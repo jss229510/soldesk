@@ -1,0 +1,292 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+
+    background: #f5f1e8;
+    color: #222;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+.header {
+    height: 64px;
+    padding: 0 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #ffffff;
+    border-bottom: 1px solid #e8e4dc;
+}
+
+.header__logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header__button {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+}
+
+
+.home {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 100px;
+}
+
+.home__intro {
+    margin-bottom: 28px;
+}
+
+.home__intro h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+
+.home__intro p {
+    margin: 0;
+    color: #777;
+}
+
+
+.category-section {
+    margin-bottom: 28px;
+}
+
+.category-list {
+    display: flex;
+    gap: 8px;
+
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.category-list::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    flex-shrink: 0;
+
+    padding: 9px 16px;
+
+    border: 1px solid #ddd7cc;
+    border-radius: 20px;
+
+    background: #fff;
+    color: #555;
+
+    font-size: 14px;
+}
+
+.chip--active {
+    background: #557a5b;
+    border-color: #557a5b;
+    color: #fff;
+}
+
+
+
+.auction-section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+.auction-section__header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.auction-section__header span {
+    color: #888;
+    font-size: 14px;
+}
+
+
+.auction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auction-item {
+    display: flex;
+    gap: 16px;
+
+    padding: 16px;
+
+    background: #fff;
+    border-radius: 14px;
+
+    border: 1px solid #eee9df;
+
+    transition: transform 0.15s ease;
+}
+
+.auction-item:hover {
+    transform: translateY(-2px);
+}
+
+.auction-item__image {
+    width: 110px;
+    height: 110px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f7f7f7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.auction-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.auction-item__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.auction-item__category {
+    display: inline-block;
+
+    margin-bottom: 6px;
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    background: #e8f1e8;
+    color: #557a5b;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.auction-item__name {
+    margin: 0 0 12px;
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.auction-item__price {
+    margin-bottom: 8px;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.auction-item__meta {
+    display: flex;
+    gap: 12px;
+
+    color: #888;
+    font-size: 13px;
+}
+
+
+.empty {
+    padding: 40px 0;
+
+    text-align: center;
+    color: #888;
+}
+
+
+.bottom-tab {
+    position: fixed;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 68px;
+
+    display: flex;
+    justify-content: center;
+
+    background: #fff;
+    border-top: 1px solid #e8e4dc;
+
+    z-index: 100;
+}
+
+.bottom-tab__item {
+    width: 120px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    border: none;
+    background: transparent;
+
+    color: #999;
+
+    font-size: 12px;
+}
+
+.bottom-tab__item span:first-child {
+    font-size: 19px;
+}
+
+.bottom-tab__item.active {
+    color: #557a5b;
+}
+
+@media (max-width: 600px) {
+    .home {
+        padding: 24px 14px 90px;
+    }
+
+    .home__intro h1 {
+        font-size: 24px;
+    }
+
+    .auction-item {
+        padding: 12px;
+    }
+
+    .auction-item__image {
+        width: 90px;
+        height: 90px;
+    }
+
+    .auction-item__name {
+        font-size: 15px;
+    }
+
+    .auction-item__price {
+        font-size: 18px;
+    }
+
+    .bottom-tab__item {
+        width: 25%;
+    }
+}
