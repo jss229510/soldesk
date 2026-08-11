@@ -5,7 +5,7 @@ export default function CategoryChip({ label, active, onClick }) {
     className={`chip${active ? " chip--active" : ""}`}
     onClick={onClick}
     >
-        {label}
+    {label}
     </button>
     );
 }
