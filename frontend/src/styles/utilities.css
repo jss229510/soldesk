@@ -1,0 +1,29 @@
+/* 여러 화면에서 공통으로 쓰는 최소한의 유틸리티 */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--sp-6);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.14em;
+  color: var(--text-4);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

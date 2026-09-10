@@ -1,28 +1,29 @@
-export function formatPrice(value){
-    return `${value.toLocaleString("ko-KR")}원`;
-}
+const krw = new Intl.NumberFormat('ko-KR');
 
-export function getTimeLeft(deadlineIso, now = new Date()){
-    const diffMs = new Date(deadlineIso).getTime() - now.getTime();
+/** 12,345원 */
+export const formatPrice = (value) =>
+  value == null ? '-' : `${krw.format(Math.round(value))}원`;
 
-    if (diffMs <= 0){
-        return {label: "경매 종료", urgent: false, ended: true};
-    }
+/** 1,234 (단위 없음) */
+export const formatNumber = (value) => krw.format(Math.round(value ?? 0));
 
-    const totalSeconds = Math.floor(diffMs / 1000);
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+/** 150만원 — 예산 칩처럼 만원 단위로 줄여 보여줄 때 */
+export const formatManwon = (value) => `${krw.format(Math.round(value / 10000))}만원`;
 
-    const pad = (n) => String(n).padStart(2, "0");
+/** -18% / +5% */
+export const formatRate = (rate) => {
+  if (rate == null) return '-';
+  const sign = rate > 0 ? '+' : '';
+  return `${sign}${rate}%`;
+};
 
-    if (days >= 1) {
-    return { label: `${days}일 ${pad(hours)}:${pad(minutes)} 남음`, urgent: false, ended: false };
-    }
+/** 할인율 계산 (정가 대비) */
+export const discountRate = (price, listPrice) => {
+  if (!listPrice || listPrice <= price) return 0;
+  return Math.round(((listPrice - price) / listPrice) * 100);
+};
 
-    const label = `${pad(hours)}:${pad(minutes)}:${pad(seconds)} 남음`;
-  const urgent = totalSeconds < 3 * 3600;
+/** 'YYYY-MM' → '9월' */
+export const monthLabel = (yyyymm) => `${Number(yyyymm.slice(5, 7))}월`;
 
-    return { label, urgent, ended: false };
-}
+export const clamp = (value, min, max) => Math.min(Math.max(value, min), max);

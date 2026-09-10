@@ -1,0 +1,185 @@
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--sp-2);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.badgeBest { background: rgba(34, 211, 238, 0.16); color: var(--brand); border: 1px solid rgba(34, 211, 238, 0.35); }
+.badgeDeal { background: rgba(239, 68, 68, 0.16); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.35); }
+.badgeNew { background: rgba(251, 191, 36, 0.14); color: var(--warn); border: 1px solid rgba(251, 191, 36, 0.32); }
+.badgeValue { background: rgba(74, 222, 128, 0.14); color: var(--down); border: 1px solid rgba(74, 222, 128, 0.32); }
+.badgeDiscount { background: #dc2626; color: #fff; font-weight: 600; }
+
+/* ── Chip (스펙 태그) ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-surface-2);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+}
+
+/* ── Button ── */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  height: 40px;
+  padding: 0 var(--sp-5);
+  border-radius: var(--r-md);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  transition: background 0.16s var(--ease), border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+.button:disabled { opacity: 0.45; cursor: not-allowed; }
+.primary { background: var(--brand); color: #04121a; }
+.primary:hover:not(:disabled) { background: #67e8f9; }
+.outline { border: 1px solid var(--line-strong); background: var(--bg-surface-2); color: var(--text); }
+.outline:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
+.ghost { color: var(--text-2); }
+.ghost:hover:not(:disabled) { color: var(--text); background: var(--bg-surface-2); }
+.soft { background: rgba(34, 211, 238, 0.1); border: 1px solid rgba(34, 211, 238, 0.28); color: var(--brand); }
+.soft:hover:not(:disabled) { background: rgba(34, 211, 238, 0.18); }
+.sm { height: 32px; padding: 0 var(--sp-3); font-size: var(--fs-sm); }
+.lg { height: 46px; padding: 0 var(--sp-6); }
+.block { width: 100%; }
+
+/* ── StarRating ── */
+.rating { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.stars { display: inline-flex; gap: 2px; color: var(--warn); font-size: var(--fs-sm); letter-spacing: 1px; }
+.starOff { color: var(--text-4); }
+.ratingValue { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-2); }
+
+/* ── Sparkline ── */
+.spark {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.015);
+}
+.sparkBody { flex: 1; min-width: 0; }
+.sparkLabel {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-4);
+  letter-spacing: 0.08em;
+}
+.sparkSvg { display: block; width: 100%; height: 30px; overflow: visible; }
+.sparkRate { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; }
+.rateDown { color: var(--down); }
+.rateUp { color: var(--up); }
+
+/* ── Thumbnail ── */
+.thumb {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--bg-surface-3);
+}
+.thumbImage { width: 100%; height: 100%; object-fit: cover; }
+.thumbFallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  opacity: 0.5;
+}
+.thumbCaption {
+  position: absolute;
+  left: var(--sp-3);
+  bottom: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: rgba(233, 238, 246, 0.55);
+  letter-spacing: 0.1em;
+}
+.thumbTopLeft { position: absolute; top: var(--sp-3); left: var(--sp-3); z-index: 1; }
+.thumbTopRight { position: absolute; top: var(--sp-3); right: var(--sp-3); z-index: 1; }
+
+/* ── Modal ── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-6);
+  background: var(--bg-overlay);
+  backdrop-filter: blur(6px);
+}
+.dialog {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: min(86vh, 720px);
+  overflow: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-card);
+}
+.close {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--bg-surface-3);
+  color: var(--text-2);
+}
+.close:hover { color: var(--text); }
+
+/* ── 상태 표시 ── */
+.stateBox {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-16) var(--sp-6);
+  color: var(--text-3);
+  text-align: center;
+}
+.spinner {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.stateTitle { color: var(--text); font-weight: 600; }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

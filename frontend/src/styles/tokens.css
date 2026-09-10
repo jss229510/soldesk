@@ -1,0 +1,78 @@
+/* 디자인 토큰 — 색상, 타이포, 간격, 반경 */
+:root {
+  /* 배경 계층 */
+  --bg-base: #05070a;
+  --bg-surface: #0b0f16;
+  --bg-surface-2: #111823;
+  --bg-surface-3: #16202c;
+  --bg-overlay: rgba(3, 6, 10, 0.78);
+
+  /* 선 */
+  --line: #1b2532;
+  --line-strong: #27354a;
+
+  /* 텍스트 */
+  --text: #e9eef6;
+  --text-2: #9fb0c4;
+  --text-3: #64748b;
+  --text-4: #44536a;
+
+  /* 브랜드 / 상태 */
+  --brand: #22d3ee;
+  --brand-strong: #06b6d4;
+  --brand-soft: rgba(34, 211, 238, 0.12);
+  --up: #f87171;
+  --down: #4ade80;
+  --warn: #fbbf24;
+
+  /* 카테고리 액센트 */
+  --c-cpu: #22d3ee;
+  --c-gpu: #a855f7;
+  --c-psu: #ef4444;
+  --c-ram: #22c55e;
+  --c-ssd: #f97316;
+  --c-mb: #eab308;
+  --c-cooler: #38bdf8;
+  --c-case: #8b5cf6;
+
+  /* 타이포 */
+  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Noto Sans KR", sans-serif;
+  --font-mono: "JetBrains Mono", "D2Coding", "SFMono-Regular", Consolas, monospace;
+
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 14px;
+  --fs-lg: 16px;
+  --fs-xl: 20px;
+  --fs-2xl: 26px;
+  --fs-3xl: 34px;
+  --fs-4xl: 42px;
+
+  /* 간격 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* 반경 */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-full: 999px;
+
+  /* 레이아웃 */
+  --container: 1240px;
+  --header-h: 64px;
+  --tabbar-h: 48px;
+
+  --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.45);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
