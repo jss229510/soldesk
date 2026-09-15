@@ -1,33 +1,37 @@
-# 환경변수
-.env
-.env.*
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Node.js
-node_modules/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
-# 로그
-*.log
-npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
-# 가상환경
-venv/
-.venv/
-env/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# VS Code
+### VS Code ###
 .vscode/
-
-# 임시 파일
-*.tmp
-*.temp
