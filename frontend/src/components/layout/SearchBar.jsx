@@ -4,7 +4,6 @@ import { searchParts } from '../../api/parts';
 import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
-import styles from './layout.module.css';
 
 /** 헤더 검색. 입력하면 부품을 찾아 해당 카테고리 화면으로 보낸다. */
 export const SearchBar = () => {
@@ -44,11 +43,11 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className={styles.search} ref={boxRef}>
-      <div className={styles.searchField}>
-        <span className={styles.searchIcon} aria-hidden="true">⌕</span>
+    <div className="relative hidden max-w-lg flex-1 lg:block" ref={boxRef}>
+      <div className="flex h-10 items-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-4">
+        <span className="text-gray-500" aria-hidden="true">⌕</span>
         <input
-          className={styles.searchInput}
+          className="h-full min-w-0 flex-1 border-0 bg-transparent outline-none placeholder:text-gray-500"
           value={keyword}
           onChange={(event) => {
             setKeyword(event.target.value);
@@ -64,17 +63,17 @@ export const SearchBar = () => {
       </div>
 
       {open && keyword.trim() && (
-        <div className={styles.results}>
+        <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-md border border-gray-600 bg-gray-900 shadow-lg">
           {items.length === 0 ? (
-            <p className={styles.resultEmpty}>찾는 부품이 없습니다. 다른 이름으로 검색해 보세요.</p>
+            <p className="p-4 text-sm text-gray-400">찾는 부품이 없습니다. 다른 이름으로 검색해 보세요.</p>
           ) : (
             items.map((part) => (
-              <button key={part.id} type="button" className={styles.resultItem} onClick={() => goToPart(part)}>
+              <button key={part.id} type="button" className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left hover:bg-gray-800" onClick={() => goToPart(part)}>
                 <span>
-                  <span className={styles.resultBrand}>{part.brand}</span>
-                  <span className={styles.resultName}>{part.name}</span>
+                  <span className="block font-mono text-xs text-gray-500">{part.brand}</span>
+                  <span>{part.name}</span>
                 </span>
-                <span className={styles.resultPrice}>{formatPrice(part.price)}</span>
+                <span className="font-mono text-sm text-cyan-400">{formatPrice(part.price)}</span>
               </button>
             ))
           )}

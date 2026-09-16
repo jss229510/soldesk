@@ -1,28 +1,25 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
-import styles from './home.module.css';
 
 /** 홈 "카테고리별 시세" 카드 하나 */
 export const CategoryCard = ({ category }) => (
   <Link
     to={ROUTES.shopCategory(category.id)}
-    className={styles.categoryCard}
-    style={{ '--accent': category.accent }}
+    className="relative block min-h-44 overflow-hidden rounded-lg border border-gray-700 bg-gray-900 p-5 transition hover:-translate-y-1 hover:border-cyan-400"
   >
-    <span className={styles.categoryGlow} aria-hidden="true" />
-    <span className={styles.categoryIcon} aria-hidden="true">{category.icon}</span>
-    <span className={styles.categoryLabel}>{category.label}</span>
-    <span className={styles.categorySub}>{category.title}</span>
+    <span className="relative text-xl text-cyan-400" aria-hidden="true">{category.icon}</span>
+    <span className="relative mt-6 block text-xl font-bold">{category.label}</span>
+    <span className="relative block text-sm text-gray-400">{category.title}</span>
 
-    <span className={styles.categoryFoot}>
+    <span className="relative mt-6 flex items-end justify-between gap-3">
       <span>
-        <span className={styles.categoryCount}>{category.count}개 제품</span>
-        <span className={styles.categoryRange}>
+        <span className="block font-mono text-xs text-gray-500">{category.count}개 제품</span>
+        <span className="block font-mono font-semibold text-cyan-400">
           {formatPrice(category.minPrice)} ~ {formatPrice(category.maxPrice)}
         </span>
       </span>
-      <span className={styles.categoryArrow} aria-hidden="true">→</span>
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-cyan-950 text-cyan-400" aria-hidden="true">→</span>
     </span>
   </Link>
 );

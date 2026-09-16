@@ -1,14 +1,16 @@
 import { SORT_OPTIONS } from '../../constants/sortOptions';
-import { cn } from '../../utils/cn';
-import styles from './shop.module.css';
 
 export const SortTabs = ({ value, onChange }) => (
-  <div className={styles.sorts} role="group" aria-label="정렬 기준">
+  <div className="flex shrink-0 gap-2" role="group" aria-label="정렬 기준">
     {SORT_OPTIONS.map((option) => (
       <button
         key={option.id}
         type="button"
-        className={cn(styles.sort, value === option.id && styles.sortActive)}
+        className={`h-8 rounded-md border px-4 text-sm ${
+          value === option.id
+            ? 'border-cyan-500 bg-cyan-950 font-semibold text-cyan-400'
+            : 'border-gray-700 text-gray-400 hover:text-white'
+        }`}
         aria-pressed={value === option.id}
         onClick={() => onChange(option.id)}
       >

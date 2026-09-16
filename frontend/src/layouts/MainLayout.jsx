@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header, Footer } from '../components/layout';
-import styles from './MainLayout.module.css';
 
 /** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
 export const MainLayout = () => {
@@ -12,9 +11,9 @@ export const MainLayout = () => {
   }, [pathname]);
 
   return (
-    <div className={styles.shell}>
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className={styles.main}>
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />

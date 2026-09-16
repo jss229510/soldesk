@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom';
-import { cn } from '../../utils/cn';
-import styles from './common.module.css';
+
+const VARIANTS = {
+  primary: 'bg-cyan-400 text-gray-900 hover:bg-cyan-300',
+  outline: 'border border-gray-500 bg-gray-800 text-white hover:border-cyan-400 hover:text-cyan-400',
+  ghost: 'text-gray-300 hover:bg-gray-800 hover:text-white',
+  soft: 'border border-cyan-700 bg-cyan-950 text-cyan-400 hover:bg-cyan-900',
+};
+
+const SIZES = {
+  sm: 'h-8 px-3 text-sm',
+  lg: 'h-12 px-6',
+};
 
 /**
  * variant: primary | outline | ghost | soft
@@ -15,13 +25,9 @@ export const Button = ({
   children,
   ...rest
 }) => {
-  const classes = cn(
-    styles.button,
-    styles[variant],
-    size && styles[size],
-    block && styles.block,
-    className,
-  );
+  const classes = `inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+    SIZES[size] ?? 'h-10 px-5'
+  } ${VARIANTS[variant]} ${block ? 'w-full' : ''} ${className ?? ''}`;
 
   if (to) {
     return (

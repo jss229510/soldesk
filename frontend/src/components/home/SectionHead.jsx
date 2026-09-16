@@ -1,10 +1,8 @@
-import styles from './home.module.css';
-
 /** 섹션 제목 + 우측 보조 정보 */
 export const SectionHead = ({ title, meta }) => (
-  <div className={styles.sectionHead}>
-    <h2 className={styles.sectionTitle}>{title}</h2>
-    {meta && <span className={styles.sectionMeta}>{meta}</span>}
+  <div className="mb-5 mt-12 flex items-center justify-between gap-4">
+    <h2 className="text-xl font-bold">{title}</h2>
+    {meta && <span className="font-mono text-sm text-gray-500">{meta}</span>}
   </div>
 );
 

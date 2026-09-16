@@ -12,7 +12,6 @@ import { CATEGORY_MAP, DEFAULT_CATEGORY, getCategory } from '../constants/catego
 import { DEFAULT_SORT } from '../constants/sortOptions';
 import { ROUTES } from '../constants/routes';
 import { useParts } from '../hooks/useParts';
-import styles from './pages.module.css';
 
 /** 시세 쇼핑: 카테고리별 부품 목록 + 12개월 시세 모달 */
 export const ShopPage = () => {
@@ -53,7 +52,7 @@ export const ShopPage = () => {
   };
 
   return (
-    <div className={`container ${styles.page}`}>
+    <div className="container mx-auto px-4 pb-12">
       <CategoryTabs />
       <Breadcrumb category={category} />
 

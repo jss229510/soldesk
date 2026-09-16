@@ -1,7 +1,5 @@
 import { areaPath, linePath, ticks } from '../../utils/chart';
 import { formatManwon, monthLabel } from '../../utils/format';
-import { cn } from '../../utils/cn';
-import styles from './shop.module.css';
 
 const W = 620;
 const H = 220;
@@ -26,13 +24,13 @@ export const PriceChart = ({ points = [], down = true }) => {
   }));
 
   const last = coords[coords.length - 1];
-  const stroke = down ? 'var(--brand)' : 'var(--up)';
+  const stroke = down ? '#22d3ee' : '#f87171';
   const yTicks = ticks(values, 5);
   // 첫/중간/끝만 라벨링해 축이 빽빽해지지 않게 한다
   const labelIndexes = [0, 3, 6, 9, points.length - 1];
 
   return (
-    <svg className={styles.chart} viewBox={`0 0 ${W} ${H}`} role="img" aria-label="최근 12개월 가격 추이">
+    <svg className="block h-56 w-full" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="최근 12개월 가격 추이">
       <defs>
         <linearGradient id="priceArea" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={stroke} stopOpacity="0.3" />
@@ -44,8 +42,8 @@ export const PriceChart = ({ points = [], down = true }) => {
         const y = PAD.top + (innerH / (yTicks.length - 1)) * i;
         return (
           <g key={value}>
-            <line className={styles.gridLine} x1={PAD.left} y1={y} x2={W - PAD.right} y2={y} />
-            <text className={styles.axisText} x={PAD.left - 8} y={y + 3} textAnchor="end">
+            <line className="stroke-gray-700" x1={PAD.left} y1={y} x2={W - PAD.right} y2={y} />
+            <text className="fill-gray-500 font-mono text-xs" x={PAD.left - 8} y={y + 3} textAnchor="end">
               {formatManwon(value)}
             </text>
           </g>
@@ -68,7 +66,7 @@ export const PriceChart = ({ points = [], down = true }) => {
         return (
           <text
             key={index}
-            className={cn(styles.axisText, isLast && styles.axisTextNow)}
+            className={`font-mono text-xs ${isLast ? 'fill-cyan-400' : 'fill-gray-500'}`}
             x={coords[index].x}
             y={H - 6}
             textAnchor="middle"

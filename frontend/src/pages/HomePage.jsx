@@ -1,13 +1,12 @@
 import { CategoryGrid, HeroSection, PromoSection, SectionHead } from '../components/home';
 import { StateBox } from '../components/common';
 import { useCategorySummaries } from '../hooks/useCategorySummaries';
-import styles from './pages.module.css';
 
 export const HomePage = () => {
   const { categories, totalCount, loading, error } = useCategorySummaries();
 
   return (
-    <div className={`container ${styles.page}`}>
+    <div className="container mx-auto px-4 pb-12">
       <HeroSection />
 
       <SectionHead title="카테고리별 시세" meta={`총 ${totalCount}개 제품`} />
