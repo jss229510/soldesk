@@ -3,10 +3,12 @@ package com.comcheck.comcheck.domain.part.controller;
 import com.comcheck.comcheck.domain.part.entity.Part;
 import com.comcheck.comcheck.domain.part.service.PartService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 // HTTP 요청을 처리하고 결과를 JSON 형태로 반환하는 Controller
@@ -31,4 +33,11 @@ public class PartController {
         // Service를 호출하여 PARTS 테이블의 전체 부품 정보를 가져옴
         return partService.getAllParts();
     }
+
+    // 부품 하나 조회
+    @GetMapping("/{partId}")
+    public Part getPartById(@PathVariable Long partId) {
+        return partService.getPartById(partId);
+    }
+
 }
