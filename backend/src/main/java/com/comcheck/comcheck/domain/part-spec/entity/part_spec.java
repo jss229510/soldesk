@@ -57,6 +57,4 @@ public class part_spec{
     public String getSpecUnit() {
         return specUnit;
     }
-
-
 }
