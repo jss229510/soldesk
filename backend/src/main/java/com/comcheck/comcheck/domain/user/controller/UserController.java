@@ -34,9 +34,9 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    // 로그인
+    // 로그인 정보를 서비스에 전달하고 성공하면 JWT 문자열을 반환한다.
     @PostMapping("/login")
-    public User login(@RequestParam String email,
+    public String login(@RequestParam String email,
             @RequestParam String password) {
         return userService.login(email, password);
     }
@@ -53,10 +53,9 @@ public class UserController {
         return userService.isNicknameDuplicate(nickname);
     }
 
-    // 회원 탈퇴
+    // 경로의 사용자 ID로 탈퇴를 요청한다.
     @DeleteMapping("/{userId}")
     public void deleteByUserId(@PathVariable Long userId){
         userService.deleteUser(userId);
     }
-    // 5. 로그인 보안
 }

@@ -1,6 +1,7 @@
 package com.comcheck.comcheck.domain.user.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "USERS")
@@ -12,7 +13,8 @@ public class User {
 
     @Column(name = "\"email\"")
     private String email;
-
+    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "\"password\"")
     private String password;
 
@@ -35,6 +37,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNickname() {
