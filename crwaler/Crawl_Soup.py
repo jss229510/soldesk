@@ -24,9 +24,7 @@ def ram_read_products(page, ddr, memory, maker):
     soup = BeautifulSoup(html, "html.parser")
 
     # 상품 목록 찾기
-    product_list = soup.select(
-        "div.main_prodlist > ul > li.prod_item"
-    )
+    product_list = soup.select('div[data-testid="ProductListItem"]')
 
     results = []
 
@@ -125,6 +123,7 @@ def ram_run():
 
         try:
             page.goto(RAM_URL, wait_until="domcontentloaded")
+            page.wait_for_timeout(2000)
 
             # 데스크탑용 선택
             desktop_checkbox = (
@@ -229,12 +228,9 @@ intel_list = ["코어 10세대", "코어 11세대", "코어 12세대","코어 13
 amd_list = ["라이젠 3000시리즈", "라이젠 4000시리즈", "라이젠 5000시리즈", "라이젠 7000시리즈", "라이젠 8000시리즈", "라이젠 9000시리즈"]
 
 def cpu_read_products(page, maker, series):
-    # 크롤러가 띄운 브라우저에서 잠시 멈춤
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
-    product_list = soup.select(
-        "div.main_prodlist > ul > li.prod_item"
-    )
+    product_list = soup.select('div[data-testid="ProductListItem"]')
 
     results = []
     for product in product_list:
@@ -256,7 +252,7 @@ def cpu_read_products(page, maker, series):
         prod_price = price_tag.get_text(" ", strip=True)
 
         # 세부스펙
-        spec_tags = product.select("div.spec_list")
+        spec_tags = product.select("span")
 
         if spec_tags is None:
             continue
@@ -275,16 +271,19 @@ def cpu_read_products(page, maker, series):
             continue
 
         # 이미지
-        img_tag = product.select_one(".thumb_image img")
+        img_tag = product.select_one("div.dnw-product-image img")
         img_src = None
 
+        
         if img_tag is not None:
             img_src = (
+                # data-original을 먼저 확인, 없으면 src을 확인
                 img_tag.get("data-original")
                 or img_tag.get("src")
             )
 
             if img_src:
+                # 이미지 주소가 있으면 urljoin으로 완전한 url로 변환
                 img_src = urljoin(page.url, img_src)
 
         # 상품 주소
@@ -330,14 +329,11 @@ def cpu_run():
             page.goto(CPU_URL, wait_until="domcontentloaded")
 
             # 더보기 누르기
-            page.locator("div.spec_opt_view > button.btn_spec_view.btn_view_more").filter(has_text="33").click()
+            page.get_by_role("button", name="33개").click()
 
             for maker in cpu_makers:
                 maker_checkbox = (
-                    page.locator("li.sub_item")
-                    .filter(has_text=maker)
-                    .locator('input[type="checkbox"]:visible')
-                    .first
+                    page.get_by_role("checkbox",name=maker, exact=True)
                 )
 
                 maker_checkbox.check()
@@ -349,7 +345,7 @@ def cpu_run():
                     series_list = amd_list
 
                 for series in series_list:
-                    series_checkbox = page.locator("li.sub_item").filter(has_text=series).locator('input[type="checkbox"]:visible')
+                    series_checkbox = page.get_by_role("checkbox", name=series, exact=True)
 
                     series_checkbox.check()
                     page.wait_for_timeout(2000)
@@ -367,7 +363,7 @@ def cpu_run():
 
                         cur_page += 1
 
-                        next_button=(page.locator("div.number_wrap").get_by_role("link",name=str(cur_page), exact=True))
+                        next_button=(page.get_by_role("button",name=str(cur_page), exact=True))
                         if next_button.count() == 0:
                             break
 
@@ -580,6 +576,6 @@ def md_run():
             browser.close()
 
 if __name__ == "__main__":
-    ram_run()
+    # ram_run()
     cpu_run()
     # md_run()
