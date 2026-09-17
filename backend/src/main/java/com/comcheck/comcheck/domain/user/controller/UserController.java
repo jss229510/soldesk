@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/api/users")
-
 public class UserController {
 
     private final UserService userService;
@@ -24,21 +22,22 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    // 1번 사용자 조회
-    @GetMapping("/{user_Id}")
+    // 사용자 한 명 조회
+    @GetMapping("/{userId}")
     public User getUserById(@PathVariable Long userId) {
         return userService.getUserById(userId);
     }
 
-    // 사용자 저장(회원가입)
+    // 회원가입
     @PostMapping
     public User saveUser(@RequestBody User user) {
         return userService.saveUser(user);
     }
 
-    // 사용자 로그인
-    @PostMapping
-    public User login(@RequestParam String email, @RequestParam String password) {
+    // 로그인
+    @PostMapping("/login")
+    public User login(@RequestParam String email,
+            @RequestParam String password) {
         return userService.login(email, password);
     }
 
@@ -48,4 +47,16 @@ public class UserController {
         return userService.isEmailDuplicate(email);
     }
 
+    // 닉네임 중복 확인
+    @GetMapping("/check-nickname")
+    public boolean checkNickname(@RequestParam String nickname) {
+        return userService.isNicknameDuplicate(nickname);
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/{userId}")
+    public void deleteByUserId(@PathVariable Long userId){
+        userService.deleteUser(userId);
+    }
+    // 5. 로그인 보안
 }
