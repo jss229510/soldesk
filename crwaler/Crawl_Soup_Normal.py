@@ -1,22 +1,16 @@
-from playwright.sync_api import sync_playwright     # python -m playwright install
-from bs4 import BeautifulSoup                       # pip install beautifulsoup4
+from playwright.sync_api import sync_playwright
+from bs4 import BeautifulSoup
 from urllib.parse import urljoin
-import pandas as pd                                 # pip install pandas
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-
-DATA_DIR = BASE_DIR / "data"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+import pandas as pd
 
 # RAM 크롤링 --------------------------------------------------------
 RAM_URL = "https://prod.danawa.com/list/?cate=112752"
 
 # 저장할 CSV의 전체 경로를 입력하세요.
-RAM_OUTPUT_PATH = DATA_DIR / "ram.csv"
+RAM_OUTPUT_PATH = r"ram.csv"
 
 ram_ddrs = ["DDR4", "DDR5"]
-ram_makers = ["삼성전자", "PATRIOT", "ESSENCORE", "G.SKILL", "TeamGroup"]
+ram_makers = ["삼성전자", "PATRIOT", "마이크론", "G.SKILL", "SK하이닉스"]
 ram_memorys = ["8GB", "16GB", "32GB", "64GB"]
 
 
@@ -30,14 +24,16 @@ def ram_read_products(page, ddr, memory, maker):
     soup = BeautifulSoup(html, "html.parser")
 
     # 상품 목록 찾기
-    product_list = soup.select('div[data-testid="ProductListItem"]') 
+    product_list = soup.select(
+        "div.main_prodlist > ul > li.prod_item"
+    )
 
     results = []
 
     for product in product_list:
 
         # 제품명
-        name_tag = product.select_one('div[data-testid="ProductListTitle"] > a')
+        name_tag = product.select_one("p.prod_name > a")
 
         if name_tag is None:
             continue
@@ -45,7 +41,7 @@ def ram_read_products(page, ddr, memory, maker):
         prod_name = name_tag.get_text(" ", strip=True)
 
         # 가격
-        price_tag = product.select_one('div[data-testid="ProductListPriceCompare"] a > span')
+        price_tag = product.select_one("p.price_sect > a")
 
         if price_tag is None:
             continue
@@ -53,7 +49,7 @@ def ram_read_products(page, ddr, memory, maker):
         prod_price = price_tag.get_text(" ", strip=True)
 
         # 세부스펙
-        spec_tag = product.select_one('div[data-testid="ProductListSpecs"]')
+        spec_tag = product.select_one("div.spec_list")
 
         if spec_tag is None:
             continue
@@ -73,7 +69,7 @@ def ram_read_products(page, ddr, memory, maker):
             continue
 
         # 이미지
-        img_tag = product.select_one("div.dnw-product-image img")
+        img_tag = product.select_one(".thumb_image img")
         img_src = None
 
         if img_tag is not None:
@@ -93,6 +89,8 @@ def ram_read_products(page, ddr, memory, maker):
 
         results.append({
             "제조사": maker,
+            "DDR": ddr,
+
             # 선택한 용량 필터값 기록
             "용량_GB": int(memory.replace("GB", "")),
 
@@ -103,7 +101,7 @@ def ram_read_products(page, ddr, memory, maker):
             "상품주소": product_url,
         })
 
-        print(maker, memory, prod_name, prod_price)
+        print(ddr, memory, maker, prod_name, prod_price)
 
     return results
 
@@ -127,34 +125,46 @@ def ram_run():
 
         try:
             page.goto(RAM_URL, wait_until="domcontentloaded")
-            page.wait_for_timeout(2000)
 
-            # 데스크탑용 선택 -> label:visible 는 현재 페이지에서 보이는 label 태그만 전부 찾는 것
-            desktop_lable = page.locator("label:visible").filter(has=page.locator(f'span[title="데스크탑용"]'))
+            # 데스크탑용 선택
+            desktop_checkbox = (
+                page.locator("li.sub_item")
+                .filter(has_text="데스크탑용")
+                .locator('input[type="checkbox"]:visible')
+                .first
+            )
 
-            # 키=for, get_attribute() 는 for의 값(id)만 가져오는 기능
-            desktop_id = desktop_lable.get_attribute("for")
-            desktop_checkbox = page.locator(f'[id={desktop_id}]')
-            
             desktop_checkbox.check()
             page.wait_for_timeout(2000)
 
             for ddr in ram_ddrs:
-                ddr_checkbox = page.get_by_role("checkbox",name=ddr, exact=True)
+                ddr_checkbox = (
+                    page.locator("li.sub_item")
+                    .filter(has_text=ddr)
+                    .locator('input[type="checkbox"]:visible')
+                    .first
+                )
 
                 ddr_checkbox.check()
                 page.wait_for_timeout(2000)
 
                 for memory in ram_memorys:
-                    memory_label = page.locator("label:visible").filter(has=page.locator(f'span[title="{memory}"]'))
-                    memory_id = memory_label.get_attribute("for")
-                    memory_checkbox = page.locator(f'id={memory_id}')
+                    memory_checkbox = page.locator(
+                        f'li.sub_item > label[title="{memory}"] '
+                        'input[type="checkbox"]:visible'
+                    ).first
 
                     memory_checkbox.check()
                     page.wait_for_timeout(2000)
 
                     for maker in ram_makers:
-                        maker_checkbox = (page.get_by_role("checkbox",name=maker, exact=True))
+                        maker_checkbox = (
+                            page.locator("#dlMaker_simple")
+                            .get_by_role("listitem")
+                            .filter(has_text=maker)
+                            .locator('input[type="checkbox"]:visible')
+                            .first
+                        )
 
                         maker_checkbox.check()
                         page.wait_for_timeout(2000)
@@ -172,7 +182,7 @@ def ram_run():
 
                             cur_page += 1
 
-                            next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {cur_page}"]'))
+                            next_button=(page.locator("div.number_wrap").get_by_role("link",name=str(cur_page), exact=True))
                             if next_button.count() == 0:
                                 break
 
@@ -190,7 +200,7 @@ def ram_run():
                 page.wait_for_timeout(2000)
 
             columns = [
-                "제조사", "용량_GB", "제품명",
+                "제조사", "DDR", "용량_GB", "제품명",
                 "가격", "세부스펙", "이미지", "상품주소"
             ]
 
@@ -212,22 +222,25 @@ def ram_run():
 
 # CPU 크롤링 -------------------------------------------------------------
 CPU_URL = "https://prod.danawa.com/list/?cate=112747&15main_11_02"
-CPU_OUTPUT_PATH = DATA_DIR / "cpu.csv"
+CPU_OUTPUT_PATH = r"cpu.csv"
 
 cpu_makers = ["인텔", "AMD"]
 intel_list = ["코어 10세대", "코어 11세대", "코어 12세대","코어 13세대","코어 14세대", "코어울트라 시리즈2"]
 amd_list = ["라이젠 3000시리즈", "라이젠 4000시리즈", "라이젠 5000시리즈", "라이젠 7000시리즈", "라이젠 8000시리즈", "라이젠 9000시리즈"]
-#adfasdfasdfasdfasdfasdf
+
 def cpu_read_products(page, maker, series):
+    # 크롤러가 띄운 브라우저에서 잠시 멈춤
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
-    product_list = soup.select('div[data-testid="ProductListItem"]')
+    product_list = soup.select(
+        "div.main_prodlist > ul > li.prod_item"
+    )
 
     results = []
     for product in product_list:
 
         # 제품명
-        name_tag = product.select_one('div[data-testid="ProductListTitle"] > a')
+        name_tag = product.select_one("p.prod_name > a")
 
         if name_tag is None:
             continue
@@ -235,7 +248,7 @@ def cpu_read_products(page, maker, series):
         prod_name = name_tag.get_text(" ", strip=True)
 
         # 가격
-        price_tag = product.select_one('div[data-testid="ProductListPriceCompare"] a')
+        price_tag = product.select_one("p.price_sect > a")
 
         if price_tag is None:
             continue
@@ -243,16 +256,16 @@ def cpu_read_products(page, maker, series):
         prod_price = price_tag.get_text(" ", strip=True)
 
         # 세부스펙
-        spec_tag = product.select_one('div[data-testid="ProductListSpecs"]')
+        spec_tags = product.select("div.spec_list")
 
-        if spec_tag is None:
+        if spec_tags is None:
             continue
 
-        # # 글자가 가장 많은 영역을 상세 스펙으로 선택
-        # spec_tag = max(
-        # spec_tags,
-        # key=lambda tag: len(tag.get_text(" ", strip=True))
-        # )
+        # 글자가 가장 많은 영역을 상세 스펙으로 선택
+        spec_tag = max(
+        spec_tags,
+        key=lambda tag: len(tag.get_text(" ", strip=True))
+        )
 
         prod_spec = spec_tag.get_text(" ", strip=True)
 
@@ -262,19 +275,16 @@ def cpu_read_products(page, maker, series):
             continue
 
         # 이미지
-        img_tag = product.select_one("div.dnw-product-image img")
+        img_tag = product.select_one(".thumb_image img")
         img_src = None
 
-        
         if img_tag is not None:
             img_src = (
-                # data-original을 먼저 확인, 없으면 src을 확인
                 img_tag.get("data-original")
                 or img_tag.get("src")
             )
 
             if img_src:
-                # 이미지 주소가 있으면 urljoin으로 완전한 url로 변환
                 img_src = urljoin(page.url, img_src)
 
         # 상품 주소
@@ -320,11 +330,14 @@ def cpu_run():
             page.goto(CPU_URL, wait_until="domcontentloaded")
 
             # 더보기 누르기
-            page.get_by_role("button", name="33개").click()
+            page.locator("div.spec_opt_view > button.btn_spec_view.btn_view_more").filter(has_text="33").click()
 
             for maker in cpu_makers:
                 maker_checkbox = (
-                    page.get_by_role("checkbox",name=maker, exact=True)
+                    page.locator("li.sub_item")
+                    .filter(has_text=maker)
+                    .locator('input[type="checkbox"]:visible')
+                    .first
                 )
 
                 maker_checkbox.check()
@@ -336,11 +349,7 @@ def cpu_run():
                     series_list = amd_list
 
                 for series in series_list:
-                    series_label = page.locator("label:visible").filter(has=page.locator(f'span[title="{series}"]'))
-
-                    checkbox_id = series_label.get_attribute("for")
-
-                    series_checkbox = page.locator(f'[id={checkbox_id}]')
+                    series_checkbox = page.locator("li.sub_item").filter(has_text=series).locator('input[type="checkbox"]:visible')
 
                     series_checkbox.check()
                     page.wait_for_timeout(2000)
@@ -358,7 +367,7 @@ def cpu_run():
 
                         cur_page += 1
 
-                        next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {cur_page}"]'))
+                        next_button=(page.locator("div.number_wrap").get_by_role("link",name=str(cur_page), exact=True))
                         if next_button.count() == 0:
                             break
 
@@ -395,7 +404,7 @@ def cpu_run():
             
 # 메인보드 크롤링 -----------------------------------------------------
 MB_URL = "https://prod.danawa.com/list/?cate=112751"
-MB_OUTPUT_PATH = DATA_DIR / "mainboard.csv"
+MB_OUTPUT_PATH = r"mainboard.csv"
 
 md_makers = ["ASUS", "GIGABYTE", "ASRock", "MSI"]
 md_sockets = ["AMD(소켓AM4)", "AMD(소켓AM5)", "인텔(소켓1200)", "인텔(소켓1700)", "인텔(소켓1851)"]
@@ -405,14 +414,14 @@ def mb_read_products(page, maker):
     # page.pause()
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
-    product_list = soup.select('div[data-testid="ProductListItem"]') 
+    product_list = soup.select("div.main_prodlist > ul > li.prod_item")
     
     results = []
     
     for product in product_list:
 
         # 제품명
-        name_tag = product.select_one('div[data-testid="ProductListTitle"] > a')
+        name_tag = product.select_one("p.prod_name > a")
 
         if name_tag is None:
             continue
@@ -420,7 +429,7 @@ def mb_read_products(page, maker):
         prod_name = name_tag.get_text(" ", strip=True)
 
         # 가격
-        price_tag = product.select_one('div[data-testid="ProductListPriceCompare"] a')
+        price_tag = product.select_one("p.price_sect > a")
 
         if price_tag is None:
             continue
@@ -428,16 +437,16 @@ def mb_read_products(page, maker):
         prod_price = price_tag.get_text(" ", strip=True)
 
         # 세부스펙
-        spec_tag = product.select_one('div[data-testid="ProductListSpecs"]')
+        spec_tags = product.select("div.spec_list")
 
-        if spec_tag is None:
+        if spec_tags is None:
             continue
         
-        # # 글자가 가장 많은 영역을 상세 스펙으로 선택
-        # spec_tag = max(
-        # spec_tags,
-        # key=lambda tag: len(tag.get_text(" ", strip=True))
-        # )
+        # 글자가 가장 많은 영역을 상세 스펙으로 선택
+        spec_tag = max(
+        spec_tags,
+        key=lambda tag: len(tag.get_text(" ", strip=True))
+        )
 
         prod_spec = spec_tag.get_text(" ", strip=True)
 
@@ -447,7 +456,7 @@ def mb_read_products(page, maker):
             continue
 
         # 이미지
-        img_tag = product.select_one("div.dnw-product-image img")
+        img_tag = product.select_one(".thumb_image img")
         img_src = None
 
         if img_tag is not None:
@@ -487,7 +496,7 @@ def md_run():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
-
+        
         # 브라우저 제어연결
         client = page.context.new_cdp_session(page)
         # 네트워크 제어 활성화
@@ -501,16 +510,23 @@ def md_run():
             page.goto(MB_URL, wait_until="domcontentloaded")
 
             # 더보기 누르기
-            page.get_by_role("button", name="20개").click()
+            page.locator("div.spec_opt_view > button.btn_spec_view.btn_view_more").filter(has_text="20").click()
 
             for maker in md_makers:
-                maker_checkbox = (page.get_by_role("checkbox",name=maker, exact=True))
+                maker_checkbox = (
+                    page.locator("li.sub_item")
+                    .filter(has_text=maker)
+                    .locator('input[type="checkbox"]:visible')
+                    .first
+                )
 
                 maker_checkbox.check()
                 page.wait_for_timeout(2000)
                 
                 for socket in md_sockets:
-                    socket_checkbox = (page.get_by_role("checkbox",name=socket, exact=True))
+                    socket_checkbox = (
+                        page.locator("li.sub_item").filter(has_text=socket).locator('input[type="checkbox"]:visible').first
+                    )
                     
                     socket_checkbox.check()
                     page.wait_for_timeout(2000)
@@ -528,7 +544,7 @@ def md_run():
 
                         cur_page += 1
 
-                        next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {cur_page}"]'))
+                        next_button=(page.locator("div.number_wrap").get_by_role("link",name=str(cur_page), exact=True))
                         if next_button.count() == 0:
                             break
 
@@ -564,6 +580,6 @@ def md_run():
             browser.close()
 
 if __name__ == "__main__":
-    # ram_run()
+    ram_run()
     # cpu_run()
-    md_run()
+    # md_run()
