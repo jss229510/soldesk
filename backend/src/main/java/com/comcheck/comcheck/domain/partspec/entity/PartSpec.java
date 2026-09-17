@@ -1,4 +1,4 @@
-package com.comcheck.comcheck.domain.part_spec.entity;
+package com.comcheck.comcheck.domain.partspec.entity;
 
 import jakarta.persistence.*;
 
