@@ -1,8 +1,9 @@
-package com.comcheck.comcheck.domain.part_spec.service;
+package com.comcheck.comcheck.domain.partspec.service;
 
-import com.comcheck.comcheck.domain.part_spec.entity.part_spec;
-import com.comcheck.comcheck.domain.part_spec.repository.PartSpecRepository;
 import org.springframework.stereotype.Service;
+
+import com.comcheck.comcheck.domain.partspec.entity.PartSpec;
+import com.comcheck.comcheck.domain.partspec.repository.PartSpecRepository;
 
 import java.util.List;
 
@@ -18,14 +19,14 @@ public class PartSpecService {
     }
 
     //PART_SPECS 테이블의 모든 정보를 조회
-    public List<part_spec> getAllSpecs(){
+    public List<PartSpec> getAllSpecs(){
         
         // Repository의 findAll()을 이용하여 전체 부품 조회
         return partSpecRepository.findAll();
     }
 
     // 기능 하나 조회
-    public part_spec getSpecById(Long specId){
+    public PartSpec getSpecById(Long specId){
         return partSpecRepository.findById(specId)
                 .orElse(null);
     }

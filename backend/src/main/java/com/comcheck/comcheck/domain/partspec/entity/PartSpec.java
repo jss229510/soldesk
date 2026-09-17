@@ -1,11 +1,11 @@
-package com.comcheck.comcheck.domain.part_spec.entity;
+package com.comcheck.comcheck.domain.partspec.entity;
 import jakarta.persistence.*;
 
 @Entity 
 
 @Table(name= "PART_SPECS")
 
-public class part_spec{
+public class PartSpec{
 
     @Id
     // spec_id
