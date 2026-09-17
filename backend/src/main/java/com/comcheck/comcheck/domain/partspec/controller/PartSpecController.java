@@ -9,7 +9,6 @@ import com.comcheck.comcheck.domain.partspec.entity.PartSpec;
 import com.comcheck.comcheck.domain.partspec.service.PartSpecService;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 // HTTP 요청을 처리하고 결과를 JSON 형태로 반환하는 Controller
