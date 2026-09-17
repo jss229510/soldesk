@@ -24,4 +24,10 @@ public class PartService {
         // Repository의 findAll()을 이용하여 전체 부품 조회
         return partRepository.findAll();
     }
+
+    // 부품 하나 조회
+    public Part getPartById(Long partId) {
+        return partRepository.findById(partId)
+                .orElse(null);
+    }
 }
