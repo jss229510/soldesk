@@ -1,4 +1,4 @@
-"""RAM/CPU/메인보드 CSV -> 1차 정제 -> Oracle PARTS/PART_SPECS CSV.
+"""RAM/CPU/메인보드 CSV -> 1차 정제 -> 2차 정제(필수 스펙이 빠진거는 아웃) -> Oracle PARTS/PART_SPECS CSV.
 실행: python clean_pc_parts.py
 필요 패키지: python -m pip install pandas
 """
@@ -33,7 +33,7 @@ SPEC_COLUMNS = ['spec_id', 'part_id', 'spec_key', 'spec_value', 'spec_unit']
 
 ALLOWED_SOCKETS = {"AM4", "AM5", "LGA1200", "LGA1700", "LGA1851"}
 
-REQUIRED_SPECS = {
+REQUIRED_SPECS = {  #필수 스펙 넣는 곳
     "RAM": [],
     "CPU": [],
     "MAINBOARD": ["ram_type", "m2_slots", "form_factor", "max_ram_capacity_gb"]
@@ -64,15 +64,25 @@ def number(pattern, value):
 
 
 def socket(spec):
+    # [A-Za-z0-9]+ 페턴
+    # A-Z: A~Z 까지 의 대문자 알파벳
+    # a-z: a-z 까지 의 소문자 알파벳
+    # 0-9: 숫자 0~9
     value = match(r'소켓\s*([A-Za-z0-9]+)', spec)
     return 'LGA' + value if value and value.isdigit() else value
 
-
+# re.I: 대문자/소문자를 구분하지 않고 찾기
 def ddr_types(value):
     values = re.findall(r'\bDDR\d\b', value or '', re.I)
     return ', '.join(dict.fromkeys(v.upper() for v in values)) or None
 
-
+# ^: 문자열의 시작
+# |: 또는
+# /: 슬래시
+# (?:^|/): 문자열로 맨 처음 시작하거나, / 바로 뒤에서 시작하는 항목을 찾는다
+# [PE]?: P또는 E가 있어도 되고 없어도 됨
+# ()*: 이 덩어리가 0번 이상 반복 될 수 있음
+# suffix: 
 def sum_count(spec, suffix):
     # 6코어, P8+E16코어, 12+8스레드 등을 합산합니다.
     value = match(r'(?:^|/)\s*((?:[PE]?\s*\d+[Cc]?\s*\+\s*)*[PE]?\s*\d+[Cc]?)\s*' + suffix, spec)

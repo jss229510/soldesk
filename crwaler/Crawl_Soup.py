@@ -217,7 +217,7 @@ CPU_OUTPUT_PATH = DATA_DIR / "cpu.csv"
 cpu_makers = ["인텔", "AMD"]
 intel_list = ["코어 10세대", "코어 11세대", "코어 12세대","코어 13세대","코어 14세대", "코어울트라 시리즈2"]
 amd_list = ["라이젠 3000시리즈", "라이젠 4000시리즈", "라이젠 5000시리즈", "라이젠 7000시리즈", "라이젠 8000시리즈", "라이젠 9000시리즈"]
-#adfasdfasdfasdfasdfasdf
+
 def cpu_read_products(page, maker, series):
     html = page.content()
     soup = BeautifulSoup(html, "html.parser")
@@ -432,12 +432,6 @@ def mb_read_products(page, maker):
 
         if spec_tag is None:
             continue
-        
-        # # 글자가 가장 많은 영역을 상세 스펙으로 선택
-        # spec_tag = max(
-        # spec_tags,
-        # key=lambda tag: len(tag.get_text(" ", strip=True))
-        # )
 
         prod_spec = spec_tag.get_text(" ", strip=True)
 
