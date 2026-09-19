@@ -1,4 +1,7 @@
 *.csv
+__pycache__/
+*.py[cod]
+tmp/
 node_modules/
 HELP.md
 .gradle
