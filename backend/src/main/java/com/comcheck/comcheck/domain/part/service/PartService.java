@@ -30,4 +30,8 @@ public class PartService {
         return partRepository.findById(partId)
                 .orElse(null);
     }
+    // 카테고리 별 부품 조회
+    public List<Part> getPartsByCategory(String category) {
+        return partRepository.findByCategory(category);
+    }
 }
