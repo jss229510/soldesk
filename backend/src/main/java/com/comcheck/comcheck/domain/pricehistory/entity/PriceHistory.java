@@ -41,8 +41,6 @@ public class PriceHistory {
 
     private String source;
 
-
-
     // DB에서 조회한 필드 값을 외부에서 읽을 수 있도록 Getter 제공
 
     public Long getPartId() {

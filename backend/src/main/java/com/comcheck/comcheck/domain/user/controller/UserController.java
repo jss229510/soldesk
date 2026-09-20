@@ -3,6 +3,7 @@ package com.comcheck.comcheck.domain.user.controller;
 import com.comcheck.comcheck.domain.user.entity.User;
 import com.comcheck.comcheck.domain.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -22,10 +23,19 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    // 사용자 한 명 조회
+    // 사용자 ID로 한 명 조회
     @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+        // Service를 통해 해당 ID의 사용자를 조회
+        User user = userService.getUserById(userId);
+
+        // 사용자가 없으면 HTTP 404 Not Found 응답
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 사용자가 있으면 HTTP 200 OK와 사용자 정보를 JSON으로 반환
+        return ResponseEntity.ok(user);
     }
 
     // 회원가입
@@ -53,9 +63,21 @@ public class UserController {
         return userService.isNicknameDuplicate(nickname);
     }
 
-    // 경로의 사용자 ID로 탈퇴를 요청한다.
+    // 사용자 ID로 회원 탈퇴
     @DeleteMapping("/{userId}")
-    public void deleteByUserId(@PathVariable Long userId){
+    public ResponseEntity<Void> deleteByUserId(@PathVariable Long userId) {
+        // 삭제 전에 사용자가 존재하는지 확인
+        User user = userService.getUserById(userId);
+
+        // 존재하지 않는 사용자면 HTTP 404 Not Found 응답
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // 존재하는 사용자만 삭제
         userService.deleteUser(userId);
+
+        // 삭제 성공 시 HTTP 204 No Content 응답
+        return ResponseEntity.noContent().build();
     }
 }

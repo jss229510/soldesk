@@ -42,5 +42,4 @@ public class PartSpecController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
 }
