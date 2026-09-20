@@ -1,4 +1,3 @@
-import pandas as pd, numpy as np, matplotlib, seaborn as sns
 import oracledb
 import pandas as pd
 from pathlib import Path

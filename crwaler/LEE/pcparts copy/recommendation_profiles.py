@@ -71,9 +71,18 @@ TARGET_MANUFACTURERS = {
     'RAM': ('삼성전자', 'PATRIOT', 'ESSENCORE', 'G.SKILL', 'TeamGroup'),
     'CPU': ('인텔', 'AMD'),
     'MAINBOARD': ('ASUS', 'GIGABYTE', 'ASRock', 'MSI'),
+    'GPU': ('GIGABYTE','ASUS','MSI','갤럭시','COLORFUL'),
+    'PSU': ('마이크로닉스','SuperFlower','잘만','시소닉','맥스엘리트'),
 }
 
 TARGET_FILTER = {
     'RAM': (),
-    
+    'CPU_Intel': ('코어 10세대','코어 11세대','코어 12세대','코어 13세대','코어 14세대','코어울트라 시리즈2'),
+    'CPU_AMD': ('라이젠 3000시리즈','라이젠 4000시리즈','라이젠 5000시리즈','라이젠 7000시리즈','라이젠 8000시리즈','라이젠 9000시리즈'),
+    'GPU_NVIDIA': ('GTX 1660 SUPER','RTX 2060','RTX 2060 SUPER',
+                   'RTX 3050','RTX 3060','RTX 3060 Ti','RTX 3070','RTX 3070 Ti','RTX 3080',
+                   'RTX 4060','RTX 4060 Ti','RTX 4070 SUPER','RTX 4070 Ti SUPER','RTX 4080 SUPER',
+                   'RTX 5050','RTX 5060','RTX 5060 Ti','RTX 5070','RTX 5070 Ti','RTX 5080','RTX 5090'),
+    'GPU_AMD': ('RX 6800','RX 7600','RX 9060','RX 9060 XT','RX 9070','RX 9070 GRE','RX 9070 XT'),
+    'MD_sockets': ('AMD(소켓AM4)','AMD(소켓AM5)','인텔(소켓1200)','인텔(소켓1700)','인텔(소켓1851)',)
 }

@@ -1,20 +1,19 @@
 from pathlib import Path
 import re
 from urllib.parse import urljoin
-
+from datetime import datetime
 import pandas as pd
 from bs4 import BeautifulSoup
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
-from recommendation_profiles import TARGET_MANUFACTURERS
+from recommendation_profiles import TARGET_MANUFACTURERS, TARGET_FILTER
 
 
 LIST_URL = "https://prod.danawa.com/list/?cate=112747&15main_11_02"
-MAX_PAGES = 5
-LOAD_RETRY_COUNT = 3
 
 BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_PATH = BASE_DIR / "data" / "cpu_playwright.csv"
+
+date = datetime.now().strftime("%Y%m%d")
+OUTPUT_PATH = BASE_DIR / "data" / f"cpu_playwright_{date}.csv"
 
 # \d{1,3}: 숫자가 1~3개
 # (?:,\d{3})*: ,뒤에 숫자 3개가 0번 이상
@@ -42,9 +41,7 @@ def read_products(page, maker):
         
         if not prod_price or not product_name.startswith(maker):
             continue
-
-        
-        
+    
         image_url = None
         img_tag = product.select_one("div.dnw-product-image img")
         if img_tag is not None:
@@ -56,45 +53,14 @@ def read_products(page, maker):
             product_url = urljoin(page.url, product_url)
 
         results.append({
-            "제조사": maker, "제품명": product_name, "가격": prod_price,
+            "제조사": maker, 
+            "제품명": product_name, 
+            "가격": prod_price,
             "세부스펙": spec_tag.get_text(" ", strip=True),
-            "이미지": image_url, "상품주소": product_url,
+            "이미지": image_url, 
+            "상품주소": product_url,
         })
     return results
-
-
-def move_to_next_page(page, next_page):
-    button = page.locator('[data-testid="ProductListPagination"]').locator(
-        f'button[aria-label="페이지 {next_page}"]'
-    )
-    if button.count() == 0:
-        # CPU 템플릿은 pagination wrapper의 data-testid가 없을 수 있다.
-        button = page.get_by_role("button", name=f"페이지 {next_page}", exact=True)
-    if button.count() == 0:
-        print(f"{next_page}페이지 버튼이 없어 수집을 종료합니다.")
-        return False
-    button.first.wait_for(state="visible", timeout=15_000)
-    before_url = page.locator('[data-testid="ProductListItem"] a[href*="pcode="]').first.get_attribute("href")
-    button.first.click()
-    page.wait_for_function(
-        "previousUrl => document.querySelector('[data-testid=\"ProductListItem\"] a[href*=\"pcode=\"]')?.getAttribute('href') !== previousUrl",
-        arg=before_url, timeout=15_000,
-    )
-    page.wait_for_timeout(3_000)
-    return True
-
-
-def open_list_page(page):
-    for attempt in range(1, LOAD_RETRY_COUNT + 1):
-        page.goto(LIST_URL, wait_until="domcontentloaded")
-        try:
-            page.locator('[data-testid="ProductListItem"]').first.wait_for(state="attached", timeout=15_000)
-            return
-        except PlaywrightTimeoutError:
-            if attempt == LOAD_RETRY_COUNT:
-                raise
-            page.wait_for_timeout(3_000)
-
 
 def cpu_run():
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -102,29 +68,64 @@ def cpu_run():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
+
         try:
-            open_list_page(page)
+            page.goto(LIST_URL, wait_until="domcontentloaded")
+            page.wait_for_timeout(2000)
+
+            # 더보기 누르기
+            page.get_by_role("button", name="33개").click()
+            page.wait_for_timeout(2000)
+
             for maker in TARGET_MANUFACTURERS['CPU']:
                 maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
+
                 maker_checkbox.check()
                 page.wait_for_timeout(2_000)
-                current_page = 1
-                while MAX_PAGES is None or current_page <= MAX_PAGES:
-                    rows = read_products(page, maker)
-                    print(f"{maker} {current_page}페이지 수집: {len(rows)}개")
-                    products.extend(rows)
-                    next_page = current_page + 1
-                    if MAX_PAGES is not None and next_page > MAX_PAGES:
-                        break
-                    if not move_to_next_page(page, next_page):
-                        break
-                    current_page = next_page
+
+                if maker == '인텔':
+                    series_list = TARGET_FILTER['CPU_Intel']
+                elif maker == 'AMD':
+                    series_list = TARGET_FILTER['CPU_AMD']
+
+                for series in series_list:
+                    series_label = page.locator("label:visible").filter(has=page.locator(f'span[title="{series}"]'))
+                    checkbox_id = series_label.get_attribute("for")
+                    series_checkbox = page.locator(f'[id={checkbox_id}]')
+
+                    series_checkbox.check()
+                    page.wait_for_timeout(2000)
+
+                    if not maker_checkbox.is_checked() or not series_checkbox.is_checked():
+                        continue                    
+
+                    current_page = 1
+
+                    while True:
+                        rows = read_products(page, maker)
+                        print(f"{maker} {current_page}페이지 수집: {len(rows)}개")
+                        products.extend(rows)
+
+                        current_page += 1
+
+                        next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {current_page}"]'))
+                        if next_button.count() == 0:
+                            break
+                        next_button.click()
+                        page.wait_for_timeout(2000)
+
+                    series_checkbox.uncheck()
+                    page.wait_for_timeout(2000)
+
                 maker_checkbox.uncheck()
                 page.wait_for_timeout(2_000)
         finally:
             browser.close()
 
-    df = pd.DataFrame(products).drop_duplicates(subset=["상품주소"], keep="first")
+    columns = ["제조사", "제품명",
+               "가격", "세부스펙", "이미지", "상품주소"]
+    
+    df = pd.DataFrame(products, columns=columns)
     df.insert(0, "번호", range(1, len(df) + 1))
     df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
     print(f"총 {len(df)}개 저장 완료: {OUTPUT_PATH}")
