@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-from recommendation_profiles import TARGET_MANUFACTURERS
+from recommendation_profiles import TARGET_MANUFACTURERS, TARGET_FILTER
 
 
 LIST_URL = "https://prod.danawa.com/list/?cate=112752"
@@ -13,7 +13,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112752"
 BASE_DIR = Path(__file__).resolve().parent
 date = datetime.now().strftime("%Y%m%d")
 OUTPUT_PATH = BASE_DIR / "data" / f"ram_playwright_{date}.csv"
-RAM_CAPACITIES_GB = (8, 16, 32, 64)
+
 
 def clean_price_text(value):
     """원본 CSV에는 숫자 가격만 남기고 가격비교중지는 제외한다."""
@@ -63,16 +63,6 @@ def read_products(page, capacity_gb, maker):
         })
     return results
 
-def checkbox_by_title(page, title):
-    label = page.locator("label:visible").filter(
-        has=page.locator(f'span[title="{title}"]')
-    ).first
-    label.wait_for(state="visible", timeout=15_000)
-    checkbox_id = label.get_attribute("for")
-    if not checkbox_id:
-        raise RuntimeError(f'필터 "{title}"의 checkbox id를 찾지 못했다.')
-    return page.locator(f'[id="{checkbox_id}"]')
-
 def ram_run():
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     products = []
@@ -94,35 +84,50 @@ def ram_run():
             desktop_checkbox.check()
             page.wait_for_timeout(2000)
 
-            for capacity_gb in RAM_CAPACITIES_GB:
-                capacity_checkbox = checkbox_by_title(page, f"{capacity_gb}GB")
-                capacity_checkbox.check()
+            for ddr in TARGET_FILTER['RAM_DDR']:
+                ddr_checkbox = page.get_by_role("checkbox",name=ddr,exact=True)
+                
+                ddr_checkbox.check()
                 page.wait_for_timeout(2000)
-
-                for maker in TARGET_MANUFACTURERS['RAM']:
-                    maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
-                    maker_checkbox.check()
+                
+                for capacity_gb in TARGET_FILTER['RAM_CAP']:
+                    capacity_label = page.locator("label:visible").filter(has=page.locator(f'span[title="{capacity_gb}"]'))
+                    capacity_id = capacity_label.get_attribute("for")
+                    capacity_checkbox = page.locator(f'id={capacity_id}')
+                    
+                    capacity_checkbox.check()
                     page.wait_for_timeout(2000)
 
-                    current_page = 1
+                    for maker in TARGET_MANUFACTURERS['RAM']:
+                        maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
+                        maker_checkbox.check()
+                        page.wait_for_timeout(2000)
+                        
+                        if not maker_checkbox.is_checked() or not capacity_checkbox.is_checked():
+                            continue                                
 
-                    while True:
-                        rows = read_products(page, capacity_gb, maker)
-                        print(f"{maker} {current_page}페이지 수집: {len(rows)}개")
-                        products.extend(rows)
+                        current_page = 1
 
-                        current_page += 1
+                        while True:
+                            rows = read_products(page, capacity_gb, maker)
+                            print(f"{maker} {current_page}페이지 수집: {len(rows)}개")
+                            products.extend(rows)
 
-                        next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {current_page}"]'))
-                        if next_button.count() == 0:
-                            break
-                        next_button.click()
+                            current_page += 1
+
+                            next_button=(page.locator('[data-testid="ProductListPagination"]').locator(f'button[aria-label="페이지 {current_page}"]'))
+                            if next_button.count() == 0:
+                                break
+                            next_button.click()
+                            page.wait_for_timeout(2000)
+
+                        maker_checkbox.uncheck()
                         page.wait_for_timeout(2000)
 
-                    maker_checkbox.uncheck()
+                    capacity_checkbox.uncheck()
                     page.wait_for_timeout(2000)
-
-                capacity_checkbox.uncheck()
+                    
+                ddr_checkbox.uncheck()
                 page.wait_for_timeout(2000)
         finally:
             browser.close()
