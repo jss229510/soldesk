@@ -12,7 +12,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112752"
 
 BASE_DIR = Path(__file__).resolve().parent
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"ram_playwright_{date}.csv"
+OUTPUT_PATH = BASE_DIR / "data" / f"ram_playwright.csv"
 
 
 def clean_price_text(value):
@@ -132,7 +132,7 @@ def ram_run():
         finally:
             browser.close()
 
-    columns = ["제조사", "제품명",
+    columns = ["제조사", "용량_GB", "제품명",
                "가격", "세부스펙", "이미지", "상품주소"]
     
     df = pd.DataFrame(products, columns=columns)

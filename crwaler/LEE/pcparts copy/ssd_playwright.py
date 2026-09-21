@@ -6,7 +6,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
-
+from datetime import datetime
 
 LIST_URL = "https://prod.danawa.com/list/?cate=112760"
 MAX_PAGES = 5  # 페이지 전환 검증 후 수집 범위를 5페이지로 확장한다.
@@ -18,7 +18,8 @@ CAPACITY_TIERS = (
 )
 
 BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_PATH = BASE_DIR / "data" / "ssd_playwright.csv"
+date = datetime.now().strftime("%Y%m%d")
+OUTPUT_PATH = BASE_DIR / "data" / f"ssd_playwright.csv"
 
 
 def clean_price_text(value):

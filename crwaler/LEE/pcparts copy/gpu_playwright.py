@@ -13,7 +13,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112753"
 BASE_DIR = Path(__file__).resolve().parent
 
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"gpu_playwright_{date}.csv"
+OUTPUT_PATH = BASE_DIR / "data" / f"gpu_playwright.csv"
 
 def clean_price_text(value):
     price = (value or "").replace("원", "").strip()
@@ -74,10 +74,10 @@ def gpu_run():
 
             page.get_by_role("button", name="23개").click()
             page.wait_for_timeout(2000)
-
+            
             series_list = (TARGET_FILTER['GPU_NVIDIA'] + TARGET_FILTER['GPU_AMD'])      
 
-            for maker in TARGET_MANUFACTURERS['MAINBOARD']:
+            for maker in TARGET_MANUFACTURERS['GPU']:
                 maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
 
                 maker_checkbox.check()
@@ -93,6 +93,7 @@ def gpu_run():
 
                     if not maker_checkbox.is_checked() or not series_checkbox.is_checked():
                         continue
+                    page.wait_for_timeout(2000)
 
                     current_page = 1
                 

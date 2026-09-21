@@ -13,7 +13,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112777"
 BASE_DIR = Path(__file__).resolve().parent
 
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"psu_playwright_{date}.csv"
+OUTPUT_PATH = BASE_DIR / "data" / f"psu_playwright.csv"
 
 def clean_price_text(value):
     price = (value or "").replace("원", "").strip()
