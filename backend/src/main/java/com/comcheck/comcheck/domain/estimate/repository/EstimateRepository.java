@@ -18,4 +18,8 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long>  {
     // 공개 여부로 견적 조회 (최신순, 페이지 단위)
     Page<Estimate> findBySharedOrderByCreatedAtDesc(boolean shared, Pageable pageable);
 
+    // 시스템 추천 preset 목록
+    List<Estimate> findByRecommendTrueAndUsageTypeOrderByCreatedAtDesc(
+            String usageType
+    );
 }
