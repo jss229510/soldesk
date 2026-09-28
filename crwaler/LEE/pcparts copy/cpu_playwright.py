@@ -74,8 +74,13 @@ def cpu_run():
             page.wait_for_timeout(2000)
 
             # 더보기 누르기
-            page.get_by_role("button", name="33개").click()
-            page.wait_for_timeout(2000)
+            series_label = page.locator("label:visible").filter(has=page.locator(f'span[title="코어울트라 시리즈2"]'))
+            series_area = series_label.locator('xpath=ancestor::div[.//button[starts-with(@aria-label, "필터 옵션")]][1]')
+            more_button = series_area.locator('button[aria-label^="필터 옵션"]')
+            
+            if more_button.get_attribute("aria-expanded") == "false":
+                more_button.click()
+                page.wait_for_timeout(2000)
 
             for maker in TARGET_MANUFACTURERS['CPU']:
                 maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
