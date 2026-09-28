@@ -60,16 +60,31 @@ def mainboard_run():
     products = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         try:
             page.goto(LIST_URL, wait_until="domcontentloaded")
             page.wait_for_timeout(2000)
 
-            # 더보기 누르기
-            page.get_by_role("button", name="20개").click()
-            page.wait_for_timeout(2000)
+            # 더보기를 누르기 전부터 보이는 소켓 항목을 기준으로 찾기
+            socket_label = page.locator("label:visible").filter(has=page.locator('span[title="AMD(소켓AM5)"]'))
+
+            # 해당 소켓을 포함하면서 '필터 옵션' 버튼이 있는 가장 가까운 상위 영역
+            # xpath= -> xpath 선택자: HTML 문서 안에서 원하는 요소를 '경로처럼' 찾아가는 방법
+            # ancestor::div -> socket_label의 부모, 부모의 부모, 그 위의 부모들 중 div을 찾아줌
+            # .// -> 현재 div 내에서 전체를 찾는다는 뜻
+            # starts-with(@aria-label -> aria-label이 필터 옵션으로 시작하는가를 검사해줌
+            # [1] -> 조건에 맞는 div 중 가장 가까운 div 하나를 선택함
+            socket_area = socket_label.locator(
+                'xpath=ancestor::div[.//button[starts-with(@aria-label, "필터 옵션")]][1]'
+            )
+            # ^= -> ~로 시작하는. 즉, 필터 옵션으로 시작하는
+            more_button = socket_area.locator('button[aria-label^="필터 옵션"]')
+
+            if more_button.get_attribute("aria-expanded") == "false":
+                more_button.click()
+                page.wait_for_timeout(2000)
 
             for maker in TARGET_MANUFACTURERS['MAINBOARD']:
                 maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
