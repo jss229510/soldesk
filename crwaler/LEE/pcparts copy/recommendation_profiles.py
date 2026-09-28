@@ -84,5 +84,7 @@ TARGET_FILTER = {
                    'RTX 4060','RTX 4060 Ti','RTX 4070 SUPER','RTX 4070 Ti SUPER','RTX 4080 SUPER',
                    'RTX 5050','RTX 5060','RTX 5060 Ti','RTX 5070','RTX 5070 Ti','RTX 5080','RTX 5090'),
     'GPU_AMD': ('RX 6800','RX 7600','RX 9060','RX 9060 XT','RX 9070','RX 9070 GRE','RX 9070 XT'),
-    'MD_sockets': ('AMD(소켓AM4)','AMD(소켓AM5)','인텔(소켓1200)','인텔(소켓1700)','인텔(소켓1851)',)
+    'MD_sockets': ('AMD(소켓AM4)','AMD(소켓AM5)','인텔(소켓1200)','인텔(소켓1700)','인텔(소켓1851)',),
+    'RAM_DDR': ('DDR4','DDR5'),
+    'RAM_CAP': ('8GB','16GB','32GB','64GB')
 }

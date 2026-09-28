@@ -13,7 +13,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112747&15main_11_02"
 BASE_DIR = Path(__file__).resolve().parent
 
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"cpu_playwright_{date}.csv"
+OUTPUT_PATH = BASE_DIR / "data" / f"cpu_playwright.csv"
 
 # \d{1,3}: 숫자가 1~3개
 # (?:,\d{3})*: ,뒤에 숫자 3개가 0번 이상
