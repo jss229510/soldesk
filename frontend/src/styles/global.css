@@ -88,3 +88,23 @@ img {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* =========================
+   라이트 / 다크 모드
+========================= */
+
+/* 기본 라이트 모드 */
+.flex.min-h-screen.flex-col {
+  background-color: #ffffff;
+  color: #111827;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* 다크 모드 */
+.flex.min-h-screen.flex-col.dark {
+  background-color: #030712;
+  color: #ffffff;
+}

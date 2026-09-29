@@ -16,13 +16,16 @@ export const SearchBar = () => {
 
   useEffect(() => {
     let ignore = false;
+
     if (!debounced.trim()) {
       setItems([]);
       return undefined;
     }
+
     searchParts(debounced).then((result) => {
       if (!ignore) setItems(result.items.slice(0, 6));
     });
+
     return () => {
       ignore = true;
     };
@@ -30,10 +33,15 @@ export const SearchBar = () => {
 
   useEffect(() => {
     const onClickOutside = (event) => {
-      if (!boxRef.current?.contains(event.target)) setOpen(false);
+      if (!boxRef.current?.contains(event.target)) {
+        setOpen(false);
+      }
     };
+
     document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+
+    return () =>
+      document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
   const goToPart = (part) => {
@@ -43,11 +51,28 @@ export const SearchBar = () => {
   };
 
   return (
-    <div className="relative hidden max-w-lg flex-1 lg:block" ref={boxRef}>
-      <div className="flex h-10 items-center gap-2 rounded-md border border-gray-700 bg-gray-800 px-4">
-        <span className="text-gray-500" aria-hidden="true">⌕</span>
+    <div
+      className="relative hidden max-w-lg flex-1 lg:block"
+      ref={boxRef}
+    >
+      <div
+        className="flex h-10 items-center gap-2 rounded-md border px-4"
+        style={{
+          backgroundColor: 'var(--bg-surface-2)',
+          borderColor: 'var(--line)',
+          color: 'var(--text)',
+        }}
+      >
+        <span
+          style={{ color: 'var(--text-3)' }}
+          aria-hidden="true"
+        >
+          ⌕
+        </span>
+
         <input
-          className="h-full min-w-0 flex-1 border-0 bg-transparent outline-none placeholder:text-gray-500"
+          className="h-full min-w-0 flex-1 border-0 bg-transparent outline-none"
+          style={{ color: 'var(--text)' }}
           value={keyword}
           onChange={(event) => {
             setKeyword(event.target.value);
@@ -55,7 +80,9 @@ export const SearchBar = () => {
           }}
           onFocus={() => setOpen(true)}
           onKeyDown={(event) => {
-            if (event.key === 'Enter' && items[0]) goToPart(items[0]);
+            if (event.key === 'Enter' && items[0]) {
+              goToPart(items[0]);
+            }
           }}
           placeholder="부품, 브랜드 검색..."
           aria-label="부품 검색"
@@ -63,17 +90,48 @@ export const SearchBar = () => {
       </div>
 
       {open && keyword.trim() && (
-        <div className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-md border border-gray-600 bg-gray-900 shadow-lg">
+        <div
+          className="absolute left-0 right-0 top-full z-20 mt-2 overflow-hidden rounded-md border shadow-lg"
+          style={{
+            backgroundColor: 'var(--bg-surface)',
+            borderColor: 'var(--line)',
+            color: 'var(--text)',
+          }}
+        >
           {items.length === 0 ? (
-            <p className="p-4 text-sm text-gray-400">찾는 부품이 없습니다. 다른 이름으로 검색해 보세요.</p>
+            <p
+              className="p-4 text-sm"
+              style={{ color: 'var(--text-2)' }}
+            >
+              찾는 부품이 없습니다. 다른 이름으로 검색해 보세요.
+            </p>
           ) : (
             items.map((part) => (
-              <button key={part.id} type="button" className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left hover:bg-gray-800" onClick={() => goToPart(part)}>
+              <button
+                key={part.id}
+                type="button"
+                className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left"
+                onClick={() => goToPart(part)}
+              >
                 <span>
-                  <span className="block font-mono text-xs text-gray-500">{part.brand}</span>
-                  <span>{part.name}</span>
+                  <span
+                    className="block font-mono text-xs"
+                    style={{ color: 'var(--text-3)' }}
+                  >
+                    {part.brand}
+                  </span>
+
+                  <span style={{ color: 'var(--text)' }}>
+                    {part.name}
+                  </span>
                 </span>
-                <span className="font-mono text-sm text-cyan-400">{formatPrice(part.price)}</span>
+
+                <span
+                  className="font-mono text-sm"
+                  style={{ color: 'var(--brand)' }}
+                >
+                  {formatPrice(part.price)}
+                </span>
               </button>
             ))
           )}
