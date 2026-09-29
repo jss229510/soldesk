@@ -10,3 +10,5 @@ public interface PriceHistoryRepository extends JpaRepository<PriceHistory, Long
     // 부품별 과거 가격을 기록 날짜 오름차순으로 조회
     List<PriceHistory> findByPartIdOrderByRecordedAtAsc(Long partId);
 }
+
+//최근 12개월 부품 가격 조회

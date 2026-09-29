@@ -32,7 +32,7 @@ public class Part {
     @Column(name = "\"part_name\"")
     // 부품 제품명을 저장하는 컬럼
 
-    private String part_name;
+    private String partName;
 
     @Column(name = "\"price\"")
     // 부품 가격을 저장하는 컬럼
@@ -42,18 +42,17 @@ public class Part {
     @Column(name = "\"is_discontinued\"")
     // 단종 여부(Y/N)를 저장하는 컬럼
 
-    private String is_discontinued;
+    private String discontinued;
 
     @Column(name = "\"image_url\"")
     // 상품 이미지 주소를 저장하는 컬럼
 
-    private String image_url;
+    private String imageUrl;
 
     @Column(name = "\"product_url\"")
     // 다나와 상품 페이지 주소를 저장하는 컬럼
 
-    private String product_url;
-
+    private String productUrl;
 
     // DB에서 조회한 필드 값을 외부에서 읽을 수 있도록 Getter 제공
 
@@ -70,7 +69,7 @@ public class Part {
     }
 
     public String getPartName() {
-        return part_name;
+        return partName;
     }
 
     public Long getPrice() {
@@ -78,14 +77,14 @@ public class Part {
     }
 
     public String getIsDiscontinued() {
-        return is_discontinued;
+        return discontinued;
     }
 
     public String getImageUrl() {
-        return image_url;
+        return imageUrl;
     }
 
     public String getProductUrl() {
-        return product_url;
+        return productUrl;
     }
 }
