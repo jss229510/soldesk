@@ -65,13 +65,6 @@ public class EstimateService {
         return estimateRepository.findByRecommendTrueAndUsageTypeOrderByCreatedAtDesc(usageType);
     }
 
-    // 견적 수정 (update)
-    @Transactional 
-    public Estimate update (Long estimateId, Estimate request){
-        if(request.getUserId() == null)
-            return estimateRepository.
-    }
-
     // 견적 삭제 (delete)
     @Transactional
     public void delete(Long estimateId) {

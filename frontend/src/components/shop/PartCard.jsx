@@ -1,4 +1,5 @@
 import { Badge, Button, Chip, Sparkline, StarRating, Thumbnail } from '../common';
+import { useCart } from '../../context/CartContext';
 import { sparklineValues } from '../../mock/priceHistory';
 import { discountRate, formatNumber, formatPrice } from '../../utils/format';
 
@@ -7,6 +8,8 @@ import { discountRate, formatNumber, formatPrice } from '../../utils/format';
  * @param {{ part: import('../../types').Part, onSelect: (part) => void }} props
  */
 export const PartCard = ({ part, onSelect }) => {
+  // 부모 컴포넌트를 거쳐 콜백을 전달하지 않아도 카드에서 바로 장바구니에 담을 수 있다.
+  const { addItem } = useCart();
   const off = discountRate(part.price, part.listPrice);
 
   return (
@@ -40,9 +43,15 @@ export const PartCard = ({ part, onSelect }) => {
           <span className="whitespace-nowrap font-mono text-xs text-gray-500">재고 {formatNumber(part.stock)}개</span>
         </div>
 
-        <Button variant="soft" block onClick={() => onSelect?.(part)}>
-          시세 차트 보기
-        </Button>
+        {/* 시세 이력 조회와 장바구니 담기를 서로 독립된 동작으로 유지한다. */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="soft" block onClick={() => onSelect?.(part)}>
+            시세 차트 보기
+          </Button>
+          <Button block onClick={() => addItem(part)}>
+            장바구니 담기
+          </Button>
+        </div>
       </div>
     </article>
   );

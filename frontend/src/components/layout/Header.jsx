@@ -1,9 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import { NAV_ITEMS } from '../../constants/routes';
+import { useCart } from '../../context/CartContext';
 import Logo from './Logo';
 import SearchBar from './SearchBar';
 
-export const Header = () => (
+export const Header = () => {
+  // 상품 종류 수가 아니라 장바구니에 담긴 전체 수량을 배지에 표시한다.
+  const { totalQuantity } = useCart();
+
+  return (
   <header
     className="sticky top-0 z-40 border-b"
     style={{
@@ -36,11 +41,18 @@ export const Header = () => (
           >
             {item.icon && <span aria-hidden="true">{item.icon}</span>}
             {item.label}
+            {/* 장바구니에 상품이 하나 이상 있을 때만 수량 배지를 표시한다. */}
+            {item.id === 'cart' && totalQuantity > 0 && (
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-cyan-500 px-1 text-xs font-bold text-gray-950">
+                {totalQuantity}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>
     </div>
   </header>
-);
+  );
+};
 
 export default Header;
