@@ -26,7 +26,9 @@ public class EstimateService {
     @Transactional
     public Estimate create(Estimate request) {
         if (request.getUserId() == null) 
-            return  }//??
+            return estimateRepository.findByUserIdOrderByCreatedAtDesc()
+            .findById();    
+    }
 
     // 견적 조회 없으면 404
     public Estimate getEstimate(Long estimateId) {
@@ -46,7 +48,8 @@ public class EstimateService {
     // 견적 수정 (update)
     @Transactional 
     public Estimate update (Long estimateId, Estimate request){
-        if 
+        if(request.getUserId() == null)
+            return estimateRepository.
     }
     // 견적 삭제 (delete)
     @Transactional
