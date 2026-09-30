@@ -88,3 +88,67 @@ img {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* =========================
+   라이트 / 다크 모드
+========================= */
+
+/* 기본 라이트 모드 */
+.flex.min-h-screen.flex-col {
+  background-color: #ffffff;
+  color: #111827;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* 다크 모드 */
+.flex.min-h-screen.flex-col.dark {
+  background-color: #030712;
+  color: #ffffff;
+}
+
+/* 기존 Tailwind 색상 유틸리티를 의미 기반 테마 토큰에 연결한다. */
+.bg-gray-950 { background-color: rgba(15, 23, 42, 0.6); }
+.bg-gray-900 { background-color: var(--bg-surface); }
+.bg-gray-800 { background-color: var(--bg-surface-2); }
+.bg-gray-700 { background-color: var(--bg-surface-3); }
+.border-gray-700 { border-color: var(--line); }
+.border-gray-600,
+.border-gray-500 { border-color: var(--line-strong); }
+.text-gray-300 { color: var(--text); }
+.text-gray-400 { color: var(--text-2); }
+.text-gray-500,
+.text-gray-600 { color: var(--text-3); }
+.hover\:bg-gray-800:hover { background-color: var(--bg-surface-3); }
+.hover\:border-gray-500:hover { border-color: var(--brand); }
+
+.bg-cyan-950 { background-color: var(--brand-soft); }
+.text-cyan-400 { color: var(--brand); }
+.border-cyan-400,
+.border-cyan-500,
+.border-cyan-700 { border-color: var(--brand); }
+.hover\:bg-cyan-900:hover { background-color: var(--brand-soft); }
+.hover\:border-cyan-400:hover { border-color: var(--brand-strong); }
+.hover\:text-cyan-400:hover { color: var(--brand); }
+.hover\:text-white:hover { color: var(--text); }
+
+.bg-green-950 { background-color: var(--success-surface); }
+.text-green-200,
+.text-green-400 { color: var(--success); }
+.border-green-500 { border-color: var(--success); }
+
+.bg-red-950 { background-color: var(--danger-surface); }
+.bg-red-600 { background-color: var(--danger); }
+.text-red-200,
+.text-red-300,
+.text-red-400 { color: var(--danger); }
+.border-red-500,
+.border-red-600 { border-color: var(--danger); }
+.hover\:text-red-400:hover { color: var(--danger); }
+
+.bg-yellow-950 { background-color: var(--warning-surface); }
+.text-yellow-300,
+.text-yellow-400 { color: var(--warning); }
+.border-yellow-500 { border-color: var(--warning); }

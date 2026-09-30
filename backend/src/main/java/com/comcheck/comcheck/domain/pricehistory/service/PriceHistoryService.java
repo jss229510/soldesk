@@ -11,12 +11,17 @@ import java.util.List;
 public class PriceHistoryService {
     // 과거 부품별 가격 시세 호출
     private final PriceHistoryRepository priceHistoryRepository;
-    //생성자
+
+    // 생성자
     public PriceHistoryService(PriceHistoryRepository priceHistoryRepository) {
         this.priceHistoryRepository = priceHistoryRepository;
     }
 
+    // 부품 시세 검색
     public List<PriceHistory> getPriceHistoriesByPartId(Long partId) {
         return priceHistoryRepository.findByPartIdOrderByRecordedAtAsc(partId);
     }
+
+    //최근 12개월 조회
+    // public List<PriceHistory> get
 }

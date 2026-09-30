@@ -62,6 +62,20 @@ public class Estimate {
     // 시스템 추천 견적 여부
     private boolean recommend;
 
+    protected Estimate() {
+        // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자다.
+    }
+
+    public Estimate(Long userId, String title, String usageType, Integer budgetMax, boolean shared) {
+        // 사용자가 새 견적을 만들 때 입력한 필드만 초기화한다.
+        this.userId = userId;
+        this.title = title;
+        this.usageType = usageType;
+        this.budgetMax = budgetMax;
+        this.shared = shared;
+        this.createdAt = LocalDateTime.now();
+    }
+
      public Long getEstimateId() {
         return estimateId;
     }

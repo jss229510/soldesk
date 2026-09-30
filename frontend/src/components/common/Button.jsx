@@ -1,10 +1,25 @@
 import { Link } from 'react-router-dom';
 
 const VARIANTS = {
-  primary: 'bg-cyan-400 text-gray-900 hover:bg-cyan-300',
-  outline: 'border border-gray-500 bg-gray-800 text-white hover:border-cyan-400 hover:text-cyan-400',
-  ghost: 'text-gray-300 hover:bg-gray-800 hover:text-white',
-  soft: 'border border-cyan-700 bg-cyan-950 text-cyan-400 hover:bg-cyan-900',
+  // 테마 변수를 사용해 라이트·다크 모드 모두에서 버튼이 읽히도록 한다.
+  primary: {
+    backgroundColor: 'var(--brand-strong)',
+    color: '#04121a',
+  },
+  outline: {
+    backgroundColor: 'var(--bg-surface)',
+    borderColor: 'var(--line-strong)',
+    color: 'var(--text)',
+  },
+  ghost: {
+    backgroundColor: 'transparent',
+    color: 'var(--text)',
+  },
+  soft: {
+    backgroundColor: 'var(--brand-soft)',
+    borderColor: 'var(--brand)',
+    color: 'var(--brand)',
+  },
 };
 
 const SIZES = {
@@ -22,23 +37,26 @@ export const Button = ({
   block = false,
   to,
   className,
+  style,
   children,
   ...rest
 }) => {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+  const classes = `inline-flex items-center justify-center gap-2 rounded-md border font-semibold transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 ${
     SIZES[size] ?? 'h-10 px-5'
-  } ${VARIANTS[variant]} ${block ? 'w-full' : ''} ${className ?? ''}`;
+  } ${block ? 'w-full' : ''} ${className ?? ''}`;
+  // 호출부 스타일을 추가해도 variant의 테마 기본 스타일은 유지한다.
+  const buttonStyle = { ...VARIANTS[variant], ...style };
 
   if (to) {
     return (
-      <Link to={to} className={classes} {...rest}>
+      <Link to={to} className={classes} style={buttonStyle} {...rest}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button type="button" className={classes} {...rest}>
+    <button type="button" className={classes} style={buttonStyle} {...rest}>
       {children}
     </button>
   );
