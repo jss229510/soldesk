@@ -1,7 +1,6 @@
 from pathlib import Path
 import re
 from urllib.parse import urljoin
-
 import pandas as pd
 from bs4 import BeautifulSoup
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
@@ -19,7 +18,7 @@ CAPACITY_TIERS = (
 
 BASE_DIR = Path(__file__).resolve().parent
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"ssd_playwright.csv"
+OUTPUT_PATH = BASE_DIR / "data" / date / f"ssd_playwright_{date}.csv"
 
 
 def clean_price_text(value):

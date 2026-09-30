@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 from urllib.parse import urljoin
-
+from datetime import datetime
 import pandas as pd
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
@@ -11,7 +11,8 @@ from recommendation_profiles import TARGET_MANUFACTURERS, TARGET_FILTER
 LIST_URL = "https://prod.danawa.com/list/?cate=112751"
 
 BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_PATH = BASE_DIR / "data" / "mainboard_playwright.csv"
+date = datetime.now().strftime("%Y%m%d")
+OUTPUT_PATH = BASE_DIR / "data" / date / f"mainboard_playwright_{date}.csv"
 
 def clean_price_text(value):
     price = (value or "").replace("원", "").strip()

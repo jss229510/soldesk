@@ -1,13 +1,29 @@
 from datetime import date
 from pathlib import Path
 import re
-
 import pandas as pd
-
+from recommendation_profiles import CPU_LEVEL_MODELS
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / 'data'
-OUTPUT_DIR = BASE_DIR / 'output'
+
+# data 안의 날짜 폴더까지 검색해서 파일명에서 날짜 추출
+csv_dates=[]
+
+for path in DATA_DIR.rglob("*.csv"):
+    found = re.fullmatch(
+        r"(?:ram|cpu|mainboard|ssd|psu|gpu)_playwright_(\d{8})\.csv",
+        path.name
+    )
+    if found:
+        csv_dates.append(found.group(1))
+if not csv_dates:
+    raise FileNotFoundError("날짜가 붙은 원본 csv파일이 없습니다.")
+
+# YYYYMMDD 형식이므로 가장 큰 값이 최신 날짜
+TARGET_DATE = max(csv_dates)
+
+OUTPUT_DIR = BASE_DIR / 'output' / TARGET_DATE
 RAW_FILE_PATTERNS = {
     'RAM': ('ram_playwright.csv', 'ram_playwright_*.csv'),
     'CPU': ('cpu_playwright.csv', 'cpu_playwright_*.csv'),
@@ -20,9 +36,19 @@ PART_COLUMNS = ['part_id', 'category', 'brand', 'part_name', 'price', 'is_discon
 SPEC_COLUMNS = ['spec_id', 'part_id', 'spec_key', 'spec_value', 'spec_unit']
 HISTORY_COLUMNS = ['price_history_id', 'part_id', 'dateprice', 'Field', 'source']
 ISSUE_COLUMNS = ['category', 'source_row', 'part_id', 'part_name', 'field', 'reason']
+RECOMMENDATION_COLUMNS = [
+    'part_id',
+    'category',
+    'part_name',
+    'level',
+    'vram_gb',
+    'ram_capacity_gb',
+    'ssd_capacity_gb',
+    'has_igpu',  
+]
 SPEC_FIELDS = {
     'RAM': [('ram_type', ''), ('capacity_gb', 'GB'), ('speed_mhz', 'MHz'), ('module_count', 'EA')],
-    'CPU': [('cpu_brand', ''), ('cpu_socket', ''), ('tdp_watt', 'W'), ('cpu_core', 'EA'), ('thread', 'EA'), ('cpu_clock', 'GHz'), ('cpu_L2', 'MB'), ('cpu_L3', 'MB'), ('DDR', '')],
+    'CPU': [('cpu_brand', ''), ('cpu_socket', ''), ('tdp_watt', 'W'), ('cpu_core', 'EA'), ('thread', 'EA'), ('cpu_clock', 'GHz'), ('cpu_L2', 'MB'), ('cpu_L3', 'MB'), ('DDR', ''), ('has_igpu', '')],
     'MAINBOARD': [('cpu_socket', ''), ('ram_type', ''), ('ram_socket', 'EA'), ('form_factor', ''), ('chipset', ''), ('m2_slots', 'EA'), ('max_ram_capacity_gb', 'GB')],
     'SSD': [('storage_gb', 'GB'), ('form_factor', ''), ('interface', ''), ('nand_type', ''), ('read_speed_mbs', 'MB/s'), ('write_speed_mbs', 'MB/s'), ('tbw', 'TB')],
     'PSU': [('wattage', 'W'), ('efficiency_rating', ''), ('modular_type', ''), ('form_factor', ''), ('pcie_connector', ''), ('atx_version', ''), ('fan_size', 'mm')],
@@ -46,6 +72,12 @@ SSD_BRAND_ALIASES = {
     '삼성전자': ('삼성전자',), 'Western Digital': ('Western Digital', 'WD ', 'SanDisk'), 'SK하이닉스': ('SK하이닉스', 'SK hynix'), '키오시아': ('키오시아', 'KIOXIA'), 'ESSENCORE': ('ESSENCORE', 'KLEVV'), '트랜센드': ('트랜센드', 'Transcend'), 'ADATA': ('ADATA',), 'BIWIN': ('BIWIN',), 'PATRIOT': ('PATRIOT',), 'GIGABYTE': ('GIGABYTE',), 'Seagate': ('Seagate',), '킹스톤': ('킹스톤', 'Kingston'), 'TeamGroup': ('TeamGroup', 'T-Force'), 'PNY': ('PNY',), 'COLORFUL': ('COLORFUL',), 'MSI': ('MSI',), '마이크론': ('마이크론', 'Micron', 'Crucial'),
 }
 
+CPU_LEVEL_LOOKUP = {
+    (maker, model.upper()): level
+    for level, manufacturers in CPU_LEVEL_MODELS.items()
+    for maker, models in manufacturers.items()
+    for model in models 
+}
 
 def text(value):
     return '' if value is None or pd.isna(value) else str(value).strip()
@@ -62,12 +94,23 @@ def save_csv(rows, columns, path):
 
 
 def latest_input_file(category):
-    fixed_name, dated_pattern = RAW_FILE_PATTERNS[category]
-    fixed_path = DATA_DIR / fixed_name
-    if fixed_path.exists():
-        return fixed_path
-    candidates = sorted(DATA_DIR.glob(dated_pattern), key=lambda path: path.stat().st_mtime)
-    return candidates[-1] if candidates else None
+    # 모든 부품을 같은 날짜로 맞춰서 읽기
+    filename = f"{category.lower()}_playwright_{TARGET_DATE}.csv"
+    candidates = list(DATA_DIR.rglob(filename))
+
+    if not candidates:
+        return None
+
+    if len(candidates) > 1:
+        raise ValueError(f"같은 날짜의 파일이 여러 폴더에 있습니다: {filename}")
+
+    return candidates[0]
+    # fixed_name, dated_pattern = RAW_FILE_PATTERNS[category]
+    # fixed_path = DATA_DIR / fixed_name
+    # if fixed_path.exists():
+    #     return fixed_path
+    # candidates = sorted(DATA_DIR.glob(dated_pattern), key=lambda path: path.stat().st_mtime)
+    # return candidates[-1] if candidates else None
 
 
 def clean_common_fields(df):
@@ -134,6 +177,7 @@ def parse_cpu(row, spec):
         'tdp_watt': first_number(r'\bTDP\s*:\s*(\d+)', spec) or first_number(r'\b(\d+)\s*W\b', spec),
         'cpu_core': str(sum(map(int, re.findall(r'\d+', cores.group(1))))) if cores else '', 'thread': str(sum(map(int, re.findall(r'\d+', threads.group(1))))) if threads else '',
         'cpu_clock': first_number(r'최대\s*클럭\s*:\s*(\d+(?:\.\d+)?)\s*GHz', spec), 'cpu_L2': first_number(r'L2\s*캐시\s*:\s*(\d+(?:\.\d+)?)\s*MB', spec), 'cpu_L3': first_number(r'L3\s*캐시\s*:\s*(\d+(?:\.\d+)?)\s*MB', spec), 'DDR': ddr_types(first_number(r'메모리\s*규격\s*:\s*([^/]+)', spec)),
+        'has_igpu' : has_igpu(spec),
     }
 
 
@@ -156,7 +200,7 @@ def parse_mainboard(row, spec):
             r'(?:^|/)\s*[\d,]+\s*MHz\s*\([^)]*\)\s*/\s*(\d+)\s*개(?=\s*/\s*메모리\s*용량)',
             spec,
         )
-    return {
+    return { 
         'cpu_socket': socket(spec), 'ram_type': ddr_types(spec), 'ram_socket': ram_slots, 'form_factor': form,
         'chipset': first_number(r'(?:^|/)\s*(?:인텔|Intel|AMD)\s+([A-Z]+\d+[A-Z0-9]*)\s*(?=/|$)', spec), 'm2_slots': first_number(r'\bM\.2\s*:\s*(\d+)\s*개', spec), 'max_ram_capacity_gb': first_number(r'메모리\s*용량\s*:\s*(?:최대\s*)?([\d,]+)\s*GB', spec),
     }
@@ -223,6 +267,31 @@ def coverage_rows(parts, specs):
             rows.append({'category': category, 'bucket': label, 'candidate_count': count, 'minimum_required': MIN_CANDIDATES_PER_BUCKET, 'status': 'PASS' if count >= MIN_CANDIDATES_PER_BUCKET else 'NEEDS_CRAWL'})
     return rows
 
+def extract_cpu_model(product_name):
+    name = " ".join(str(product_name or "").upper().split())
+    match = re.search(
+        r"\b(?:PRO\s+)?\d{3,5}[A-Z0-9]*(?:\s+PLUS)?\b",
+        name,
+    )
+    return match.group(0) if match else None
+
+def cpu_level_from_name(name, maker):
+    model = extract_cpu_model(name)
+
+    if not model:
+        return ''
+    return CPU_LEVEL_LOOKUP.get((maker, model.upper()),'')
+
+def has_igpu(spec):
+    spec = text(spec)
+    # 미탑재를 먼저 검사해야 하는 이유: 미탑재에 탑재라는 글자가 들어있어서 Y가 되버림
+    if re.search(r'미탑재', spec, re.IGNORECASE):
+        return 'N'
+    
+    if re.search(r'탑재', spec, re.IGNORECASE):
+        return 'Y'
+    
+    return ''
 
 def main():
     selected = {category: latest_input_file(category) for category in RAW_FILE_PATTERNS}
@@ -230,7 +299,9 @@ def main():
     if missing:
         raise FileNotFoundError(f'원본 CSV 없음: {", ".join(missing)}')
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    parts, specs, issues, history = [], [], [], []
+
+    parts, specs, issues, history, recommendation_data = [], [], [], [], []
+
     part_id = spec_id = history_id = 1
     for category, source_path in selected.items():
         source = clean_common_fields(pd.read_csv(source_path, encoding='utf-8-sig', dtype=str).fillna(''))
@@ -246,6 +317,7 @@ def main():
                 continue
             brand = text(row.get('제조사')) or (inferred_ssd_brand(name) if category == 'SSD' else inferred_brand(category, name))
             values = PARSERS[category](row, spec)
+
             if category in ('CPU', 'MAINBOARD') and values['cpu_socket'] not in ALLOWED_SOCKETS:
                 continue
             required = [key for key in REQUIRED_SPECS[category] if not text(values.get(key))]
@@ -254,6 +326,52 @@ def main():
                 continue
             common = {'part_id': part_id, 'category': category, 'brand': brand, 'part_name': name, 'price': text(row.get('가격')), 'is_discontinued': 'Y' if '단종' in spec else 'N', 'image_url': text(row.get('이미지')), 'product_url': text(row.get('상품주소'))}
             parts.append(common)
+
+            if category == 'CPU':
+                recommendation_data.append({
+                    'part_id': part_id,
+                    'category': category,
+                    'part_name': name,
+                    'level': cpu_level_from_name(name, brand),
+                    'vram_gb': '',
+                    'ram_capacity_gb': '',
+                    'ssd_capacity_gb': '',  
+                    'has_igpu': values.get('has_igpu',''),                 
+                })
+            elif category == 'GPU':
+                recommendation_data.append({
+                    'part_id': part_id,
+                    'category': category,
+                    'part_name': name,
+                    'level': values.get('performance_tier', ''),
+                    'vram_gb': values.get('vram_gb', ''),
+                    'ram_capacity_gb': '',
+                    'ssd_capacity_gb': '',   
+                    'has_igpu': '',                
+                })
+            elif category == 'RAM':
+                recommendation_data.append({
+                    'part_id': part_id,
+                    'category': category,
+                    'part_name': name,
+                    'level': '',
+                    'vram_gb': '',
+                    'ram_capacity_gb': values.get('capacity_gb', ''),
+                    'ssd_capacity_gb': '', 
+                    'has_igpu': '',                    
+                })
+            elif category == 'SSD':
+                recommendation_data.append({
+                    'part_id': part_id,
+                    'category': category,
+                    'part_name': name,
+                    'level': '',
+                    'vram_gb': '',
+                    'ram_capacity_gb': '',
+                    'ssd_capacity_gb': values.get('storage_gb', ''),  
+                    'has_igpu': '',                   
+                })
+
             history.append({'price_history_id': history_id, 'part_id': part_id, 'dateprice': common['price'], 'Field': date.today().isoformat(), 'source': '다나와'})
             history_id += 1
             for key, unit in SPEC_FIELDS[category]:
@@ -271,6 +389,7 @@ def main():
     save_csv(history, HISTORY_COLUMNS, OUTPUT_DIR / 'price_history_all.csv')
     save_csv(issues, ISSUE_COLUMNS, OUTPUT_DIR / 'review_needed.csv')
     save_csv(coverage_rows(parts, specs), ['category', 'bucket', 'candidate_count', 'minimum_required', 'status'], OUTPUT_DIR / 'coverage_report.csv')
+    save_csv(recommendation_data,RECOMMENDATION_COLUMNS,OUTPUT_DIR / 'recommendation_data.csv')
     print(f'통합 완료: PARTS {len(parts)}건 / PART_SPECS {len(specs)}건 / PRICE_HISTORY {len(history)}건')
 
 
