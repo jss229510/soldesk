@@ -48,7 +48,7 @@ RECOMMENDATION_COLUMNS = [
 ]
 SPEC_FIELDS = {
     'RAM': [('ram_type', ''), ('capacity_gb', 'GB'), ('speed_mhz', 'MHz'), ('module_count', 'EA')],
-    'CPU': [('cpu_brand', ''), ('cpu_socket', ''), ('tdp_watt', 'W'), ('cpu_core', 'EA'), ('thread', 'EA'), ('cpu_clock', 'GHz'), ('cpu_L2', 'MB'), ('cpu_L3', 'MB'), ('DDR', ''), ('has_igpu', '')],
+    'CPU': [('cpu_brand', ''), ('cpu_socket', ''), ('tdp_watt', 'W'), ('cpu_core', 'EA'), ('thread', 'EA'), ('cpu_clock', 'GHz'), ('cpu_L2', 'MB'), ('cpu_L3', 'MB'), ('DDR', ''), ('has_igpu', ''), ('cpu_level','')],
     'MAINBOARD': [('cpu_socket', ''), ('ram_type', ''), ('ram_socket', 'EA'), ('form_factor', ''), ('chipset', ''), ('m2_slots', 'EA'), ('max_ram_capacity_gb', 'GB')],
     'SSD': [('storage_gb', 'GB'), ('form_factor', ''), ('interface', ''), ('nand_type', ''), ('read_speed_mbs', 'MB/s'), ('write_speed_mbs', 'MB/s'), ('tbw', 'TB')],
     'PSU': [('wattage', 'W'), ('efficiency_rating', ''), ('modular_type', ''), ('form_factor', ''), ('pcie_connector', ''), ('atx_version', ''), ('fan_size', 'mm')],
@@ -172,12 +172,16 @@ def parse_ram(row, spec):
 def parse_cpu(row, spec):
     cores = re.search(r'(?:^|/)\s*((?:[PE]?\s*\d+\s*\+\s*)*[PE]?\s*\d+)\s*코어', spec, re.I)
     threads = re.search(r'(?:^|/)\s*((?:\d+\s*\+\s*)*\d+)\s*스레드', spec, re.I)
+    name = text(row.get('제품명'))
+    brand = text(row.get('제조사') or inferred_brand('CPU', name))
+
     return {
         'cpu_brand': 'Intel' if text(row.get('제조사')) == '인텔' else text(row.get('제조사')), 'cpu_socket': socket(spec),
         'tdp_watt': first_number(r'\bTDP\s*:\s*(\d+)', spec) or first_number(r'\b(\d+)\s*W\b', spec),
         'cpu_core': str(sum(map(int, re.findall(r'\d+', cores.group(1))))) if cores else '', 'thread': str(sum(map(int, re.findall(r'\d+', threads.group(1))))) if threads else '',
         'cpu_clock': first_number(r'최대\s*클럭\s*:\s*(\d+(?:\.\d+)?)\s*GHz', spec), 'cpu_L2': first_number(r'L2\s*캐시\s*:\s*(\d+(?:\.\d+)?)\s*MB', spec), 'cpu_L3': first_number(r'L3\s*캐시\s*:\s*(\d+(?:\.\d+)?)\s*MB', spec), 'DDR': ddr_types(first_number(r'메모리\s*규격\s*:\s*([^/]+)', spec)),
         'has_igpu' : has_igpu(spec),
+        'cpu_level': cpu_level_from_name(name, brand),
     }
 
 
@@ -300,7 +304,7 @@ def main():
         raise FileNotFoundError(f'원본 CSV 없음: {", ".join(missing)}')
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    parts, specs, issues, history, recommendation_data = [], [], [], [], []
+    parts, specs, issues, history = [], [], [], []
 
     part_id = spec_id = history_id = 1
     for category, source_path in selected.items():
@@ -327,51 +331,6 @@ def main():
             common = {'part_id': part_id, 'category': category, 'brand': brand, 'part_name': name, 'price': text(row.get('가격')), 'is_discontinued': 'Y' if '단종' in spec else 'N', 'image_url': text(row.get('이미지')), 'product_url': text(row.get('상품주소'))}
             parts.append(common)
 
-            if category == 'CPU':
-                recommendation_data.append({
-                    'part_id': part_id,
-                    'category': category,
-                    'part_name': name,
-                    'level': cpu_level_from_name(name, brand),
-                    'vram_gb': '',
-                    'ram_capacity_gb': '',
-                    'ssd_capacity_gb': '',  
-                    'has_igpu': values.get('has_igpu',''),                 
-                })
-            elif category == 'GPU':
-                recommendation_data.append({
-                    'part_id': part_id,
-                    'category': category,
-                    'part_name': name,
-                    'level': values.get('performance_tier', ''),
-                    'vram_gb': values.get('vram_gb', ''),
-                    'ram_capacity_gb': '',
-                    'ssd_capacity_gb': '',   
-                    'has_igpu': '',                
-                })
-            elif category == 'RAM':
-                recommendation_data.append({
-                    'part_id': part_id,
-                    'category': category,
-                    'part_name': name,
-                    'level': '',
-                    'vram_gb': '',
-                    'ram_capacity_gb': values.get('capacity_gb', ''),
-                    'ssd_capacity_gb': '', 
-                    'has_igpu': '',                    
-                })
-            elif category == 'SSD':
-                recommendation_data.append({
-                    'part_id': part_id,
-                    'category': category,
-                    'part_name': name,
-                    'level': '',
-                    'vram_gb': '',
-                    'ram_capacity_gb': '',
-                    'ssd_capacity_gb': values.get('storage_gb', ''),  
-                    'has_igpu': '',                   
-                })
-
             history.append({'price_history_id': history_id, 'part_id': part_id, 'dateprice': common['price'], 'Field': date.today().isoformat(), 'source': '다나와'})
             history_id += 1
             for key, unit in SPEC_FIELDS[category]:
@@ -389,7 +348,6 @@ def main():
     save_csv(history, HISTORY_COLUMNS, OUTPUT_DIR / 'price_history_all.csv')
     save_csv(issues, ISSUE_COLUMNS, OUTPUT_DIR / 'review_needed.csv')
     save_csv(coverage_rows(parts, specs), ['category', 'bucket', 'candidate_count', 'minimum_required', 'status'], OUTPUT_DIR / 'coverage_report.csv')
-    save_csv(recommendation_data,RECOMMENDATION_COLUMNS,OUTPUT_DIR / 'recommendation_data.csv')
     print(f'통합 완료: PARTS {len(parts)}건 / PART_SPECS {len(specs)}건 / PRICE_HISTORY {len(history)}건')
 
 
