@@ -12,7 +12,7 @@ LIST_URL = "https://prod.danawa.com/list/?cate=112752"
 
 BASE_DIR = Path(__file__).resolve().parent
 date = datetime.now().strftime("%Y%m%d")
-OUTPUT_PATH = BASE_DIR / "data" / f"ram_playwright.csv"
+OUTPUT_PATH = BASE_DIR / "data" / date / f"ram_playwright_{date}.csv"
 
 
 def clean_price_text(value):

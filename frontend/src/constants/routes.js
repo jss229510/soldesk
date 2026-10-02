@@ -4,12 +4,15 @@ export const ROUTES = {
   shopCategory: (categoryId) => `/shop/${categoryId}`,
   budget: '/budget',
   build: '/build',
+  // 메뉴 링크와 라우트 선언에서 같은 경로를 사용한다.
+  cart: '/cart',
 };
 
 export const NAV_ITEMS = [
   { id: 'shop', to: ROUTES.shop, label: '시세 쇼핑' },
   { id: 'budget', to: ROUTES.budget, label: '예산 추천', icon: '💰' },
   { id: 'build', to: ROUTES.build, label: 'PC 구성', icon: '📋' },
+  { id: 'cart', to: ROUTES.cart, label: '장바구니', icon: '🛒' },
 ];
 
 export const FOOTER_LINKS = [

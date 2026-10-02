@@ -5,14 +5,15 @@ DB_SAVE_ENABLED를 True로 바꾸기 전에는 연결과 INSERT를 수행하지 
 from pathlib import Path
 import os
 import pandas as pd
+from DataProcessing_parts import TARGET_DATE
 
 
 DB_SAVE_ENABLED = False
 DB_SAVE_DISABLED_EXIT_CODE = 10
 BASE_DIR = Path(__file__).resolve().parent
-PARTS_PATH = BASE_DIR / 'output' / 'parts_all.csv'
-SPECS_PATH = BASE_DIR / 'output' / 'part_specs_all.csv'
-HISTORY_PATH = BASE_DIR / 'output' / 'price_history_all.csv'
+PARTS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'parts_all.csv'
+SPECS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'part_specs_all.csv'
+HISTORY_PATH = BASE_DIR / 'output' / TARGET_DATE / 'price_history_all.csv'
 
 
 def empty_to_none(value):
