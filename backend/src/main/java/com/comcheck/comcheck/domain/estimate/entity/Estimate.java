@@ -34,7 +34,7 @@ public class Estimate {
  
     @Column(name = "\"total_price\"")
     // 부품 총합 가격
-    private Integer totalPrice;
+    private Long totalPrice;
  
     @Column(name = "\"total_power\"")
     // 예상 소비전력(W)
@@ -74,7 +74,7 @@ public class Estimate {
         return title;
     }
  
-    public Integer getTotalPrice() {
+    public Long getTotalPrice() {
         return totalPrice;
     }
  
