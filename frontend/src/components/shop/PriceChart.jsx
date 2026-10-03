@@ -27,7 +27,8 @@ export const PriceChart = ({ points = [], down = true }) => {
   const stroke = down ? '#22d3ee' : '#f87171';
   const yTicks = ticks(values, 5);
   // 첫/중간/끝만 라벨링해 축이 빽빽해지지 않게 한다
-  const labelIndexes = [0, 3, 6, 9, points.length - 1];
+  const labelIndexes = [...new Set([0, 3, 6, 9, points.length - 1])]
+    .filter((index) => index < points.length);
 
   return (
     <svg className="block h-56 w-full" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="최근 12개월 가격 추이">

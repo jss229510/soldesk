@@ -5,8 +5,8 @@ import { MainLayout } from './layouts';
 import { BudgetPage, BuildPage, CartPage, HomePage, NotFoundPage, ShopPage } from './pages';
 import { DEFAULT_CATEGORY } from './constants/categories';
 import { ROUTES } from './constants/routes';
-import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 const App = () => (
   <BrowserRouter>
@@ -35,11 +35,11 @@ const App = () => (
           <Route path={ROUTES.budget} element={<BudgetPage />} />
           <Route path={ROUTES.build} element={<BuildPage />} />
           <Route path={ROUTES.cart} element={<CartPage />} />
-
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<HomePage />} />
 
           {/* 회원가입 페이지 */}
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>
