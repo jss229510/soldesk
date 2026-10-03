@@ -49,7 +49,7 @@ RECOMMENDATION_COLUMNS = [
 SPEC_FIELDS = {
     'RAM': [('ram_type', ''), ('capacity_gb', 'GB'), ('speed_mhz', 'MHz'), ('module_count', 'EA')],
     'CPU': [('cpu_brand', ''), ('cpu_socket', ''), ('tdp_watt', 'W'), ('cpu_core', 'EA'), ('thread', 'EA'), ('cpu_clock', 'GHz'), ('cpu_L2', 'MB'), ('cpu_L3', 'MB'), ('DDR', ''), ('has_igpu', ''), ('cpu_level','')],
-    'MAINBOARD': [('cpu_socket', ''), ('ram_type', ''), ('ram_socket', 'EA'), ('form_factor', ''), ('chipset', ''), ('m2_slots', 'EA'), ('max_ram_capacity_gb', 'GB')],
+    'MAINBOARD': [('cpu_socket', ''), ('ram_type', ''), ('ram_socket', 'EA'), ('form_factor', ''), ('chipset', ''), ('m2_slots', 'EA'), ('nvme_supported', ''), ('max_ram_capacity_gb', 'GB')],
     'SSD': [('storage_gb', 'GB'), ('form_factor', ''), ('interface', ''), ('nand_type', ''), ('read_speed_mbs', 'MB/s'), ('write_speed_mbs', 'MB/s'), ('tbw', 'TB')],
     'PSU': [('wattage', 'W'), ('efficiency_rating', ''), ('modular_type', ''), ('form_factor', ''), ('pcie_connector', ''), ('atx_version', ''), ('fan_size', 'mm')],
     'GPU': [('chipset', ''), ('vram_gb', 'GB'), ('vram_type', ''), ('tdp_watt', 'W'), ('recommended_psu_watt', 'W'), ('length_mm', 'mm'), ('performance_tier', '')],
@@ -204,9 +204,16 @@ def parse_mainboard(row, spec):
             r'(?:^|/)\s*[\d,]+\s*MHz\s*\([^)]*\)\s*/\s*(\d+)\s*개(?=\s*/\s*메모리\s*용량)',
             spec,
         )
+    m2_connection = first_number(r'\bM\.?2\s*연결\s*:\s*([^/]+)', spec)
+    nvme_supported = ''
+    if re.search(r'NVMe\s*(?:미지원|지원\s*안\s*함)', m2_connection, re.I):
+        nvme_supported = 'N'
+    elif re.search(r'\bNVMe\b', m2_connection, re.I):
+        nvme_supported = 'Y'
     return { 
         'cpu_socket': socket(spec), 'ram_type': ddr_types(spec), 'ram_socket': ram_slots, 'form_factor': form,
         'chipset': first_number(r'(?:^|/)\s*(?:인텔|Intel|AMD)\s+([A-Z]+\d+[A-Z0-9]*)\s*(?=/|$)', spec), 'm2_slots': first_number(r'\bM\.2\s*:\s*(\d+)\s*개', spec), 'max_ram_capacity_gb': first_number(r'메모리\s*용량\s*:\s*(?:최대\s*)?([\d,]+)\s*GB', spec),
+        'nvme_supported': nvme_supported,
     }
 
 
