@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
-import Thumbnail from '../common/Thumbnail';
 
 /** 홈 "카테고리별 시세" 카드 하나 */
 export const CategoryCard = ({ category }) => (
@@ -9,7 +8,7 @@ export const CategoryCard = ({ category }) => (
     to={ROUTES.shopCategory(category.id)}
     className="relative block min-h-44 overflow-hidden rounded-lg border border-gray-700 bg-gray-900 p-5 transition hover:-translate-y-1 hover:border-cyan-400"
   >
-    <Thumbnail part={{ category: category.id, name: category.title, image: category.image }} />
+    <span className="relative text-xl text-cyan-400" aria-hidden="true">{category.icon}</span>
     <span className="relative mt-6 block text-xl font-bold">{category.label}</span>
     <span className="relative block text-sm text-gray-400">{category.title}</span>
 

@@ -23,8 +23,7 @@ export const PARTS = [
     popularity: 98,
     releasedAt: '2022-04-04',
     attrs: { socket: 'AM4', tdp: 65, cores: 6, boostClock: 4.4 },
-    image: 'https://img.danuri.io/catalog-image/083/157/017/6359f5716dc440498f450949c1a7d415.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=17157083',
+    image: null,
   },
   {
     id: 'cpu-i5-14600k',
@@ -42,8 +41,7 @@ export const PARTS = [
     popularity: 91,
     releasedAt: '2023-10-17',
     attrs: { socket: 'LGA1700', tdp: 125, cores: 14, boostClock: 5.3 },
-    image: 'https://img.danuri.io/catalog-image/654/799/028/38b3d57cd5814fdb82f9f83ed3744db3.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=28799654',
+    image: null,
   },
   {
     id: 'cpu-ryzen9-9950x',
@@ -61,8 +59,7 @@ export const PARTS = [
     popularity: 84,
     releasedAt: '2024-08-15',
     attrs: { socket: 'AM5', tdp: 170, cores: 16, boostClock: 5.7 },
-    image: 'https://img.danuri.io/catalog-image/115/139/063/17567081addc4ccd8a73830bf93f1d39.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=63139115',
+    image: null,
   },
   {
     id: 'cpu-i9-14900ks',
@@ -80,8 +77,7 @@ export const PARTS = [
     popularity: 80,
     releasedAt: '2024-04-11',
     attrs: { socket: 'LGA1700', tdp: 150, cores: 24, boostClock: 6.2 },
-    image: 'https://img.danuri.io/catalog-image/399/032/063/ff480d7c85bb4b06a418b179c0c2e15c.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=63032399',
+    image: null,
   },
   {
     id: 'cpu-ryzen7-7800x3d',
@@ -99,8 +95,7 @@ export const PARTS = [
     popularity: 95,
     releasedAt: '2023-04-06',
     attrs: { socket: 'AM5', tdp: 120, cores: 8, boostClock: 5.0 },
-    image: 'https://img.danuri.io/catalog-image/808/627/019/ce3b1b6efca340e6b382745ff23eda98.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=19627808',
+    image: null,
   },
 
   /* ─────────── GPU ─────────── */
@@ -120,9 +115,7 @@ export const PARTS = [
     popularity: 93,
     releasedAt: '2025-01-30',
     attrs: { tdp: 575, length: 358, vram: 32 },
-    image: 'https://img.danuri.io/catalog-image/898/373/075/77f4f2508533479781018ebd22448188.jpg?shrink=500:500',
-    imageModel: 'ASUS ROG Astral RTX 5090 OC 32GB',
-    imageSource: 'https://prod.danawa.com/info/?pcode=75373898',
+    image: null,
   },
   {
     id: 'gpu-rtx4070tis-msi',
@@ -140,9 +133,7 @@ export const PARTS = [
     popularity: 88,
     releasedAt: '2024-01-24',
     attrs: { tdp: 285, length: 337, vram: 16 },
-    image: 'https://img.danuri.io/catalog-image/820/421/033/b5d372241c7847b286138aef6f51e492.jpg?shrink=500:500',
-    imageModel: 'MSI RTX 4070 Ti SUPER Ventus 3X OC 16GB',
-    imageSource: 'https://prod.danawa.com/info/?pcode=33421820',
+    image: null,
   },
   {
     id: 'gpu-rtx5080-gigabyte',
@@ -160,9 +151,7 @@ export const PARTS = [
     popularity: 86,
     releasedAt: '2025-01-30',
     attrs: { tdp: 360, length: 340, vram: 16 },
-    image: 'https://img.danuri.io/catalog-image/268/184/075/045c03cbdfb84558a01bde3545437cfd.jpg?shrink=500:500',
-    imageModel: 'Gigabyte RTX 5080 Gaming OC 16GB',
-    imageSource: 'https://prod.danawa.com/info/?pcode=75184268',
+    image: null,
   },
   {
     id: 'gpu-rx7800xt-sapphire',
@@ -180,9 +169,7 @@ export const PARTS = [
     popularity: 90,
     releasedAt: '2023-09-06',
     attrs: { tdp: 263, length: 276, vram: 16 },
-    image: 'https://img.danuri.io/catalog-image/799/486/028/9745c4330c3746c1ab4759a98c64eb15.jpg?shrink=500:500',
-    imageModel: 'Sapphire RX 7800 XT 16GB (Reference)',
-    imageSource: 'https://prod.danawa.com/info/?pcode=28486799',
+    image: null,
   },
 
   /* ─────────── 파워 ─────────── */
@@ -202,8 +189,7 @@ export const PARTS = [
     popularity: 94,
     releasedAt: '2021-06-01',
     attrs: { watt: 650, efficiency: '80+ Gold', modular: true },
-    image: 'https://img.danuri.io/catalog-image/835/515/009/8755b390609e4aef9346e798852cc88f.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=9515835',
+    image: null,
   },
   {
     id: 'psu-bequiet-dp13-850',
@@ -221,9 +207,7 @@ export const PARTS = [
     popularity: 79,
     releasedAt: '2023-02-14',
     attrs: { watt: 850, efficiency: '80+ Titanium', modular: true },
-    image: 'https://www.overclockers.ua/power/bequiet-dark-power-13-850W/01-big-bequiet-dark-power-p13-850W.jpg',
-    imageModel: 'be quiet! Dark Power 13 850W',
-    imageSource: 'https://www.overclockers.ua/power/bequiet-dark-power-13-850W/',
+    image: null,
   },
   {
     id: 'psu-corsair-hx1500i',
@@ -241,9 +225,7 @@ export const PARTS = [
     popularity: 72,
     releasedAt: '2023-09-20',
     attrs: { watt: 1500, efficiency: '80+ Platinum', modular: true },
-    image: 'https://img.danuri.io/catalog-image/022/455/017/d33ced640d6e4950b995b8e141c638b5.jpg?shrink=500:500',
-    imageModel: 'Corsair HX1500i 2022 Platinum',
-    imageSource: 'https://prod.danawa.com/info/?pcode=17455022',
+    image: null,
   },
 
   /* ─────────── 램 ─────────── */
@@ -252,7 +234,7 @@ export const PARTS = [
     category: 'ram',
     brand: 'KINGSTON',
     name: 'Kingston Fury Beast DDR4',
-    specs: ['DDR4-3600', '16GB (8×2)', 'CL17'],
+    specs: ['DDR4-3600', '16GB (8×2)', 'CL18'],
     rating: 4.6,
     reviewCount: 762,
     price: 95000,
@@ -263,9 +245,7 @@ export const PARTS = [
     popularity: 96,
     releasedAt: '2021-03-12',
     attrs: { memoryType: 'DDR4', capacity: 16, speed: 3600 },
-    image: 'https://plecom.imgix.net/iil-262958-647544.jpg?auto=format&fill=solid&fill-color=ffffff&fit=fillmax&h=1000&w=1000',
-    imageModel: 'Kingston FURY Beast DDR4-3600 16GB (8GB×2) CL17, KF436C17BBK2/16',
-    imageSource: 'https://www.ple.com.au/products/647544/kingston-fury-beast-16gb-kit-2x8gb-ddr4-3600-c17',
+    image: null,
   },
   {
     id: 'ram-gskill-z5-ddr5',
@@ -283,9 +263,7 @@ export const PARTS = [
     popularity: 83,
     releasedAt: '2023-05-30',
     attrs: { memoryType: 'DDR5', capacity: 32, speed: 7200 },
-    image: 'https://img.danuri.io/catalog-image/644/036/018/6176a53edaa545d3aac85b6582404b8a.jpg?shrink=500:500',
-    imageModel: 'G.SKILL Trident Z5 RGB DDR5-7200 CL34 32GB (16GB×2), Silver',
-    imageSource: 'https://prod.danawa.com/info/?pcode=18036644',
+    image: null,
   },
   {
     id: 'ram-crucial-pro-ddr5',
@@ -303,8 +281,7 @@ export const PARTS = [
     popularity: 87,
     releasedAt: '2023-11-08',
     attrs: { memoryType: 'DDR5', capacity: 32, speed: 5600 },
-    image: 'https://img.danuri.io/catalog-image/574/990/106/cbc241ceadb2412e9d8e2da66ddc6e0a.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=106990574',
+    image: null,
   },
 
   /* ─────────── SSD ─────────── */
@@ -324,8 +301,7 @@ export const PARTS = [
     popularity: 97,
     releasedAt: '2022-10-20',
     attrs: { capacity: 2048, interface: 'PCIe 4.0', formFactor: 'M.2 2280' },
-    image: 'https://img.danuri.io/catalog-image/722/297/018/86053af7566c43d8b3c56da85d1ac491.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=18297722',
+    image: null,
   },
   {
     id: 'ssd-wd-sn850x-1tb',
@@ -343,8 +319,7 @@ export const PARTS = [
     popularity: 92,
     releasedAt: '2022-08-01',
     attrs: { capacity: 1024, interface: 'PCIe 4.0', formFactor: 'M.2 2280' },
-    image: 'https://img.danuri.io/catalog-image/487/788/017/1406f2562a854be6a55e2b3499988714.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=17788487',
+    image: null,
   },
   {
     id: 'ssd-hynix-p41-1tb',
@@ -362,8 +337,7 @@ export const PARTS = [
     popularity: 89,
     releasedAt: '2022-06-14',
     attrs: { capacity: 1024, interface: 'PCIe 4.0', formFactor: 'M.2 2280' },
-    image: 'https://img.danuri.io/catalog-image/050/001/017/ad7497c5c9bc4f2e8091709069115d7a.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=17001050',
+    image: null,
   },
 
   /* ─────────── 메인보드 ─────────── */
@@ -383,9 +357,7 @@ export const PARTS = [
     popularity: 85,
     releasedAt: '2022-10-20',
     attrs: { socket: 'LGA1700', memoryType: 'DDR5', formFactor: 'ATX', chipset: 'Z790' },
-    image: 'https://img.danuri.io/catalog-image/699/167/018/2edf54cd3de44417b84574e8d4fe7607.jpg?shrink=500:500',
-    imageModel: 'MSI MAG Z790 Tomahawk WIFI DDR5',
-    imageSource: 'https://prod.danawa.com/info/?pcode=18167699',
+    image: null,
   },
   {
     id: 'mb-asrock-b550m-pro4',
@@ -403,8 +375,7 @@ export const PARTS = [
     popularity: 93,
     releasedAt: '2020-06-16',
     attrs: { socket: 'AM4', memoryType: 'DDR4', formFactor: 'mATX', chipset: 'B550' },
-    image: 'https://img.danuri.io/catalog-image/991/572/011/d22422534bc64a06897b2c1175c1d896.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=11572991',
+    image: null,
   },
   {
     id: 'mb-asus-z790-hero',
@@ -422,8 +393,7 @@ export const PARTS = [
     popularity: 74,
     releasedAt: '2022-10-20',
     attrs: { socket: 'LGA1700', memoryType: 'DDR5', formFactor: 'ATX', chipset: 'Z790' },
-    image: 'https://img.danuri.io/catalog-image/849/059/018/cc79be722c6b4bd28474cb84ec5ab9a4.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=18059849',
+    image: null,
   },
   {
     id: 'mb-gigabyte-b650-aorus',
@@ -441,8 +411,7 @@ export const PARTS = [
     popularity: 88,
     releasedAt: '2022-09-27',
     attrs: { socket: 'AM5', memoryType: 'DDR5', formFactor: 'ATX', chipset: 'B650' },
-    image: 'https://img.danuri.io/catalog-image/497/189/018/1b6b46659fb54096808df7e82e2738c5.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=18189497',
+    image: null,
   },
 
   /* ─────────── 쿨러 ─────────── */
@@ -462,9 +431,7 @@ export const PARTS = [
     popularity: 99,
     releasedAt: '2022-02-01',
     attrs: { maxTdp: 260, sockets: ['LGA1700', 'AM5', 'AM4'], type: '공랭', height: 155 },
-    image: 'https://img.danuri.io/catalog-image/058/525/016/30c05d7764404b5692dbcab24ecc44da.jpg?shrink=500:500',
-    imageModel: 'Thermalright Peerless Assassin 120 SE',
-    imageSource: 'https://prod.danawa.com/info/?pcode=16525058',
+    image: null,
   },
   {
     id: 'cooler-bequiet-darkrock5',
@@ -482,8 +449,7 @@ export const PARTS = [
     popularity: 81,
     releasedAt: '2023-09-05',
     attrs: { maxTdp: 250, sockets: ['LGA1700', 'AM5', 'AM4'], type: '공랭', height: 163 },
-    image: 'https://img.danuri.io/catalog-image/737/847/029/a6e630e2bc4a4f63bc87abc499c3b5c9.jpg?shrink=500:500',
-    imageSource: 'https://prod.danawa.com/info/?pcode=29847737',
+    image: null,
   },
   {
     id: 'cooler-nzxt-kraken-360',
@@ -501,9 +467,7 @@ export const PARTS = [
     popularity: 78,
     releasedAt: '2024-03-19',
     attrs: { maxTdp: 350, sockets: ['LGA1700', 'AM5', 'AM4'], type: '수랭', radiator: 360 },
-    image: 'https://img.danuri.io/catalog-image/133/870/019/e742e4d7b2024cffaed8b243a68807c7.jpg?shrink=500:500',
-    imageModel: 'NZXT Kraken Elite 360 RGB 2023, Black',
-    imageSource: 'https://prod.danawa.com/info/?pcode=19870133',
+    image: null,
   },
 
   /* ─────────── 케이스 ─────────── */
@@ -523,9 +487,7 @@ export const PARTS = [
     popularity: 95,
     releasedAt: '2022-06-01',
     attrs: { formFactors: ['E-ATX', 'ATX', 'mATX'], maxGpuLength: 423, size: '미들타워' },
-    image: 'https://img.danuri.io/catalog-image/510/301/016/f21096bc77cd4e48a08ba2bbeb1d78d2.jpg?shrink=500:500',
-    imageModel: 'Lian Li PC-O11D EVO, Black',
-    imageSource: 'https://prod.danawa.com/info/?pcode=16301510',
+    image: null,
   },
   {
     id: 'case-bequiet-pb500dx',
@@ -543,9 +505,7 @@ export const PARTS = [
     popularity: 90,
     releasedAt: '2020-05-14',
     attrs: { formFactors: ['ATX', 'mATX'], maxGpuLength: 369, size: '미들타워' },
-    image: 'https://img.danuri.io/catalog-image/097/339/011/7d0eea6535174a4d984bda40d14d5db2.jpg?shrink=500:500',
-    imageModel: 'be quiet! Pure Base 500DX, Black',
-    imageSource: 'https://prod.danawa.com/info/?pcode=11339097',
+    image: null,
   },
   {
     id: 'case-fractal-torrent',
@@ -563,9 +523,7 @@ export const PARTS = [
     popularity: 76,
     releasedAt: '2021-09-02',
     attrs: { formFactors: ['E-ATX', 'ATX', 'mATX'], maxGpuLength: 461, size: '미들타워' },
-    image: 'https://www.ask-corp.jp/products/images/fractal-design/torrent-tg_03.jpg',
-    imageModel: 'Fractal Design Torrent Grey TG Light Tint (FD-C-TOR1A-02)',
-    imageSource: 'https://www.ask-corp.jp/products/fractal-design/fulltower-pccase/torrent-tg.html',
+    image: null,
   },
 ];
 
@@ -575,4 +533,3 @@ export const PARTS_BY_ID = PARTS.reduce((acc, part) => {
 }, {});
 
 export const partsByCategory = (categoryId) => PARTS.filter((p) => p.category === categoryId);
-

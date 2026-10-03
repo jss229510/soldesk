@@ -15,10 +15,7 @@ export const BuildPartRow = ({ item }) => {
         {category.label}
       </span>
 
-      <Thumbnail
-        part={part}
-        className="w-24 shrink-0 rounded-md [&>img]:p-1 [&>figcaption]:hidden"
-      />
+      <Thumbnail part={part} className="w-16 rounded-md" />
 
       <div className="flex-1">
         <p className="font-mono text-xs text-cyan-400">{part.brand}</p>
