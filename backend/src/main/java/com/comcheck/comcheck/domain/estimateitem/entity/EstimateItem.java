@@ -23,8 +23,8 @@ public class EstimateItem {
     @Id
     // item_id를 기본키(PK)로 지정
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATE_ITEMS_SEQ_GENERATOR")
-    @SequenceGenerator(name = "ESTIMATE_ITEMS_SEQ_GENERATOR", sequenceName = "ESTIMATE_ITEMS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ESTIMATE_ITEMS_GENERATOR")
+    @SequenceGenerator(name = "SEQ_ESTIMATE_ITEMS_GENERATOR", sequenceName = "SEQ_ESTIMATE_ITEMS", allocationSize = 1)
     // Oracle 시퀀스로 PK 자동 생성
     // PK 값을 직접 넣지 않고, DB 시퀀스에서 번호를 받아와 자동으로 채움
     // CREATE SEQUENCE ESTIMATE_ITEMS_SEQ START WITH 1 INCREMENT BY 1; => 오라클 시퀀스 필요

@@ -39,6 +39,9 @@ public class PartSpec {
 
     private String specUnit;
 
+    protected PartSpec(){
+        //jpa 기본 생성자
+    }
 
     // DB에서 조회한 필드 값을 외부에서 읽을 수 있도록 Getter 제공
 

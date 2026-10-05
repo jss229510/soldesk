@@ -23,9 +23,9 @@ public class CartItem {
 
     @Id
     // 기본키(PK)로 지정
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CART_ITEMS_SEQ_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CART_ITEMS_GENERATOR")
     // 값을 자동 생성하도록 설정 (시퀀스 방식)
-    @SequenceGenerator(name = "CART_ITEMS_SEQ_GENERATOR", sequenceName = "CART_ITEMS_SEQ", allocationSize = 1)
+    @SequenceGenerator(name = "SEQ_CART_ITEMS_GENERATOR", sequenceName = "SEQ_CART_ITEMS", allocationSize = 1)
     // 사용할 시퀀스 생성기 정의 (DB 시퀀스 이름, 한 번에 1개씩)
 
     @Column(name = "\"cart_item_id\"")
@@ -47,9 +47,13 @@ public class CartItem {
     // 실제 컬럼명 quantity와 연결, 비어 있으면 안 됨
     private Long quantity;
 
-    @Column(name = "\" added_at\"", nullable = false, updatable = false)
+    @Column(name = "\"added_at\"", nullable = false, updatable = false)
     // 실제 컬럼명 added_at과 연결, 비어 있으면 안 되고 처음 저장 후 수정되면 안 됨
     private LocalDateTime addedAt;
+
+    protected CartItem(){
+        // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자다
+    }
 
     public CartItem(Part part, Long quantity) {
         this.part = part;
@@ -87,7 +91,7 @@ public class CartItem {
         return cart;
     }
 
-    public Part gePart(){
+    public Part getPart(){
         return part;
     }
 

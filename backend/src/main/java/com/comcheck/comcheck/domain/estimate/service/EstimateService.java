@@ -41,8 +41,7 @@ public class EstimateService {
                 request.getTitle(),
                 request.getUsageType(),
                 request.getBudgetMax(),
-                request.isShared()
-        );
+                request.isShared());
 
         // 3. 저장 후, 번호가 매겨진 견적을 반환
         return estimateRepository.save(estimate);
@@ -51,8 +50,8 @@ public class EstimateService {
     // 견적 조회 없으면 404
     public Estimate getEstimate(Long estimateId) {
         return estimateRepository.findById(estimateId)
-                .orElseThrow(()-> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."+ estimateId)); 
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다." + estimateId));
     }
 
     // 특정 회원 견적
@@ -65,6 +64,13 @@ public class EstimateService {
         return estimateRepository.findByRecommendTrueAndUsageTypeOrderByCreatedAtDesc(usageType);
     }
 
+    // 견적 수정
+    @Transactional
+    public Estimate update(Long estimateId, Estimate request) {
+        // estimateId : 몇번 견적 고칠지, request : 무엇으로 고칠지
+       
+    }
+
     // 견적 삭제 (delete)
     @Transactional
     public void delete(Long estimateId) {
@@ -72,4 +78,5 @@ public class EstimateService {
         estimateRepository.delete(estimate);
     }
     // 견적 이름
+
 }

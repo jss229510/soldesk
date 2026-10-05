@@ -4,10 +4,14 @@ import java.time.LocalDateTime;
 
 import org.hibernate.type.YesNoConverter;
 
+import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity 
@@ -19,6 +23,8 @@ public class Estimate {
     
     @Id 
     // estimated_id를 기본키(PK)로 지정
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ESTIMATES_GENERATOR")
+    @SequenceGenerator (name = "SEQ_ESTIMATES_GENERATOR", sequenceName = "SEQ_ESTIMATES", allocationSize = 1)
 
     @Column (name = "\"estimated_id\"")
     // Oracle의 실제 컬럼명 "estimated_id"와 연결
@@ -66,6 +72,7 @@ public class Estimate {
         // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자다.
     }
 
+    // 견적 생성
     public Estimate(Long userId, String title, String usageType, Integer budgetMax, boolean shared) {
         // 사용자가 새 견적을 만들 때 입력한 필드만 초기화한다.
         this.userId = userId;
@@ -75,6 +82,11 @@ public class Estimate {
         this.shared = shared;
         this.createdAt = LocalDateTime.now();
     }
+
+    // 견적 수정
+    
+
+    // 담긴 부품이 바뀌었을 때 총 가격/소비전력 갱신
 
      public Long getEstimateId() {
         return estimateId;

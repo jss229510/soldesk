@@ -40,6 +40,10 @@ public class Cart {
     @Column(name = "\"updated_at\"", nullable = false)
     LocalDateTime updatedAt;
 
+    protected Cart(){
+        //JPA 기본 생성자
+    }
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     // 장바구니 1개에 품목 여러 개가 들어가는 관계
     // mappedBy = "cart": 관계의 주인은 CartItem의 cart 필드
@@ -47,7 +51,7 @@ public class Cart {
     // orphanRemoval = true: 목록에서 빠진 품목은 DB에서도 삭제
     private List<CartItem> items = new ArrayList<>();
 
-    // ===== 날짜 자동 처리 =====
+    // 날짜 자동 처리
     // DB에 처음 저장되기 직전에 실행: 생성일과 변경일을 현재 시간으로 채움
     // PrePersist : 이 엔티티가 DB에 처음 저장되기 직전에, 이 메서드를 자동으로 실행해라
     @PrePersist
