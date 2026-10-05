@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import com.comcheck.comcheck.domain.cartitem.entity.CartItem;
 import com.comcheck.comcheck.domain.user.entity.User;
 
@@ -16,7 +13,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
@@ -69,7 +65,7 @@ public class Cart {
         // 변경일을 현재 시간으로 갱신
     }
 
-    // ===== 품목 관리 메서드 (품목 목록을 둔 경우) =====
+    // 품목 관리 메서드
     public void addItem(CartItem item) {
         // 품목 추가
         this.items.add(item);

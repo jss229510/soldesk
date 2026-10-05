@@ -59,10 +59,11 @@ public class EstimateItem {
     }
 
     public void changeQuantity(Long quantity) {
-        // 부품 수량 변경 (1개 이상만 허용)
+        // 부품 수량 변경
         if (quantity < 1) {
             throw new IllegalArgumentException("부품 수량은 1개 이상이어야 합니다.");
             //throw = 여기서 에러를 일부러 발생시키고(1개가 안될시), 이 메서드를 그 자리에서 멈춰라
+            // IllegalArgumentException : 잘못된 인수 
         }
         this.quantity = quantity;
     }
