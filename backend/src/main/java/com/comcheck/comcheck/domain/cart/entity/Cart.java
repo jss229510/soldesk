@@ -76,12 +76,6 @@ public class Cart {
         // 장바구니 목록에 품목을 넣음
         item.setCart(this);
         // 품목 쪽에도 이 장바구니를 연결
-        
-        //cartItem에 필요한 메서드
-        // public void setCart(Cart cart) {
-        // 이 품목이 속한 장바구니를 연결
-        // this.cart = cart;
-        // }
         this.updatedAt = LocalDateTime.now();
         // 장바구니 변경일 갱신
     }

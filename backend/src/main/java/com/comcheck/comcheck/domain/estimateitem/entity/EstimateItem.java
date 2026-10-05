@@ -47,16 +47,18 @@ public class EstimateItem {
 
     @Column(name = "\"quantity\"", nullable = false)
     // 부품 수량
-    private Integer quantity;
+    private Long quantity;
 
-    public EstimateItem(Estimate estimate, Part part, Integer quantity) {
+    public EstimateItem(Estimate estimate, Part part, Long quantity) {
         // 견적 품목 생성 (수량 미입력 시 1개)
         this.estimate = estimate;
         this.part = part;
+        // 담을 부품 저장
         this.quantity = (quantity == null) ? 1 : quantity;
+        // 부품 개수가 비었으면 1개 아니면 설정한 개수대로
     }
 
-    public void changeQuantity(int quantity) {
+    public void changeQuantity(Long quantity) {
         // 부품 수량 변경 (1개 이상만 허용)
         if (quantity < 1) {
             throw new IllegalArgumentException("부품 수량은 1개 이상이어야 합니다.");
@@ -87,7 +89,7 @@ public class EstimateItem {
         return estimate;
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 

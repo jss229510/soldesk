@@ -1,5 +1,7 @@
 package com.comcheck.comcheck.domain.cartitem.entity;
 
+import java.time.LocalDateTime;
+
 import com.comcheck.comcheck.domain.cart.entity.Cart;
 import com.comcheck.comcheck.domain.part.entity.Part;
 
@@ -45,14 +47,16 @@ public class CartItem {
     // 실제 컬럼명 quantity와 연결, 비어 있으면 안 됨
     private Long quantity;
 
-    
-    // ===== added_at (장바구니에 담은 날짜) =====
+    @Column (name = "\" added_at\"", nullable = false, updatable = false)
     // 실제 컬럼명 added_at과 연결, 비어 있으면 안 되고 처음 저장 후 수정되면 안 됨
-    // 필드 선언 (날짜+시간 타입)
+    private LocalDateTime addedAt;
 
-    // ===== 생성자 =====
-    // JPA가 사용하는 기본 생성자 (외부에서 함부로 못 쓰게 접근 제한)
-    // 품목을 새로 만들 때 쓰는 생성자 (부품과 수량을 받아서 저장, 수량이 없으면 1개)
+    public CartItem (Part part, Long quantity){
+        this.part = part;
+        // 담을 부품 저장
+        this.quantity = (quantity == null) ? 1: quantity;
+        // 부품 개수가 비었으면 1개 아니면 설정한 개수대로
+    }
 
     // ===== 날짜 자동 처리 =====
     // DB에 처음 저장되기 직전에 실행: 담은 날짜를 현재 시간으로 채움
