@@ -233,6 +233,7 @@ GPU_MODEL_TIERS = {
         'RTX 3070 TI',
         'RTX 4060',
         'RTX 4060 TI',
+        'RTX 5050',
         'RTX 5060',
         'RTX 5060 TI',
         'RX 7600',
@@ -254,6 +255,7 @@ GPU_MODEL_TIERS = {
 
     '최상급': (
         'RTX 4080 SUPER',
+        'RTX 5080',
         'RTX 5090',
     ),
 }

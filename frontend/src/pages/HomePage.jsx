@@ -7,7 +7,7 @@ import {
 
 import { StateBox } from "../components/common";
 import { useCategorySummaries } from "../hooks/useCategorySummaries";
-import LoginPage from "./LoginPage";
+
 
 export const HomePage = () => {
   const {
@@ -28,10 +28,7 @@ export const HomePage = () => {
           <HeroSection />
         </div>
 
-        {/* 오른쪽 로그인 */}
-        <div className="shrink-0">
-          <LoginPage />
-        </div>
+
 
       </div>
 

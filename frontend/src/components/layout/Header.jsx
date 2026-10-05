@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import Logo from './Logo';
 import SearchBar from './SearchBar';
 
-export const Header = () => {
+export const Header = ({ onLogin, user, onLogout }) => {
   // 상품 종류 수가 아니라 장바구니에 담긴 전체 수량을 배지에 표시한다.
   const { totalQuantity } = useCart();
 
@@ -49,6 +49,14 @@ export const Header = () => {
             )}
           </NavLink>
         ))}
+        {user && <span className="max-w-32 truncate text-sm">{user.nickname}님</span>}
+        <button
+          type="button"
+          onClick={user ? onLogout : onLogin}
+          className="inline-flex h-9 items-center rounded-md bg-cyan-500 px-3 text-sm font-semibold text-gray-950 hover:bg-cyan-400"
+        >
+          {user ? '로그아웃' : '로그인'}
+        </button>
       </nav>
     </div>
   </header>
