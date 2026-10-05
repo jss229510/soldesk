@@ -3,7 +3,8 @@ package com.comcheck.comcheck.domain.part.service;
 import com.comcheck.comcheck.domain.part.entity.Part;
 import com.comcheck.comcheck.domain.part.repository.PartRepository;
 import org.springframework.stereotype.Service;
-
+import com.comcheck.comcheck.domain.part.dto.PartResponse;
+import java.util.Locale;
 import java.util.List;
 
 @Service
@@ -35,4 +36,6 @@ public class PartService {
     public List<Part> getPartsByCategory(String category) {
         return partRepository.findByCategory(category);
     }
+
+    
 }
