@@ -61,7 +61,7 @@ public class Estimate {
  
     @Column(name = "\"budget_max\"")
     // 사용자 예산
-    private Integer budgetMax;
+    private Long budgetMax;
  
     @Convert(converter = YesNoConverter.class)
     @Column(name = "\"is_recommend\"")
@@ -69,11 +69,11 @@ public class Estimate {
     private boolean recommend;
 
     protected Estimate() {
-        // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자다.
+        // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자
     }
 
     // 견적 생성
-    public Estimate(Long userId, String title, String usageType, Integer budgetMax, boolean shared) {
+    public Estimate(Long userId, String title, String usageType, Long budgetMax, boolean shared) {
         // 사용자가 새 견적을 만들 때 입력한 필드만 초기화한다.
         this.userId = userId;
         this.title = title;
@@ -84,7 +84,10 @@ public class Estimate {
     }
 
     // 견적 수정
-    
+    public void updateestimateId(){
+        
+    }
+
 
     // 담긴 부품이 바뀌었을 때 총 가격/소비전력 갱신
 
@@ -120,7 +123,7 @@ public class Estimate {
         return usageType;
     }
  
-    public Integer getBudgetMax() {
+    public Long getBudgetMax() {
         return budgetMax;
     }
  
