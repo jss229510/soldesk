@@ -61,7 +61,7 @@ def gpu_run():
     products = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         try:
@@ -69,11 +69,19 @@ def gpu_run():
             page.wait_for_timeout(2000)
 
             # 더보기 누르기
-            page.get_by_role("button", name="87개").click()
-            page.wait_for_timeout(2000)
+            series_label1 = page.locator("label:visible").filter(has=page.locator(f'span[title="RTX 5090"]'))
+            series_area1 = series_label1.locator('xpath=ancestor::div[.//button[starts-with(@aria-label, "필터 옵션")]][1]')
+            more_button1 = series_area1.locator('button[aria-label^="필터 옵션"]')
+            if more_button1.get_attribute("aria-expanded") == "false":
+                more_button1.click()
+                page.wait_for_timeout(2000)
 
-            page.get_by_role("button", name="23개").click()
-            page.wait_for_timeout(2000)
+            series_label1 = page.locator("label:visible").filter(has=page.locator(f'span[title="R9700"]'))
+            series_area1 = series_label1.locator('xpath=ancestor::div[.//button[starts-with(@aria-label, "필터 옵션")]][1]')
+            more_button1 = series_area1.locator('button[aria-label^="필터 옵션"]')
+            if more_button1.get_attribute("aria-expanded") == "false":
+                more_button1.click()
+                page.wait_for_timeout(2000)
             
             series_list = (TARGET_FILTER['GPU_NVIDIA'] + TARGET_FILTER['GPU_AMD'])      
 
