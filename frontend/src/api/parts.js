@@ -10,7 +10,8 @@ const sorters = {
 
 /** 카테고리 목록 + 각 카테고리의 제품 수/가격 범위 (홈 카드에서 사용) */
 export const fetchCategorySummaries = async () => {
-  if (!USE_MOCK) return request('/categories');
+  // 백엔드에 /categories API가 없으므로 PARTS 전체 목록을 받아 홈 카드에서 계산한다.
+  if (!USE_MOCK) return request('/parts');
 
   const summaries = CATEGORIES.map((category) => {
     const items = PARTS.filter((p) => p.category === category.id);

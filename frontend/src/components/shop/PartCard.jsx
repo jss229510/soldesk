@@ -26,21 +26,37 @@ export const PartCard = ({ part, onSelect }) => {
         <p className="font-mono text-xs text-cyan-400">{part.brand}</p>
         <h3 className="text-lg font-bold">{part.name}</h3>
 
-        <div className="flex flex-wrap gap-2">
+          {/* 실제 PARTS API에 스펙이 없을 수 있으므로 값이 있을 때만 표시한다. */}
+          {part.specs?.length> 0 && (
+            <div className="flex flex-wrap gap-2">
           {part.specs.map((spec) => (
             <Chip key={spec}>{spec}</Chip>
           ))}
         </div>
+        )}
 
+        {/* 평점과 가격 추세는 현재 DB 응답에 없으므로 mock 값이 있을 때만 표시한다. */}
+        {typeof part.rating === "number" && (
         <StarRating value={part.rating} />
-        <Sparkline values={sparklineValues(part.id)} rate={part.trendRate} />
+        )}
+        {typeof part.trendRate === "number" && (
+        <Sparkline
+        values={sparklineValues(part.id)}
+        rate={part.trendRate}
+        />
+        )}
 
         <div className="flex items-end justify-between gap-3">
           <div>
             <strong className="text-2xl font-extrabold">{formatPrice(part.price)}</strong>
             {part.listPrice && <span className="block text-sm text-gray-500 line-through">{formatPrice(part.listPrice)}</span>}
           </div>
-          <span className="whitespace-nowrap font-mono text-xs text-gray-500">재고 {formatNumber(part.stock)}개</span>
+          {/* 재고 수량도 실제 응답에 포함된 경우에만 보여 준다. */}
+          {typeof part.stock === "number" && (
+          <span className="whitespace-nowrap font-mono text-xs text-gray-500">
+          재고 {formatNumber(part.stock)}개
+          </span>
+)}
         </div>
 
         {/* 시세 이력 조회와 장바구니 담기를 서로 독립된 동작으로 유지한다. */}

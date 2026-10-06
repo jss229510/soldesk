@@ -68,7 +68,8 @@ public class EstimateService {
     @Transactional
     public Estimate update(Long estimateId, Estimate request) {
         // estimateId : 몇번 견적 고칠지, request : 무엇으로 고칠지
-       
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED,
+                "견적 수정 기능은 아직 구현되지 않았습니다.");
     }
 
     // 견적 삭제 (delete)

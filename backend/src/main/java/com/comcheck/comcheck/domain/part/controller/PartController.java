@@ -8,6 +8,8 @@ import com.comcheck.comcheck.domain.pricehistory.service.PriceHistoryService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.comcheck.comcheck.domain.part.dto.PartListResponse;
+import com.comcheck.comcheck.domain.part.dto.PartResponse;
 
 import java.util.List;
 
@@ -25,20 +27,24 @@ public class PartController {
 
     // 전체 부품 조회
     @GetMapping
-    public List<Part> getParts(
+    public PartListResponse getParts(
             @RequestParam(required = false) String category) {
+        // category가 있으면 해당 카테고리만, 없으면 전체 부품을 DTO로 조회한다.
+        List<PartResponse> items;
         if (category != null && !category.isBlank()) {
-            return partService.getPartsByCategory(category);
+            items = partService.getPartResponsesByCategory(category);
+        } else {
+            items = partService.getPartResponses();
         }
-
-        return partService.getAllParts();
+        // 프론트가 사용하는 { items, total } 응답 형식으로 묶어 반환한다.
+        return new PartListResponse(items, items.size());
     }
 
     // 부품 ID로 단건 조회
     @GetMapping("/{partId}")
-    public ResponseEntity<Part> getPartById(@PathVariable Long partId) {
-        // Service를 통해 해당 ID의 부품을 조회
-        Part part = partService.getPartById(partId);
+    public ResponseEntity<PartResponse> getPartById(@PathVariable Long partId) {
+        // Service에서 Entity가 아닌 프론트 전용 DTO로 변환된 부품을 조회한다.
+        PartResponse part = partService.getPartResponsesById(partId);
 
         // 조회 결과가 없으면 HTTP 404 Not Found 응답
         if (part == null) {
