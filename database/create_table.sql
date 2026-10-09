@@ -61,21 +61,22 @@ CREATE TABLE "PART_SPECS" (
 CREATE TABLE "ESTIMATES" (
     "estimated_id" NUMBER NOT NULL,
     "user_id" NUMBER NOT NULL,
-    "title" VARCHAR2(100),
-    "total_price" NUMBER,
+    "source_recommended_id" NUMBER,
+    "title" VARCHAR2(100 CHAR) DEFAULT '내 견적' NOT NULL,
+    "usage_type" VARCHAR2(30 CHAR),
+    "budget_max" NUMBER,
     "total_power" NUMBER,
     "is_shared" CHAR(1) DEFAULT 'N' NOT NULL,
     "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "usage_type" VARCHAR2(30),
-    "budget_max" NUMBER,
-    "is_recommend" CHAR(1) DEFAULT 'N' NOT NULL
+    "updated_at" DATE DEFAULT SYSDATE NOT NULL
 );
 
 CREATE TABLE "ESTIMATE_ITEMS" (
     "item_id" NUMBER NOT NULL,
-    "part_id" NUMBER NOT NULL,
     "estimated_id" NUMBER NOT NULL,
-    "quantity" NUMBER DEFAULT 1 NOT NULL
+    "part_id" NUMBER NOT NULL,
+    "quantity" NUMBER DEFAULT 1 NOT NULL,
+    "unit_price" NUMBER(12, 0) NOT NULL
 );
 
 CREATE TABLE "CARTS" (
@@ -116,13 +117,33 @@ CREATE TABLE "RESELL_POSTS" (
     "created_at" DATE
 );
 
-CREATE TABLE "PERFORMANCE_TIER" (
-    "tier_id"  NUMBER NOT NULL,
+CREATE TABLE "RECOMMENDATIONS" (
+    "recommended_id" NUMBER NOT NULL,
+    "recommendation_key" VARCHAR2(100 CHAR) NOT NULL,
+    "purpose_code" VARCHAR2(30 CHAR) NOT NULL,
+    "tier_code" VARCHAR2(40 CHAR) NOT NULL,
+    "recommendation_name" VARCHAR2(150 CHAR) NOT NULL,
+    "created_at" DATE DEFAULT SYSDATE NOT NULL
+);
+
+CREATE TABLE "RECOMMENDATION_PRODUCT" (
+    "recommended_id" NUMBER NOT NULL,
     "part_id" NUMBER NOT NULL,
-    "tier" VARCHAR2(20) NOT NULL
-    );
-    
-    
+    "quantity" NUMBER DEFAULT 1 NOT NULL,
+    "unit_price" NUMBER(12, 0) NOT NULL
+);
+
+CREATE TABLE "BOARD_POSTS" (
+    "post_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
+    "board_type" VARCHAR2(20 CHAR) NOT NULL,
+    "estimated_id" NUMBER,
+    "title" VARCHAR2(200 CHAR) NOT NULL,
+    "content" CLOB NOT NULL,
+    "view_count" NUMBER DEFAULT 0 NOT NULL,
+    "created_at" DATE DEFAULT SYSDATE NOT NULL,
+    "updated_at" DATE DEFAULT SYSDATE NOT NULL
+);
     
     
     
