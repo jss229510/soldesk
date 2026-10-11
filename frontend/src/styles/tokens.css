@@ -5,11 +5,14 @@
 ========================= */
 :root {
   /* 배경 계층 */
-  --bg-base: #EEF2ED;
+  --bg-base: #F3F4F6;
   --bg-surface: #ffffff;
   --bg-surface-2: #f1f5f9;
   --bg-surface-3: #e2e8f0;
   --bg-overlay: rgba(255, 255, 255, 0.78);
+  --search-bg: var(--bg-surface);
+  --search-border: var(--line);
+  --search-placeholder: var(--text-2);
 
   /* 선 */
   --line: #e2e8f0;
@@ -101,6 +104,9 @@
   --bg-surface-2: #111823;
   --bg-surface-3: #16202c;
   --bg-overlay: rgba(3, 6, 10, 0.78);
+  --search-bg: var(--bg-surface-2);
+  --search-border: var(--line);
+  --search-placeholder: color-mix(in oklab, var(--text) 50%, transparent);
 
   /* 선 */
   --line: #1b2532;

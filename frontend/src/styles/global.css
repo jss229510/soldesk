@@ -51,6 +51,11 @@ input {
   color: inherit;
 }
 
+.search-input::placeholder {
+  color: var(--search-placeholder);
+  opacity: 1;
+}
+
 img {
   display: block;
   max-width: 100%;

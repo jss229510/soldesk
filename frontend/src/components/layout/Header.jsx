@@ -2,7 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { NAV_ITEMS } from '../../constants/routes';
 import { useCart } from '../../context/CartContext';
 import Logo from './Logo';
-import SearchBar from './SearchBar';
 
 export const Header = ({ onLogin, user, onLogout }) => {
   // 상품 종류 수가 아니라 장바구니에 담긴 전체 수량을 배지에 표시한다.
@@ -18,10 +17,9 @@ export const Header = ({ onLogin, user, onLogout }) => {
   >
     <div className="container mx-auto flex h-16 items-center gap-3 px-4 md:gap-6">
       <Logo />
-      <SearchBar />
 
       <nav
-        className="ml-auto flex shrink-0 items-center gap-1"
+        className="flex shrink-0 items-center gap-1"
         aria-label="주요 메뉴"
       >
         {NAV_ITEMS.map((item) => (
@@ -49,6 +47,9 @@ export const Header = ({ onLogin, user, onLogout }) => {
             )}
           </NavLink>
         ))}
+      </nav>
+
+      <div className="ml-auto flex shrink-0 items-center gap-2">
         {user && <span className="max-w-32 truncate text-sm">{user.nickname}님</span>}
         <button
           type="button"
@@ -57,7 +58,7 @@ export const Header = ({ onLogin, user, onLogout }) => {
         >
           {user ? '로그아웃' : '로그인'}
         </button>
-      </nav>
+      </div>
     </div>
   </header>
   );
