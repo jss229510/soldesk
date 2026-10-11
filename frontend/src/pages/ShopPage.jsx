@@ -1,5 +1,6 @@
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { StateBox } from '../components/common';
+import SearchBar from '../components/layout/SearchBar';
 import {
   Breadcrumb,
   CategoryHero,
@@ -18,7 +19,7 @@ export const ShopPage = () => {
 
   // URL에 sort가 없으면 백엔드의 기본순(partId 내림차순)을 사용한다.
   const sort = searchParams.get('sort') ?? DEFAULT_SORT;
-  // 헤더 검색창에서 전달한 검색어를 목록 조회에도 그대로 사용한다.
+  // 검색창에서 전달한 검색어를 목록 조회에도 그대로 사용한다.
   const keyword = searchParams.get('keyword') ?? '';
   const { parts, total, loading, error } = useParts({ category: categoryId, sort, keyword });
 
@@ -52,6 +53,9 @@ export const ShopPage = () => {
   return (
     <div className="container mx-auto px-4 pb-12">
       <CategoryTabs />
+      <div className="pt-2 pb-4">
+        <SearchBar />
+      </div>
       <Breadcrumb category={category} />
 
       <CategoryHero
