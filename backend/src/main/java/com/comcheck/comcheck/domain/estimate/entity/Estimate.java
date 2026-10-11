@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -33,6 +34,10 @@ public class Estimate {
     @Column(name = "\"user_id\"", nullable = false)
     // 견적을 만든 회원 
     private Long userId;
+
+    @Column(name = "\"source_recommended_id\"", updatable = false)
+    //이 견적이 어떤 추천 구성에서 시작됐는지
+    private Long sourceRecommendedId;
  
     @Column(name = "\"title\"")
     // 견적 이름
@@ -40,7 +45,7 @@ public class Estimate {
  
     @Column(name = "\"total_price\"")
     // 부품 총합 가격
-    private Long totalPrice;
+    private Integer totalPrice;
  
     @Column(name = "\"total_power\"")
     // 예상 소비전력(W)
@@ -62,11 +67,12 @@ public class Estimate {
     @Column(name = "\"budget_max\"")
     // 사용자 예산
     private Long budgetMax;
+
+    @Column(name = "\"updated_at\"", nullable = false)
+    // 마지막 수정일시 
+    private LocalDateTime updatedAt;
  
-    @Convert(converter = YesNoConverter.class)
-    @Column(name = "\"is_recommend\"")
-    // 시스템 추천 견적 여부
-    private boolean recommend;
+    
 
     protected Estimate() {
         // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자
@@ -80,11 +86,20 @@ public class Estimate {
         this.usageType = usageType;
         this.budgetMax = budgetMax;
         this.shared = shared;
-        this.createdAt = LocalDateTime.now();
+        this.totalPower = 0;             // 부품을 담기 전이므로 0W
+        this.sourceRecommendedId = null; // 직접 만든 견적이므로 추천 출처 없음
+    }
+
+    @PrePersist 
+    // DB에 처음 저장되기 직전에 JPA가 자동으로 불러 주는 메서드
+    void onCreate(){
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 
     // 견적 수정
-    public void updateestimateId(){
+    public void update(String title, String usageType, Integer budgetMax, Boolean shared){
         
     }
 
@@ -103,7 +118,7 @@ public class Estimate {
         return title;
     }
  
-    public Long getTotalPrice() {
+    public Integer getTotalPrice() {
         return totalPrice;
     }
  
