@@ -6,9 +6,12 @@ export const UsageCard = ({ usage, active, onSelect }) => (
     type="button"
     className={`relative flex flex-col items-start overflow-hidden rounded-xl border p-5 text-left transition-colors ${
       active
-        ? 'border-cyan-400 bg-linear-to-r from-cyan-950 to-gray-900'
+        ? 'border-cyan-400 bg-gray-900'
         : 'border-gray-700 bg-gray-900 hover:border-gray-500'
     }`}
+    style={active ? {
+      backgroundImage: 'linear-gradient(to right, var(--brand-soft), var(--bg-surface))',
+    } : undefined}
     aria-pressed={active}
     onClick={() => onSelect?.(usage.id)}
   >
@@ -27,7 +30,7 @@ export const UsageCard = ({ usage, active, onSelect }) => (
 
     <span className="mt-5 flex items-baseline gap-2 font-mono">
       <span className="text-xs text-gray-500">예상</span>
-      <span className="text-base font-bold text-white">
+      <span className="text-base font-bold text-gray-300">
         {formatPrice(usage.estimate)}~
       </span>
     </span>

@@ -62,6 +62,12 @@ img {
   border-radius: var(--r-sm);
 }
 
+.theme-toggle:focus-visible {
+  outline-color: var(--line-strong);
+  outline-offset: -2px;
+  border-radius: var(--r-full);
+}
+
 ::selection {
   background: var(--brand);
   color: #04121a;
@@ -95,7 +101,7 @@ img {
 
 /* 기본 라이트 모드 */
 .flex.min-h-screen.flex-col {
-  background-color: #ffffff;
+  background-color: var(--bg-base);
   color: #111827;
 
   transition:
