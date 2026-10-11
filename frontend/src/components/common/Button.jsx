@@ -4,7 +4,8 @@ const VARIANTS = {
   // 테마 변수를 사용해 라이트·다크 모드 모두에서 버튼이 읽히도록 한다.
   primary: {
     backgroundColor: 'var(--brand-strong)',
-    color: '#04121a',
+    color: 'var(--on-brand)',
+    borderColor: 'var(--brand-strong)',
   },
   outline: {
     backgroundColor: 'var(--bg-surface)',
@@ -41,7 +42,7 @@ export const Button = ({
   children,
   ...rest
 }) => {
-  const classes = `inline-flex items-center justify-center gap-2 rounded-md border font-semibold transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 ${
+  const classes = `theme-button inline-flex items-center justify-center gap-2 rounded-md border font-semibold transition-colors disabled:cursor-not-allowed ${
     SIZES[size] ?? 'h-10 px-5'
   } ${block ? 'w-full' : ''} ${className ?? ''}`;
   // 호출부 스타일을 추가해도 variant의 테마 기본 스타일은 유지한다.

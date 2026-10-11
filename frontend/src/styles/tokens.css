@@ -12,39 +12,40 @@
   --bg-overlay: rgba(255, 255, 255, 0.78);
 
   /* 선 */
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
+  --line: #718198;
+  --line-strong: #526176;
 
   /* 텍스트 */
   --text: #0f172a;
   --text-2: #475569;
-  --text-3: #64748b;
-  --text-4: #94a3b8;
+  --text-3: #526176;
+  --text-4: #526176;
 
   /* 브랜드 / 상태 */
-  --brand: #0891b2;
-  --brand-strong: #06b6d4;
+  --brand: #155e75;
+  --brand-strong: #0e7490;
+  --on-brand: #ffffff;
   --brand-soft: rgba(34, 211, 238, 0.12);
   --up: #f87171;
   --down: #22c55e;
   --warn: #f59e0b;
   /* 상태 안내가 읽히도록 글자색과 배경색을 분리해 정의한다. */
-  --success: #15803d;
+  --success: #166534;
   --success-surface: #dcfce7;
-  --danger: #dc2626;
+  --danger: #b91c1c;
   --danger-surface: #fee2e2;
-  --warning: #b45309;
+  --warning: #92400e;
   --warning-surface: #fef3c7;
 
   /* 카테고리 액센트 */
-  --c-cpu: #22d3ee;
-  --c-gpu: #a855f7;
-  --c-psu: #ef4444;
-  --c-ram: #22c55e;
-  --c-ssd: #f97316;
-  --c-mb: #eab308;
-  --c-cooler: #38bdf8;
-  --c-case: #8b5cf6;
+  --c-cpu: #155e75;
+  --c-gpu: #7e22ce;
+  --c-psu: #b91c1c;
+  --c-ram: #166534;
+  --c-ssd: #9a3412;
+  --c-mb: #854d0e;
+  --c-cooler: #075985;
+  --c-case: #6d28d9;
 
   /* 타이포 */
   --font-sans: "Pretendard", "Pretendard Variable", -apple-system,
@@ -103,18 +104,19 @@
   --bg-overlay: rgba(3, 6, 10, 0.78);
 
   /* 선 */
-  --line: #1b2532;
-  --line-strong: #27354a;
+  --line: #64748b;
+  --line-strong: #64748b;
 
   /* 텍스트 */
   --text: #e9eef6;
   --text-2: #9fb0c4;
-  --text-3: #64748b;
-  --text-4: #44536a;
+  --text-3: #a8b8cc;
+  --text-4: #94a3b8;
 
   /* 브랜드 / 상태 */
   --brand: #22d3ee;
   --brand-strong: #06b6d4;
+  --on-brand: #04121a;
   --brand-soft: rgba(34, 211, 238, 0.12);
   --up: #f87171;
   --down: #4ade80;
@@ -126,6 +128,14 @@
   --danger-surface: rgba(239, 68, 68, 0.14);
   --warning: #fbbf24;
   --warning-surface: rgba(245, 158, 11, 0.14);
+  --c-cpu: #22d3ee;
+  --c-gpu: #c084fc;
+  --c-psu: #f87171;
+  --c-ram: #4ade80;
+  --c-ssd: #fb923c;
+  --c-mb: #facc15;
+  --c-cooler: #38bdf8;
+  --c-case: #a78bfa;
 
   --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.45);
 }

@@ -24,6 +24,9 @@ export const SearchBar = () => {
 
     searchParts(debounced).then((result) => {
       if (!ignore) setItems(result.items.slice(0, 6));
+    }).catch(() => {
+      // 서버 요청이 실패해도 이전 검색 결과를 클릭하지 않도록 비운다.
+      if (!ignore) setItems([]);
     });
 
     return () => {

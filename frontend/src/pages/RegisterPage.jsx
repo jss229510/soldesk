@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser, checkEmail, checkNickname } from "../api/users";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
 
+  // 회원가입 입력값
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -11,19 +13,25 @@ const RegisterPage = () => {
     nickname: "",
   });
 
+  // 입력칸 커서 이동용
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordCheckRef = useRef();
   const nicknameRef = useRef();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const onChange = (e) => {
+    // 입력한 칸의 값만 변경
     setInput({
       ...input,
       [e.target.name]: e.target.value,
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    if (loading) return;
+    setError("");
     // 이메일 빈칸 확인
     if (!input.email.trim()) {
       alert("이메일을 입력해주세요.");
@@ -32,7 +40,7 @@ const RegisterPage = () => {
     }
 
     // 이메일 형식 확인
-    if (!input.email.includes("@")) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.email.trim())) {
       alert("올바른 이메일 형식으로 입력해주세요.");
       emailRef.current.focus();
       return;
@@ -73,11 +81,43 @@ const RegisterPage = () => {
       return;
     }
 
-    console.log(input);
+    if (input.email.trim().length > 255 || input.nickname.trim().length > 50) {
+      setError("이메일은 255자, 닉네임은 50자 이내로 입력해주세요.");
+      return;
+    }
 
-    alert("회원가입 정보 확인 완료!");
-
-    // 나중에 여기에 백엔드 연결
+    // 중복 확인 후 회원가입 요청
+    setLoading(true);
+    try {
+      const email = input.email.trim();
+      const nickname = input.nickname.trim();
+      // 이메일과 닉네임 중복 확인
+      if (await checkEmail(email)) {
+        setError("이미 사용 중인 이메일입니다.");
+        emailRef.current.focus();
+        return;
+      }
+      if (await checkNickname(nickname)) {
+        setError("이미 사용 중인 닉네임입니다.");
+        nicknameRef.current.focus();
+        return;
+      }
+      // 비밀번호 확인 값은 서버에 보내지 않음
+      await registerUser(email, input.password, nickname);
+      setInput({ email: "", password: "", passwordCheck: "", nickname: "" });
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      // 가입 완료 후 로그인으로 이동
+      navigate("/login", { replace: true });
+    } catch (err) {
+      setError(err.status === 409
+        ? "이미 사용 중인 이메일 또는 닉네임입니다."
+        : err.status === 400
+          ? "입력한 회원 정보를 확인해주세요."
+          : "회원가입 요청을 처리하지 못했습니다. 서버 연결을 확인해주세요.");
+    } finally {
+      // 요청 종료
+      setLoading(false);
+    }
   };
 
   const goLogin = () => {
@@ -86,7 +126,9 @@ const RegisterPage = () => {
 
   return (
     <div className="flex justify-center px-4 py-8">
-      <div
+      <form
+        noValidate
+        onSubmit={(event) => { event.preventDefault(); onSubmit(); }}
         className="w-full max-w-sm rounded-xl border p-5 shadow-lg"
         style={{
           backgroundColor: "var(--bg-surface)",
@@ -191,12 +233,14 @@ const RegisterPage = () => {
           />
         </div>
 
+        {error && <p role="alert" className="mb-3 text-sm text-red-500">{error}</p>}
+
         <button
-          type="button"
-          onClick={onSubmit}
+          type="submit"
+          disabled={loading}
           className="w-full rounded-lg bg-cyan-500 py-2.5 font-semibold text-gray-950 hover:bg-cyan-400"
         >
-          회원가입
+          {loading ? "가입 중..." : "회원가입"}
         </button>
 
         <button
@@ -207,7 +251,7 @@ const RegisterPage = () => {
         >
           이미 계정이 있으신가요? 로그인
         </button>
-      </div>
+      </form>
     </div>
   );
 };

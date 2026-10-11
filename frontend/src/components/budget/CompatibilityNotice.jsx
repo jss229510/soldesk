@@ -19,7 +19,7 @@ export const CompatibilityNotice = ({ compatibility }) => {
       className={`mb-4 mt-6 flex items-start gap-3 rounded-md border px-5 py-4 ${tone}`}
       role={hasError ? 'alert' : 'status'}
     >
-      <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-current text-xs text-gray-900" aria-hidden="true">
+      <span className="grid h-5 w-5 shrink-0 place-items-center rounded border border-current text-xs font-bold" aria-hidden="true">
         {ok ? '✓' : '!'}
       </span>
       <div>

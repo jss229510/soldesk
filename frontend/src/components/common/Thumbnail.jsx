@@ -12,7 +12,11 @@ export const Thumbnail = ({ part, topLeft, topRight, className, square = false, 
   return (
     <figure
       className={`relative m-0 flex items-center justify-center overflow-hidden rounded-md bg-gray-800 ${className ?? ''}`}
-      style={{ aspectRatio: square ? '1 / 1' : '16 / 9' }}
+      style={{
+        aspectRatio: square ? '1 / 1' : '16 / 9',
+        // 흰 제품 사진도 두 테마에서 카드와 구분되도록 안쪽 테두리를 둔다.
+        border: '1px solid var(--line)',
+      }}
     >
       {topLeft && <span className="absolute left-3 top-3 z-10">{topLeft}</span>}
       {topRight && <span className="absolute right-3 top-3 z-10">{topRight}</span>}
@@ -36,9 +40,10 @@ export const Thumbnail = ({ part, topLeft, topRight, className, square = false, 
           onError={() => setFailedImage(part.image)}
         />
       ) : (
-        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 text-gray-500">
+        <span role="status" className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 text-gray-500">
           <span className="text-3xl" aria-hidden="true">{category.icon}</span>
           <span className="text-xs">이미지 준비 중</span>
+          <span className="max-w-full px-3 text-center text-xs">{part.imageModel || part.name}</span>
         </span>
       )}
       <figcaption className="sr-only">{category.label}</figcaption>

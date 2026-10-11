@@ -1,5 +1,6 @@
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
+import { Thumbnail } from '../components/common';
 
 export const CartPage = () => {
   const {
@@ -26,9 +27,13 @@ export const CartPage = () => {
           <section className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
             {items.map((item) => (
               <article key={item.id} className="flex flex-col gap-4 border-b border-gray-700 p-5 last:border-b-0 sm:flex-row sm:items-center">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-md bg-gray-800 text-xs text-cyan-400">
-                  {item.category}
-                </div>
+                {/* 담은 상품의 모델별 사진을 기존 공통 썸네일로 표시한다. */}
+                <Thumbnail
+                  part={item}
+                  square
+                  imageSize={88}
+                  className="w-28 shrink-0 border border-gray-700 !bg-white"
+                />
 
                 <div className="min-w-0 flex-1">
                   <p className="text-xs text-cyan-400">{item.category}</p>

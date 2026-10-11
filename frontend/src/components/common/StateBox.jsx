@@ -8,7 +8,7 @@ export const StateBox = ({ status = 'loading', title, description, action }) => 
       </>
     ) : (
       <>
-        <strong className="font-semibold text-white">{title}</strong>
+        <strong className="font-semibold text-theme">{title}</strong>
         {description && <span>{description}</span>}
         {action}
       </>

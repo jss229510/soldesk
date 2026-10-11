@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export const useAsync = (asyncFn, deps = [], { enabled = true } = {}) => {
   const [state, setState] = useState({ data: null, loading: enabled, error: null });
   const mounted = useRef(true);
+  const requestId = useRef(0);
   const fnRef = useRef(asyncFn);
   fnRef.current = asyncFn;
 
@@ -18,19 +19,21 @@ export const useAsync = (asyncFn, deps = [], { enabled = true } = {}) => {
   }, []);
 
   const run = useCallback(async () => {
+    const currentRequest = ++requestId.current;
     setState((prev) => ({ ...prev, loading: true, error: null }));
     try {
       const data = await fnRef.current();
-      if (mounted.current) setState({ data, loading: false, error: null });
+      if (mounted.current && currentRequest === requestId.current) setState({ data, loading: false, error: null });
       return data;
     } catch (error) {
-      if (mounted.current) setState({ data: null, loading: false, error });
+      if (mounted.current && currentRequest === requestId.current) setState({ data: null, loading: false, error });
       return null;
     }
   }, []);
 
   useEffect(() => {
     if (!enabled) {
+      requestId.current += 1;
       setState({ data: null, loading: false, error: null });
       return;
     }

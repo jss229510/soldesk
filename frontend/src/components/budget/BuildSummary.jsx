@@ -48,7 +48,7 @@ export const BuildSummary = ({ build, actionLabel, onAction, note }) => {
                 <span style={{ color: category.accent }} aria-hidden="true">{category.icon}</span>
                 {category.label}
               </span>
-              <span className="font-mono text-white">{formatPrice(item.part.price)}</span>
+              <span className="font-mono text-theme">{formatPrice(item.part.price)}</span>
             </li>
           );
         })}

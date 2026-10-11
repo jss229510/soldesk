@@ -9,8 +9,21 @@ import { useBuild } from '../context/BuildContext';
 /** PC 구성: 용도를 고르면 호환성이 검증된 구성을 제안한다 */
 export const BuildPage = () => {
   const [usageId, setUsageId] = useState(null);
-  const { build, loading } = useUsageBuild(usageId);
-  const { setBuild } = useBuild();
+  const { build: recommendedBuild, loading, error } = useUsageBuild(usageId);
+  const savedBuild = useBuild();
+  const { setBuild } = savedBuild;
+  // 예산 추천에서 저장한 구성도 PC 구성 화면에 바로 표시한다.
+  const build = usageId ? recommendedBuild : savedBuild.items.length ? savedBuild : null;
+  const [saved, setSaved] = useState(false);
+  const onSelectUsage = (id) => {
+    setSaved(false);
+    setUsageId(id);
+  };
+  const onSaveBuild = () => {
+    if (!build) return;
+    setBuild(build.items, build.budget);
+    setSaved(true);
+  };
 
   return (
     <div className="container mx-auto px-4 pb-12">
@@ -22,11 +35,12 @@ export const BuildPage = () => {
         </p>
       </header>
 
-      <UsageGrid usages={USAGE_PRESETS} selected={usageId} onSelect={setUsageId} />
+      <UsageGrid usages={USAGE_PRESETS} selected={usageId} onSelect={onSelectUsage} />
 
       {loading && <StateBox status="loading" title="구성을 준비하는 중입니다" />}
+      {error && <StateBox status="error" title="구성을 불러오지 못했습니다" description="다른 용도를 선택하거나 잠시 후 다시 시도해주세요." />}
 
-      {!loading && build && (
+      {!loading && !error && build && (
         <div className="mt-8">
           <CompatibilityNotice compatibility={build.compatibility} />
 
@@ -40,8 +54,8 @@ export const BuildPage = () => {
             <BuildSummary
               build={build}
               actionLabel="이 구성 담기"
-              onAction={() => setBuild(build.items)}
-              note="담아두면 시세 쇼핑에서 부품을 바꿔 볼 수 있어요"
+              onAction={onSaveBuild}
+              note={saved ? "구성이 저장되었습니다." : "선택한 부품 구성을 저장합니다."}
             />
           </div>
         </div>

@@ -24,7 +24,7 @@ export const PriceChart = ({ points = [], down = true }) => {
   }));
 
   const last = coords[coords.length - 1];
-  const stroke = down ? '#22d3ee' : '#f87171';
+  const stroke = down ? 'var(--brand)' : 'var(--danger)';
   const yTicks = ticks(values, 5);
   // 첫/중간/끝만 라벨링해 축이 빽빽해지지 않게 한다
   const labelIndexes = [...new Set([0, 3, 6, 9, points.length - 1])]

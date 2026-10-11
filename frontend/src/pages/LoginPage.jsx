@@ -5,17 +5,20 @@ import { loginUser } from "../api/users";
 const LoginPage = ({ onNavigate, onSuccess }) => {
   const navigate = useNavigate();
 
+  // 로그인 입력값
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
 
+  // 입력칸 커서 이동용
   const emailRef = useRef();
   const passwordRef = useRef();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const onChange = (e) => {
+    // 입력한 칸의 값만 변경
     setInput({
       ...input,
       [e.target.name]: e.target.value,
@@ -23,6 +26,7 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
   };
 
   const onSubmit = async () => {
+    // 중복 요청 방지
     if (loading) return;
     setError("");
     // 이메일 빈칸 확인
@@ -46,11 +50,12 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
       return;
     }
 
-    // 서버가 계정과 비밀번호를 확인한 경우에만 로그인 성공 처리한다.
+    // 서버에 로그인 요청
     setLoading(true);
     try {
       const user = await loginUser(input.email.trim(), input.password);
       setInput({ email: "", password: "" });
+      // 로그인 정보 저장은 부모 화면에서 처리
       onSuccess?.(user);
     } catch (err) {
       setError(err.status === 401
@@ -59,18 +64,22 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
           ? "이메일과 비밀번호를 확인해주세요."
           : "로그인 서버에 연결하지 못했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
+      // 요청 종료
       setLoading(false);
     }
   };
 
   const onRegister = () => {
+    // 로그인창 닫고 회원가입으로 이동
     onNavigate?.();
     navigate("/register");
   };
 
   return (
     <div className="h-full">
-      <div
+      <form
+        noValidate
+        onSubmit={(event) => { event.preventDefault(); onSubmit(); }}
         className="flex h-full w-full flex-col justify-center rounded-xl border p-4 shadow-md"
         style={{
           backgroundColor: "var(--bg-surface)",
@@ -125,8 +134,7 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
         {error && <p role="alert" className="mb-3 text-sm text-red-500">{error}</p>}
 
         <button
-          type="button"
-          onClick={onSubmit}
+          type="submit"
           disabled={loading}
           className="w-full rounded-lg bg-cyan-500 py-2 text-sm font-semibold text-gray-950 hover:bg-cyan-400"
         >
@@ -153,7 +161,7 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
             비밀번호 찾기
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

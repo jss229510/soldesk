@@ -6,14 +6,23 @@ import Modal from '../components/common/Modal';
 import LoginPage from '../pages/LoginPage';
 import { fetchCurrentUser } from '../api/users';
 
-/** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
+/** 공통 화면: 헤더, 본문, 푸터 */
 export const MainLayout = () => {
   const { pathname } = useLocation();
   const [isDark, toggleDark] = useToggle(false);
   const [loginOpen, toggleLogin] = useToggle(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  // 새로고침 때 저장된 토큰을 서버에 확인한다. 비밀번호는 저장하지 않는다.
+  // 팝업에도 같은 테마 적용
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+    document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+    return () => {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.style.colorScheme = '';
+    };
+  }, [isDark]);
+  // 저장된 토큰으로 로그인 상태 확인
   useEffect(() => {
     let active = true;
     const saved = sessionStorage.getItem('partzone-login');
@@ -33,12 +42,14 @@ export const MainLayout = () => {
   }, []);
 
   const onLoginSuccess = (profile) => {
+    // JWT와 회원 정보 저장 (비밀번호 제외)
     sessionStorage.setItem('partzone-login', JSON.stringify(profile));
     setUser(profile);
     closeLogin();
   };
 
   const onLogout = () => {
+    // 로그인 정보 삭제
     sessionStorage.removeItem('partzone-login');
     setUser(null);
   };
@@ -53,7 +64,7 @@ export const MainLayout = () => {
 
   return (
     <div className={`flex min-h-screen flex-col ${isDark ? 'dark' : ''}`}>
-      <button type="button" onClick={toggleDark}>
+      <button type="button" className="theme-toggle" onClick={toggleDark} aria-pressed={isDark}>
         {isDark ? '☀️ 라이트 모드' : '🌙 다크 모드'}
       </button>
 

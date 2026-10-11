@@ -9,7 +9,7 @@ const H = 34;
 export const Sparkline = ({ values = [], rate = 0, label = '12개월 시세' }) => {
   const points = toPoints(values, W, H, 3);
   const down = rate <= 0;
-  const stroke = down ? '#4ade80' : '#f87171';
+  const stroke = down ? 'var(--success)' : 'var(--danger)';
   const last = points[points.length - 1];
   const gradientId = `spark${useId()}`;
 
