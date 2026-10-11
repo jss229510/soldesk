@@ -18,7 +18,6 @@ export const SearchBar = () => {
     let ignore = false;
 
     if (!debounced.trim()) {
-      setItems([]);
       return undefined;
     }
 
@@ -46,8 +45,13 @@ export const SearchBar = () => {
 
   const goToPart = (part) => {
     setOpen(false);
+
+    // PriceHistory 기능을 다시 연결하기 전까지는 검색어만 결과 화면에 전달한다.
+    const query = new URLSearchParams({
+      keyword: keyword.trim(),
+    });
+    navigate(`${ROUTES.shopCategory(part.category)}?${query.toString()}`);
     setKeyword('');
-    navigate(`${ROUTES.shopCategory(part.category)}?part=${part.id}`);
   };
 
   return (
