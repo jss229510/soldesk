@@ -12,26 +12,22 @@ export const UsageCard = ({ usage, active, onSelect }) => (
     aria-pressed={active}
     onClick={() => onSelect?.(usage.id)}
   >
-    <span className="flex flex-wrap gap-2">
-      <span className="inline-flex items-center rounded-md border border-gray-700 bg-gray-800 px-2 py-1 font-mono text-xs text-gray-300">
-        {usage.tag}
-      </span>
-      <span className="inline-flex items-center rounded-md border border-green-500 bg-gray-800 px-2 py-1 font-mono text-xs text-green-400">
-        ✓ 호환검증
-      </span>
+  <span className="text-2xl" aria-hidden="true">
+      {usage.icon}
     </span>
 
-    <span className="mt-5 text-2xl" aria-hidden="true">{usage.icon}</span>
-    <span className="mt-3 text-lg font-bold">{usage.title}</span>
-    <span className="text-sm text-gray-400">{usage.description}</span>
+    <span className="mt-3 text-lg font-bold">
+      {usage.title}
+    </span>
 
-    <span className="mt-5 flex items-baseline gap-2 font-mono">
-      <span className="text-xs text-gray-500">예상</span>
-      <span className="text-base font-bold text-white">
-        {formatPrice(usage.estimate)}~
-      </span>
+    <span className="mt-2 text-sm text-gray-400">
+      {usage.description}
+    </span>
+
+    <span className="mt-auto pt-5 text-sm text-cyan-400">
+      {active ? '선택됨' : '세부 용도 보기 →'}
     </span>
   </button>
 );
 
-export default UsageCard;
+export default UsageCard;  
