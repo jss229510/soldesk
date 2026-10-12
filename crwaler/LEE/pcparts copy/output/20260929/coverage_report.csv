@@ -1,7 +1,7 @@
 ﻿category,bucket,candidate_count,minimum_required,status
-CPU,사무용,67,3,PASS
-CPU,게임용,78,3,PASS
-CPU,개발·작업용,122,3,PASS
+CPU,사무용,64,3,PASS
+CPU,게임용,75,3,PASS
+CPU,개발·작업용,121,3,PASS
 RAM,8GB,26,3,PASS
 RAM,16GB,58,3,PASS
 RAM,32GB,169,3,PASS

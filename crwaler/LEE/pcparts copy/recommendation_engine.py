@@ -795,35 +795,36 @@ def recommend_build(
     }
 
 
-def main():
-    """Read command-line options and print a CSV-backed recommendation."""
-    parser = argparse.ArgumentParser(description='기본 규격 기준 PC 부품 추천')
-    parser.add_argument('--use-case', default='GAMING', type=normalized)
-    parser.add_argument('--tier-code', default='FHD_ENTRY')
-    parser.add_argument('--date', default='20260929', help='정제 CSV 날짜: YYYYMMDD')
-    parser.add_argument('--ram-quantity', type=int, default=1)
-    parser.add_argument('--office-psu-min-watt', type=int, default=400)
-    args = parser.parse_args()
-
-    try:
-        datetime.strptime(args.date, '%Y%m%d')
-        if not re.fullmatch(r'\d{8}', args.date):
+def select_output_dir(date_code=None):
+    """Select an explicit date or the latest dated output directory."""
+    output_root = Path(__file__).resolve().parent / 'output'
+    if date_code is None:
+        dated_dirs = []
+        for path in output_root.iterdir():
+            if not path.is_dir() or not re.fullmatch(r'\d{8}', path.name):
+                continue
+            try:
+                datetime.strptime(path.name, '%Y%m%d')
+            except ValueError:
+                continue
+            dated_dirs.append(path)
+        if not dated_dirs:
+            raise ValueError('날짜별 정제 CSV 폴더가 없습니다.')
+        output_dir = max(dated_dirs, key=lambda path: path.name)
+    else:
+        if not re.fullmatch(r'\d{8}', date_code):
             raise ValueError('날짜는 YYYYMMDD 형식이어야 합니다.')
-        tiers = RECOMMENDATION_PROFILES.get(args.use_case, {}).get('tiers', {})
-        tier_code = next(
-            (code for code in tiers if normalized(code) == normalized(args.tier_code)),
-            args.tier_code,
-        )
-        get_profile(args.use_case, tier_code)
-        output_dir = Path(__file__).resolve().parent / 'output' / args.date
-        result = recommend_build(
-            load_part_candidates(output_dir), args.use_case, tier_code,
-            ram_quantity=args.ram_quantity,
-            office_psu_min_watt=args.office_psu_min_watt,
-        )
-    except (ValueError, OSError) as error:
-        parser.error(str(error))
+        datetime.strptime(date_code, '%Y%m%d')
+        output_dir = output_root / date_code
 
+    for filename in ('parts_all.csv', 'part_specs_all.csv'):
+        if not (output_dir / filename).is_file():
+            raise ValueError(f'정제 CSV가 없습니다: {output_dir / filename}')
+    return output_dir
+
+
+def print_recommendation(result, office_psu_min_watt):
+    """Print one recommendation using the existing output format."""
     print(f"추천 프로필: {result['use_case']} / {result['tier_code']}")
     print_build(result['selected_parts'], ram_quantity=result['ram_quantity'])
     print('\n대표 케이스 후보 (가격 미포함)')
@@ -832,12 +833,135 @@ def main():
     if not result['case_candidates']:
         print('현재 대표 목록에 기본 규격을 만족하는 케이스가 없습니다.')
     if 'GPU' not in result['selected_parts']:
-        print(f'외장 GPU 제외 / 사무용 PSU 선택 기준: {args.office_psu_min_watt}W 이상')
+        print(f'외장 GPU 제외 / 사무용 PSU 선택 기준: {office_psu_min_watt}W 이상')
         print('사무용 PSU 기준은 선택 정책이며 전체 소비전력 계산 결과가 아닙니다.')
+
+
+def save_recommendation_csvs(results, output_dir):
+    """Export estimates and items linked by a key, not by invented DB IDs."""
+    output_dir = Path(output_dir)
+    estimate_rows, item_rows = [], []
+    seen_keys = set()
+    for result in results:
+        use_case, tier_code = result['use_case'], result['tier_code']
+        key = f'{output_dir.name}_{use_case}_{tier_code}'
+        if key in seen_keys:
+            raise ValueError(f'Duplicate recommendation key: {key}')
+        seen_keys.add(key)
+        total = Decimal('0')
+        seen_urls = set()
+        for category, part in result['selected_parts'].items():
+            product_url = str(part.get('product_url') or '').strip()
+            if not product_url or product_url in seen_urls:
+                raise ValueError(f'Missing or duplicate product_url: {key}/{category}')
+            seen_urls.add(product_url)
+            quantity = result['ram_quantity'] if category == 'RAM' else 1
+            if isinstance(quantity, bool) or not isinstance(quantity, int) or quantity <= 0:
+                raise ValueError(f'Invalid quantity: {key}/{category}')
+            if number(part.get('price')) is None:
+                raise ValueError(f'Invalid price: {key}/{category}')
+            price = Decimal(str(part['price']))
+            amount = price * quantity
+            total += amount
+            item_rows.append({
+                'recommendation_key': key, 'category': category,
+                'csv_part_id': part['part_id'], 'product_url': product_url,
+                'part_name': part['part_name'], 'quantity': quantity,
+                'unit_price': format(price, 'f'),
+            })
+        if not result['selected_parts'] or total != result['total_price']:
+            raise ValueError(f'Empty or inconsistent recommendation total: {key}')
+        profile = RECOMMENDATION_PROFILES[use_case]
+        estimate_rows.append({
+            'recommendation_key': key, 'usage_type': use_case,
+            'tier_code': tier_code,
+            'title': f"{profile['label']} {profile['tiers'][tier_code]['label']}",
+            'total_price': format(total, 'f'), 'is_recommend': 'Y',
+        })
+
+    exports = (
+        ('recommended_estimates.csv', estimate_rows,
+         ('recommendation_key', 'usage_type', 'tier_code', 'title', 'total_price', 'is_recommend')),
+        ('recommended_estimate_items.csv', item_rows,
+         ('recommendation_key', 'category', 'csv_part_id', 'product_url',
+          'part_name', 'quantity', 'unit_price')),
+    )
+    for filename, rows, columns in exports:
+        path = output_dir / filename
+        with path.open('w', encoding='utf-8-sig', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=columns)
+            writer.writeheader()
+            writer.writerows(rows)
+        print(f'추천 CSV 저장: {path} / {len(rows)}행')
+
+
+def main():
+    """Run all profiles by default, or explicitly selected profiles."""
+    parser = argparse.ArgumentParser(description='기본 규격 기준 PC 부품 추천')
+    parser.add_argument('--use-case', type=normalized, help='생략하면 모든 용도 실행')
+    parser.add_argument('--tier-code', help='생략하면 선택한 용도의 모든 단계 실행')
+    parser.add_argument('--date', help='정제 CSV 날짜: YYYYMMDD, 생략하면 최신 날짜')
+    parser.add_argument('--ram-quantity', type=int, default=1)
+    parser.add_argument('--office-psu-min-watt', type=int, default=400)
+    args = parser.parse_args()
+
+    try:
+        if args.tier_code and not args.use_case:
+            raise ValueError('--tier-code를 지정하려면 --use-case도 지정해야 합니다.')
+        if args.use_case and args.use_case not in RECOMMENDATION_PROFILES:
+            raise ValueError(f'존재하지 않는 용도: {args.use_case}')
+        if args.ram_quantity <= 0 or args.office_psu_min_watt <= 0:
+            raise ValueError('RAM 수량과 사무용 PSU 기준 출력은 양수여야 합니다.')
+        use_cases = [args.use_case] if args.use_case else list(RECOMMENDATION_PROFILES)
+        profiles = []
+        for use_case in use_cases:
+            tiers = RECOMMENDATION_PROFILES[use_case]['tiers']
+            if args.tier_code:
+                tier_code = next(
+                    (code for code in tiers if normalized(code) == normalized(args.tier_code)),
+                    args.tier_code,
+                )
+                get_profile(use_case, tier_code)
+                profiles.append((use_case, tier_code))
+            else:
+                profiles.extend((use_case, code) for code in tiers)
+        output_dir = select_output_dir(args.date)
+        candidates = load_part_candidates(output_dir)
+    except (ValueError, OSError) as error:
+        parser.error(str(error))
+
+    print(f'사용한 정제 CSV 폴더: {output_dir}')
+    for category, parts in candidates.items():
+        print(f'{category}: {len(parts)}개 후보')
+    failures, results = [], []
+    for use_case, tier_code in profiles:
+        print(f'\n--- {use_case} / {tier_code} ---')
+        try:
+            result = recommend_build(
+                candidates, use_case, tier_code,
+                ram_quantity=args.ram_quantity,
+                office_psu_min_watt=args.office_psu_min_watt,
+            )
+            print_recommendation(result, args.office_psu_min_watt)
+            results.append(result)
+        except ValueError as error:
+            failures.append((use_case, tier_code, str(error)))
+            print(f'추천 불가: {error}')
+
+    try:
+        save_recommendation_csvs(results, output_dir)
+    except (ValueError, OSError) as error:
+        parser.error(str(error))
+    print('이번 실행에서 성공한 추천만 저장합니다. 기존 추천 CSV는 갱신됩니다.')
+    print('CSV 연결키와 csv_part_id는 실제 DB ID가 아닙니다. DB 적재 시 product_url로 연결해야 합니다.')
+    print('추천 CSV의 합계에는 케이스·쿨러·배송비가 포함되지 않습니다.')
+    print(f'\n전체 {len(profiles)}개 프로필 / 성공 {len(profiles) - len(failures)}개 / 실패 {len(failures)}개')
     print('CPU → RAM → 메인보드 가격순 선택이며 전체 조합의 최저가는 아닙니다.')
     print('각 단계의 최소조건만 적용하며 가성비 점수·최고성능 순위는 사용하지 않습니다.')
     print('기본 규격 기준 결과이며, CPU별 칩셋 지원·BIOS·전체 소비전력은 검증하지 않습니다.')
     print('소켓이 같아도 CPU가 지원되지 않을 수 있으므로 완전한 조립 호환을 보장하지 않습니다.')
+    if failures:
+        raise SystemExit(1)
 
 
 if __name__ == '__main__':
