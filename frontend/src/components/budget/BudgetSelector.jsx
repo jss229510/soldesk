@@ -56,7 +56,7 @@ export const BudgetSelector = ({ value, onChange }) => {
         </div>
         <p className="text-base text-gray-300">
           적용 예산:{' '}
-          <span className="font-bold text-white">{formatPrice(value)}</span>
+          <span className="font-bold text-gray-300">{formatPrice(value)}</span>
         </p>
       </div>
     </div>

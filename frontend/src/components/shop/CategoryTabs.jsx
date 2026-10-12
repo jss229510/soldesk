@@ -10,7 +10,7 @@ export const CategoryTabs = () => (
         key={category.id}
         to={ROUTES.shopCategory(category.id)}
         className={({ isActive }) =>
-          `h-8 shrink-0 rounded-md px-4 ${
+          `inline-flex h-10 shrink-0 items-center justify-center whitespace-nowrap rounded-md px-4 text-base ${
             isActive
               ? 'bg-cyan-950 font-semibold text-cyan-400'
               : 'text-gray-400 hover:text-white'

@@ -53,7 +53,18 @@ export const MainLayout = () => {
 
   return (
     <div className={`flex min-h-screen flex-col ${isDark ? 'dark' : ''}`}>
-      <button type="button" onClick={toggleDark}>
+      <button
+        type="button"
+        className="theme-toggle self-center whitespace-nowrap rounded-full px-3 py-1"
+        onClick={toggleDark}
+        aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
+        aria-pressed={isDark}
+        style={{
+          backgroundColor: 'var(--bg-surface-2)',
+          color: 'var(--text)',
+          boxShadow: 'inset 0 0 0 1px var(--line-strong)',
+        }}
+      >
         {isDark ? '☀️ 라이트 모드' : '🌙 다크 모드'}
       </button>
 

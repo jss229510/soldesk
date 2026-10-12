@@ -417,10 +417,17 @@ TARGET_FILTER = {
     'CPU_AMD': ('라이젠 3000시리즈','라이젠 4000시리즈','라이젠 5000시리즈','라이젠 7000시리즈','라이젠 8000시리즈','라이젠 9000시리즈'),
     'GPU_NVIDIA': ('GTX 1660 SUPER','RTX 2060','RTX 2060 SUPER',
                    'RTX 3050','RTX 3060','RTX 3060 Ti','RTX 3070','RTX 3070 Ti','RTX 3080',
-                   'RTX 4060','RTX 4060 Ti','RTX 4070 SUPER','RTX 4070 Ti SUPER','RTX 4080 SUPER',
+                   'RTX 4060','RTX 4060 Ti','RTX 4070 SUPER','RTX 4080 SUPER',
                    'RTX 5050','RTX 5060','RTX 5060 Ti','RTX 5070','RTX 5070 Ti','RTX 5080','RTX 5090'),
     'GPU_AMD': ('RX 6800','RX 7600','RX 9060','RX 9060 XT','RX 9070','RX 9070 GRE','RX 9070 XT'),
     'MD_sockets': ('AMD(소켓AM4)','AMD(소켓AM5)','인텔(소켓1200)','인텔(소켓1700)','인텔(소켓1851)',),
     'RAM_DDR': ('DDR4','DDR5'),
     'RAM_CAP': ('8GB','16GB','32GB','64GB')
+}
+
+TARGET_MANUFACTURERS = {
+    'GPU' : ('MSI','GIGABYTE','ASUS','갤럭시','COLORFUL','이엠텍'),
+    'MAINBOARD':('GIGABYTE','ASUS','MSI','ASRock'),
+    'PSU': ('마이크로닉스','SuperFlower','잘만','시소닉'),
+    'RAM': ('삼성전자','ESSENCORE','TeamGroup','마이크론'),
 }

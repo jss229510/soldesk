@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
-from recommendation_profiles import TARGET_MANUFACTURERS, TARGET_FILTER
+from recommendation_profiles import TARGET_FILTER
 
 
 LIST_URL = "https://prod.danawa.com/list/?cate=112747&15main_11_02"
@@ -82,7 +82,7 @@ def cpu_run():
                 more_button.click()
                 page.wait_for_timeout(2000)
 
-            for maker in TARGET_MANUFACTURERS['CPU']:
+            for maker in ['인텔','AMD']:
                 maker_checkbox = page.get_by_role("checkbox", name=maker, exact=True)
 
                 maker_checkbox.check()

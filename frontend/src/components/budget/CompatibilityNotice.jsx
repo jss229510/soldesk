@@ -7,7 +7,7 @@ export const CompatibilityNotice = ({ compatibility }) => {
     ? 'border-green-500 bg-green-950 text-green-200'
     : hasError
       ? 'border-red-500 bg-red-950 text-red-200'
-      : 'border-yellow-500 bg-yellow-950 text-yellow-200';
+      : 'border-yellow-500 bg-yellow-950 text-yellow-300';
   const title = ok
     ? '모든 부품이 호환됩니다.'
     : hasError
@@ -19,8 +19,8 @@ export const CompatibilityNotice = ({ compatibility }) => {
       className={`mb-4 mt-6 flex items-start gap-3 rounded-md border px-5 py-4 ${tone}`}
       role={hasError ? 'alert' : 'status'}
     >
-      <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-current text-xs text-gray-900" aria-hidden="true">
-        {ok ? '✓' : '!'}
+      <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-current text-xs" aria-hidden="true">
+        <span style={{ color: 'var(--bg-surface)' }}>{ok ? '✓' : '!'}</span>
       </span>
       <div>
         <strong>{title}</strong>

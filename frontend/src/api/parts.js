@@ -1,29 +1,10 @@
 import { CATEGORIES } from '../constants/categories';
-import { PART_IMAGES } from '../constants/partImages';
 import { PARTS, PARTS_BY_ID, PRICE_HISTORY } from '../mock';
-import { mockResponse, request, USE_REAL_PARTS, ApiError } from './client';
-
-// 서버의 필드 이름을 기존 React 화면에서 사용하는 이름으로 맞춘다.
-export const toPart = (data, specs = []) => ({
-  id: String(data.partId),
-  category: data.category?.toLowerCase(),
-  brand: data.brand ?? '',
-  name: data.partName ?? '',
-  price: Number(data.price ?? 0),
-  image: PART_IMAGES[data.partName] ?? data.imageUrl?.replace(/([?&])shrink=\d+:\d+/, '$1shrink=500:500'),
-  productUrl: data.productUrl,
-  specs: specs.map((spec) => `${spec.specKey}: ${spec.specValue ?? ''}${spec.specUnit ?? ''}`),
-  attrs: {},
-  rating: null,
-  reviewCount: null,
-  listPrice: null,
-  stock: null,
-  trendRate: null,
-  popularity: 0,
-  releasedAt: '',
-});
+import { mockResponse, request, USE_MOCK, ApiError } from './client';
 
 const sorters = {
+  // mock 모드에서도 실제 백엔드와 같은 part ID 내림차순을 기본순으로 사용한다.
+  default: (a, b) => b.id - a.id,
   popular: (a, b) => b.popularity - a.popularity,
   price: (a, b) => a.price - b.price,
   latest: (a, b) => new Date(b.releasedAt) - new Date(a.releasedAt),
@@ -31,29 +12,14 @@ const sorters = {
 
 /** 카테고리 목록 + 각 카테고리의 제품 수/가격 범위 (홈 카드에서 사용) */
 export const fetchCategorySummaries = async () => {
-  if (USE_REAL_PARTS) {
-    // 현재 서버에는 /categories가 없으므로 부품 목록에서 집계한다.
-    const { items } = await fetchParts();
-    const categories = CATEGORIES.map((category) => {
-      const parts = items.filter((part) => part.category === category.id);
-      const prices = parts.map((part) => part.price);
-      return {
-        ...category,
-        image: parts.find((part) => part.image)?.image ?? null,
-        count: parts.length,
-        minPrice: prices.length ? Math.min(...prices) : 0,
-        maxPrice: prices.length ? Math.max(...prices) : 0,
-      };
-    });
-    return { categories, totalCount: items.length };
-  }
+  // 백엔드에 /categories API가 없으므로 PARTS 전체 목록을 받아 홈 카드에서 계산한다.
+  if (!USE_MOCK) return request('/parts');
 
   const summaries = CATEGORIES.map((category) => {
     const items = PARTS.filter((p) => p.category === category.id);
     const prices = items.map((p) => p.price);
     return {
       ...category,
-      image: items.find((part) => part.image)?.image ?? null,
       count: items.length,
       minPrice: Math.min(...prices),
       maxPrice: Math.max(...prices),
@@ -63,17 +29,30 @@ export const fetchCategorySummaries = async () => {
   return mockResponse({ categories: summaries, totalCount: PARTS.length });
 };
 
-/** 카테고리별 부품 목록 */
-export const fetchParts = async ({ category, sort = 'popular', keyword = '' } = {}) => {
-  if (USE_REAL_PARTS) {
+/** 카테고리·검색어·정렬 조건에 맞는 부품 목록을 조회한다. */
+export const fetchParts = async ({ category, sort = 'default', keyword = '' } = {}) => {
+  if (!USE_MOCK) {
+    // URL의 ?category=cpu&keyword=AMD&sort=price 부분을 안전하게 만든다.
     const query = new URLSearchParams();
-    if (category) query.set('category', category.toUpperCase());
-    const data = await request(`/parts${query.size ? `?${query}` : ''}`);
-    const normalized = keyword.trim().toLowerCase();
-    const items = data.map((part) => toPart(part)).filter((part) =>
-      !normalized || part.name.toLowerCase().includes(normalized) || part.brand.toLowerCase().includes(normalized)
-    ).sort(sorters[sort] ?? sorters.popular);
-    return { items, total: items.length };
+
+    if (category) {
+      query.set('category', category);
+    }
+
+    if (keyword.trim()) {
+      query.set('keyword', keyword.trim());
+    }
+
+    // 가격순일 때만 sort=price를 보낸다.
+    // 기본순은 sort를 보내지 않고, 백엔드가 partId 내림차순으로 처리한다.
+    if (sort === 'price') {
+      query.set('sort', 'price');
+    }
+
+    const queryString = query.toString();
+
+    // 조건이 하나라도 있으면 query string을 붙이고, 없으면 전체 목록을 요청한다.
+    return request(queryString ? `/parts?${queryString}` : '/parts');
   }
 
   const normalized = keyword.trim().toLowerCase();
@@ -84,46 +63,25 @@ export const fetchParts = async ({ category, sort = 'popular', keyword = '' } = 
       part.name.toLowerCase().includes(normalized) ||
       part.brand.toLowerCase().includes(normalized);
     return matchCategory && matchKeyword;
-  }).sort(sorters[sort] ?? sorters.popular);
+  }).sort(sorters[sort] ?? sorters.default);
 
   return mockResponse({ items, total: items.length });
 };
 
+/** 부품 상세 조회 */
 export const fetchPart = async (partId) => {
-  if (USE_REAL_PARTS) {
-    const [part, specs] = await Promise.all([
-      request(`/parts/${encodeURIComponent(partId)}`),
-      request(`/parts/${encodeURIComponent(partId)}/specs`),
-    ]);
-    return toPart(part, specs);
-  }
+  // 단건 조회는 목록 조건이 아니라 URL 경로의 부품 ID를 사용한다.
+  if (!USE_MOCK) return request(`/parts/${partId}`);
 
   const part = PARTS_BY_ID[partId];
   if (!part) throw new ApiError('부품을 찾을 수 없습니다.', 404);
+
   return mockResponse(part);
 };
 
 /** 최근 12개월 시세 */
 export const fetchPriceHistory = async (partId) => {
-  if (USE_REAL_PARTS) {
-    const data = await request(`/parts/${encodeURIComponent(partId)}/price-history`);
-    if (!data.length) return null;
-    const cutoff = new Date();
-    cutoff.setFullYear(cutoff.getFullYear() - 1);
-    const records = data.filter((record) => new Date(record.recordedAt) >= cutoff)
-      .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt));
-    if (!records.length) return null;
-    const points = records.map((record) => ({ month: record.recordedAt, price: Number(record.price) }));
-    const first = points[0].price;
-    const last = points[points.length - 1].price;
-    return {
-      partId: String(partId), points,
-      yearAgoPrice: first,
-      lowestPrice: Math.min(...points.map((point) => point.price)),
-      changeRate: first ? Math.round((last - first) / first * 1000) / 10 : 0,
-      changeAmount: Math.abs(last - first),
-    };
-  }
+  if (!USE_MOCK) return request(`/parts/${partId}/price-history`);
 
   const history = PRICE_HISTORY[partId];
   if (!history) throw new ApiError('시세 기록이 없습니다.', 404);

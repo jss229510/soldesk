@@ -23,8 +23,8 @@ public class EstimateItem {
     @Id
     // item_id를 기본키(PK)로 지정
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATE_ITEMS_SEQ_GENERATOR")
-    @SequenceGenerator(name = "ESTIMATE_ITEMS_SEQ_GENERATOR", sequenceName = "ESTIMATE_ITEMS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ESTIMATE_ITEMS_GENERATOR")
+    @SequenceGenerator(name = "SEQ_ESTIMATE_ITEMS_GENERATOR", sequenceName = "SEQ_ESTIMATE_ITEMS", allocationSize = 1)
     // Oracle 시퀀스로 PK 자동 생성
     // PK 값을 직접 넣지 않고, DB 시퀀스에서 번호를 받아와 자동으로 채움
     // CREATE SEQUENCE ESTIMATE_ITEMS_SEQ START WITH 1 INCREMENT BY 1; => 오라클 시퀀스 필요
@@ -47,20 +47,23 @@ public class EstimateItem {
 
     @Column(name = "\"quantity\"", nullable = false)
     // 부품 수량
-    private Integer quantity;
+    private Long quantity;
 
-    public EstimateItem(Estimate estimate, Part part, Integer quantity) {
+    public EstimateItem(Estimate estimate, Part part, Long quantity) {
         // 견적 품목 생성 (수량 미입력 시 1개)
         this.estimate = estimate;
         this.part = part;
+        // 담을 부품 저장
         this.quantity = (quantity == null) ? 1 : quantity;
+        // 부품 개수가 비었으면 1개 아니면 설정한 개수대로
     }
 
-    public void changeQuantity(int quantity) {
-        // 부품 수량 변경 (1개 이상만 허용)
+    public void changeQuantity(Long quantity) {
+        // 부품 수량 변경
         if (quantity < 1) {
             throw new IllegalArgumentException("부품 수량은 1개 이상이어야 합니다.");
             //throw = 여기서 에러를 일부러 발생시키고(1개가 안될시), 이 메서드를 그 자리에서 멈춰라
+            // IllegalArgumentException : 잘못된 인수 
         }
         this.quantity = quantity;
     }
@@ -87,7 +90,7 @@ public class EstimateItem {
         return estimate;
     }
 
-    public Integer getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 

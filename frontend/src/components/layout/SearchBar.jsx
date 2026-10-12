@@ -5,7 +5,7 @@ import { useDebouncedValue } from '../../hooks/useDebouncedValue';
 import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
 
-/** 헤더 검색. 입력하면 부품을 찾아 해당 카테고리 화면으로 보낸다. */
+/** 시세 쇼핑 검색. 입력하면 부품을 찾아 해당 카테고리 화면으로 보낸다. */
 export const SearchBar = () => {
   const [keyword, setKeyword] = useState('');
   const [items, setItems] = useState([]);
@@ -18,7 +18,6 @@ export const SearchBar = () => {
     let ignore = false;
 
     if (!debounced.trim()) {
-      setItems([]);
       return undefined;
     }
 
@@ -46,20 +45,25 @@ export const SearchBar = () => {
 
   const goToPart = (part) => {
     setOpen(false);
+
+    // PriceHistory 기능을 다시 연결하기 전까지는 검색어만 결과 화면에 전달한다.
+    const query = new URLSearchParams({
+      keyword: keyword.trim(),
+    });
+    navigate(`${ROUTES.shopCategory(part.category)}?${query.toString()}`);
     setKeyword('');
-    navigate(`${ROUTES.shopCategory(part.category)}?part=${part.id}`);
   };
 
   return (
     <div
-      className="relative hidden max-w-lg flex-1 lg:block"
+      className="relative w-full max-w-lg"
       ref={boxRef}
     >
       <div
         className="flex h-10 items-center gap-2 rounded-md border px-4"
         style={{
-          backgroundColor: 'var(--bg-surface-2)',
-          borderColor: 'var(--line)',
+          backgroundColor: 'var(--search-bg)',
+          borderColor: 'var(--search-border)',
           color: 'var(--text)',
         }}
       >
@@ -71,7 +75,7 @@ export const SearchBar = () => {
         </span>
 
         <input
-          className="h-full min-w-0 flex-1 border-0 bg-transparent outline-none"
+          className="search-input h-full min-w-0 flex-1 border-0 bg-transparent outline-none"
           style={{ color: 'var(--text)' }}
           value={keyword}
           onChange={(event) => {

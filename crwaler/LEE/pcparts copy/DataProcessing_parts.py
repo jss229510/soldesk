@@ -205,6 +205,7 @@ def parse_mainboard(row, spec):
             spec,
         )
     m2_connection = first_number(r'\bM\.?2\s*연결\s*:\s*([^/]+)', spec)
+    
     nvme_supported = ''
     if re.search(r'NVMe\s*(?:미지원|지원\s*안\s*함)', m2_connection, re.I):
         nvme_supported = 'N'

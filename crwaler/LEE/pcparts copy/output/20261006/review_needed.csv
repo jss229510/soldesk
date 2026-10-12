@@ -1,0 +1,668 @@
+﻿category,source_row,part_id,part_name,field,reason
+RAM,3,,삼성전자 DDR4-3200 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,4,,삼성전자 DDR4-2666 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,6,,삼성전자 DDR4-2133 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,8,,삼성전자 DDR4-2400 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,10,,삼성전자 DDR4-2933 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,13,,ESSENCORE KLEVV DDR4-3200 CL22 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,19,,마이크론 Crucial DDR4-3200 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,20,,마이크론 DDR4-2400 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,22,,삼성전자 DDR4-3200 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,23,,삼성전자 DDR4-2133 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,24,,삼성전자 DDR4-2666 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,27,,삼성전자 DDR4-2400 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,50,,삼성전자 DDR4-3200 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,51,,삼성전자 DDR4-2666 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,55,,ESSENCORE KLEVV DDR4-3200 CL22 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,64,,TeamGroup DDR4-3200 Elite 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,76,,삼성전자 DDR5-5600 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,85,,삼성전자 DDR5-5600 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,89,,삼성전자 DDR5-4800 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,98,,ESSENCORE KLEVV DDR5-5600 CL46 NEO 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,109,,마이크론 Crucial DDR5-5600 CL46 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,113,,삼성전자 DDR5-5600 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,114,,삼성전자 DDR5-4800 중고,추천 제외,중고·리퍼·재생 상품 제외
+RAM,182,,마이크론 Crucial DDR5-5600 CL46 중고,추천 제외,중고·리퍼·재생 상품 제외
+CPU,58,233,인텔 코어i9-14세대 14900 (랩터레이크 리프레시),cpu_L2,원본에 값이 없거나 지원하지 않는 표기
+CPU,89,,AMD 라이젠 스레드리퍼 PRO 3955WX (캐슬 픽-W),추천 제외,중고·리퍼·재생 상품 제외
+CPU,93,,AMD 라이젠 스레드리퍼 PRO 3975WX (캐슬 픽-W),추천 제외,중고·리퍼·재생 상품 제외
+CPU,95,,AMD 라이젠 스레드리퍼 3970X (캐슬 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,97,,AMD 라이젠 스레드리퍼 3960X (캐슬 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,100,,AMD 라이젠 스레드리퍼 PRO 3995WX (캐슬 픽-W),추천 제외,중고·리퍼·재생 상품 제외
+CPU,124,,AMD 라이젠 스레드리퍼 PRO 5955WX (샤갈 프로),추천 제외,중고·리퍼·재생 상품 제외
+CPU,125,,AMD 라이젠 스레드리퍼 PRO 5995WX (샤갈 프로),추천 제외,중고·리퍼·재생 상품 제외
+CPU,126,,AMD 라이젠 스레드리퍼 PRO 5965WX (샤갈 프로),추천 제외,중고·리퍼·재생 상품 제외
+CPU,127,,AMD 라이젠 스레드리퍼 PRO 5975WX (샤갈 프로),추천 제외,중고·리퍼·재생 상품 제외
+CPU,147,,AMD 라이젠 스레드리퍼 PRO 7985WX (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,148,,AMD 라이젠 스레드리퍼 PRO 7995WX (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,149,,AMD 라이젠 스레드리퍼 7980X (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,150,,AMD 라이젠 스레드리퍼 7970X (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,151,,AMD 라이젠 스레드리퍼 PRO 7955WX (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,152,,AMD 라이젠 스레드리퍼 PRO 7975WX (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,153,,AMD 라이젠 스레드리퍼 PRO 7965WX (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,155,,AMD 라이젠 스레드리퍼 7960X (스톰 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,159,317,AMD 라이젠5-5세대 8500G (피닉스),cpu_core,원본에 값이 없거나 지원하지 않는 표기
+CPU,161,319,AMD 라이젠5-5세대 8400F (피닉스),has_igpu,원본에 값이 없거나 지원하지 않는 표기
+CPU,163,321,AMD 라이젠5 PRO 8500G (피닉스),cpu_core,원본에 값이 없거나 지원하지 않는 표기
+CPU,175,,AMD 라이젠 스레드리퍼 PRO 9995WX (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,176,,AMD 라이젠 스레드리퍼 PRO 9965WX (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,177,,AMD 라이젠 스레드리퍼 9970X (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,178,,AMD 라이젠 스레드리퍼 PRO 9955WX (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,179,,AMD 라이젠 스레드리퍼 9980X (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,180,,AMD 라이젠 스레드리퍼 PRO 9985WX (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,181,,AMD 라이젠 스레드리퍼 9960X (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+CPU,182,,AMD 라이젠 스레드리퍼 PRO 9975WX (시마다 픽),추천 제외,중고·리퍼·재생 상품 제외
+MAINBOARD,8,339,GIGABYTE A320M-H 듀러블에디션 피씨디렉트,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,122,453,GIGABYTE B760M D2HX LITE SI GEN5 피씨디렉트 (벌크),nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,152,,GIGABYTE H610M K 피씨디렉트 (중고),추천 제외,중고·리퍼·재생 상품 제외
+MAINBOARD,198,,ASUS PRIME A520M-A II 대원씨티에스,max_ram_capacity_gb,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,204,533,ASUS EX A320M-GAMING 대원씨티에스,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,213,542,ASUS TUF Gaming B650EM-E WIFI 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,218,547,ASUS TUF Gaming B650EM-E WIFI 대원씨티에스,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,242,571,ASUS TUF Gaming B850-BTF WIFI W 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,265,594,ASUS TUF Gaming B850-BTF WIFI W STCOM,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,291,620,ASUS TUF Gaming A620-PRO WIFI STCOM,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,298,627,ASUS TUF Gaming B650EM-E WIFI STCOM,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,348,677,ASUS P12R-I STCOM,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,389,,ASUS EX H610M-V3 D4 STCOM,m2_slots,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,421,,ASUS ROG MAXIMUS Z890 APEX 인텍앤컴퍼니,m2_slots,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,425,,ASUS ROG MAXIMUS Z890 EXTREME 코잇,m2_slots,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,430,,ASUS ROG MAXIMUS Z890 APEX 코잇,m2_slots,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,436,,ASUS ROG MAXIMUS Z890 APEX STCOM,m2_slots,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,449,,ASUS PRO WS W880-ACE SE STCOM,"ram_type,form_factor",필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,481,804,ASUS Pro H810T-CSM,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,488,,ASUS PRO WS W880-ACE SE 아이보라,"ram_type,form_factor",필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,521,,MSI PRO B840-P WIFI,max_ram_capacity_gb,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,528,849,MSI MAG X670E 토마호크 WIFI (해외구매),nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,529,,MSI MPG X670E 카본 WiFi (중고),추천 제외,중고·리퍼·재생 상품 제외
+MAINBOARD,536,856,MSI PRO B760M-A DDR4 II,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,543,863,MSI PRO B760M-E DDR4,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,544,,MSI PRO B760M-A WIFI,max_ram_capacity_gb,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,550,,MSI PRO B760M-A WIFI (중고),추천 제외,중고·리퍼·재생 상품 제외
+MAINBOARD,566,884,MSI PRO H810M-E,chipset,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,697,,ASRock A620AM-X 디앤디컴,form_factor,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,700,,ASRock A620AM-X + WiFi6E 랜카드 패키지 디앤디컴,form_factor,필수 스펙을 추출하지 못해 적재 제외
+MAINBOARD,764,1080,ASRock Z890 Nova WiFi 에즈윈,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,767,1083,ASRock Z890 Nova WiFi 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,790,1106,ASRock Z890 Taichi 에즈윈,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,791,1107,ASRock Z890 Taichi 디앤디컴,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,818,1134,ASRock Z890 Taichi 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,819,1135,ASRock Z890 Taichi AQUA 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+MAINBOARD,834,1150,ASRock Z890 Taichi OCF 인텍앤컴퍼니,nvme_supported,원본에 값이 없거나 지원하지 않는 표기
+SSD,6,1161,ADATA LEGEND 900 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,7,1162,ADATA LEGEND 900 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,8,1163,ADATA LEGEND 900 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,24,1179,타무즈 M740Q M.2 NVMe 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,25,1180,타무즈 M740Q M.2 NVMe 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,26,1181,타무즈 M740Q M.2 NVMe 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,40,1195,화웨이 eKitStor Xtreme 201 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,41,1196,화웨이 eKitStor Xtreme 201 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,51,1206,YMTC ZHITAI TiPro9000 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,52,1207,YMTC ZHITAI TiPro9000 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,53,1208,YMTC ZHITAI TiPro9000 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,54,1209,YMTC ZHITAI  TiPlus7100s M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,55,1210,YMTC ZHITAI  TiPlus7100s M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,56,1211,YMTC ZHITAI  TiPlus7100s M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,57,1212,YMTC ZHITAI TiPlus9100 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,58,1213,YMTC ZHITAI TiPlus9100 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,59,1214,YMTC ZHITAI TiPlus9100 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,67,1222,삼성전자 PM9C1 M.2 NVMe 벌크,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,68,1223,삼성전자 PM9C1 M.2 NVMe 벌크,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,69,1224,삼성전자 PM9C1 M.2 NVMe 벌크,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,70,,Seagate 파이어쿠다 530 M.2 NVMe 중고,추천 제외,중고·리퍼·재생 상품 제외
+SSD,71,1225,파이슨 ESO256GHLCJ-EL1 M.2 NVMe 벌크,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,71,1225,파이슨 ESO256GHLCJ-EL1 M.2 NVMe 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,92,1246,Apacer AS2280Q4X M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,92,1246,Apacer AS2280Q4X M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,93,1247,Apacer AS2280Q4X M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,93,1247,Apacer AS2280Q4X M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,94,1248,Apacer AS2280Q4X M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,94,1248,Apacer AS2280Q4X M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,102,1256,Apacer AS350X,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,102,1256,Apacer AS350X,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,103,1257,Apacer AS350X,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,103,1257,Apacer AS350X,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,104,1258,Apacer AS350X,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,104,1258,Apacer AS350X,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,125,1279,COLORFUL CN600 M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,126,1280,COLORFUL CN600 M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,127,1281,Apacer AS2280P4X M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,127,1281,Apacer AS2280P4X M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,128,1282,Apacer AS2280P4X M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,128,1282,Apacer AS2280P4X M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,145,,삼성전자 PM9A1 M.2 NVMe 중고,추천 제외,중고·리퍼·재생 상품 제외
+SSD,146,,삼성전자 PM9A1 M.2 NVMe 중고,추천 제외,중고·리퍼·재생 상품 제외
+SSD,147,,삼성전자 PM9A1 M.2 NVMe 중고,추천 제외,중고·리퍼·재생 상품 제외
+SSD,148,,삼성전자 PM9A1 M.2 NVMe 중고,추천 제외,중고·리퍼·재생 상품 제외
+SSD,155,1305,삼성전자 PM981 M.2 NVMe 병행수입,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,156,1306,삼성전자 PM981 M.2 NVMe 병행수입,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,157,1307,삼성전자 PM981 M.2 NVMe 병행수입,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,169,1319,Lexar NM620 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,170,1320,Lexar NM620 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,175,1325,COLORFUL SL500 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,176,1326,COLORFUL SL500 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,180,1330,트로이씨앤씨 MTros MS820 SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,180,1330,트로이씨앤씨 MTros MS820 SSD,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,181,1331,COLORFUL CN700 PRO M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,182,1332,마이크로닉스 WARP B2,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,182,1332,마이크로닉스 WARP B2,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,182,1332,마이크로닉스 WARP B2,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,183,1333,마이크로닉스 WARP B2,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,183,1333,마이크로닉스 WARP B2,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,183,1333,마이크로닉스 WARP B2,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,187,1337,COLORFUL CN600 PRO M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,188,1338,COLORFUL CN600 PRO M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,189,1339,COLORFUL CN600 PRO M.2 NVMe 디앤디컴,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,192,1342,ADATA Ultimate SU650 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,193,1343,ADATA Ultimate SU650 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,194,1344,ADATA Ultimate SU650 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,195,1345,ADATA Ultimate SU650 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,218,1368,PNY CS900 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,218,1368,PNY CS900 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,219,1369,PNY CS900 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,219,1369,PNY CS900 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,220,1370,PNY CS900 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,220,1370,PNY CS900 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,227,1377,Western Digital WD GREEN SSD,write_speed_mbs,원본에 값이 없거나 지원하지 않는 표기
+SSD,227,1377,Western Digital WD GREEN SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,228,1378,Western Digital WD GREEN SSD,write_speed_mbs,원본에 값이 없거나 지원하지 않는 표기
+SSD,228,1378,Western Digital WD GREEN SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,229,1379,Western Digital WD GREEN SSD,write_speed_mbs,원본에 값이 없거나 지원하지 않는 표기
+SSD,229,1379,Western Digital WD GREEN SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,230,1380,Western Digital WD GREEN SSD,write_speed_mbs,원본에 값이 없거나 지원하지 않는 표기
+SSD,230,1380,Western Digital WD GREEN SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,231,1381,Western Digital WD GREEN SSD,write_speed_mbs,원본에 값이 없거나 지원하지 않는 표기
+SSD,231,1381,Western Digital WD GREEN SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,236,1386,BIWIN M560 M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,237,1387,BIWIN M560 M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,243,1393,PNY CS1031 Gen3 M.2 NVMe 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,243,1393,PNY CS1031 Gen3 M.2 NVMe 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,244,1394,PNY CS1031 Gen3 M.2 NVMe 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,244,1394,PNY CS1031 Gen3 M.2 NVMe 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,245,1395,PNY CS1031 Gen3 M.2 NVMe 제이씨현,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,245,1395,PNY CS1031 Gen3 M.2 NVMe 제이씨현,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,262,1412,타무즈 RXK550 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,263,1413,타무즈 RXK550 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,264,1414,타무즈 RXK550 벌크,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,268,1418,트랜센드 MTS830S M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,269,1419,트랜센드 MTS830S M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,270,1420,트랜센드 MTS830S M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,279,,타무즈 GKX370 mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,280,,타무즈 GKX370 mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,281,1429,타무즈 GKM330 M.2 SATA,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,282,1430,타무즈 GKM330 M.2 SATA,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,290,1438,타무즈 GK300,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,291,1439,STCOM STORM SSD,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,291,1439,STCOM STORM SSD,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,292,1440,화웨이 eKitStor Xtreme 200E M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,298,1446,트랜센드 MTE400S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,299,1447,트랜센드 MTE400S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,300,1448,트랜센드 MTE400S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,301,1449,트랜센드 MTE400S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,305,1453,트랜센드 MTE410S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,306,1454,트랜센드 MTE410S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,307,1455,트랜센드 MTE410S M.2 2242 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,308,1456,Apacer AS2280F4L M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,308,1456,Apacer AS2280F4L M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,309,1457,트랜센드 MTE220S M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,310,1458,트랜센드 MTE220S M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,311,1459,트랜센드 MTE220S M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,312,1460,트랜센드 MTE220S M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,313,1461,AGI AI818 M.2 NVMe 서린,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,315,1463,타무즈 M820 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,316,1464,타무즈 M820 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,335,,트랜센드 MSA230S mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,336,,트랜센드 MSA230S mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,346,,타무즈 GKX570 mSATA 벌크,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,350,1495,트랜센드 MTS420S M.2 2242 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,351,1496,트랜센드 MTS420S M.2 2242 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,352,1497,트랜센드 MTS820S M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,353,1498,트랜센드 MTS820S M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,354,1499,Apacer AST280X M.2 SATA,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,354,1499,Apacer AST280X M.2 SATA,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,355,1500,ADATA LEGEND 710 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,356,1501,ADATA LEGEND 710 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,357,1502,ADATA LEGEND 710 M.2 NVMe 파인인포,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,361,1506,트랜센드 MTE250H M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,362,1507,트랜센드 MTE250H M.2 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,368,1513,BIOSTAR M760 M.2 NVMe,tbw,원본에 값이 없거나 지원하지 않는 표기
+SSD,368,1513,BIOSTAR M760 M.2 NVMe,제조사,제품명에서 SSD 제조사를 확정하지 못함
+SSD,376,1521,트랜센드 MTE310S M.2 2230 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,377,1522,트랜센드 MTE310S M.2 2230 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,378,1523,트랜센드 MTE310S M.2 2230 NVMe,nand_type,원본에 값이 없거나 지원하지 않는 표기
+SSD,379,,트랜센드 MSA370 mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+SSD,380,,트랜센드 MSA370 mSATA,form_factor,필수 스펙을 추출하지 못해 적재 제외
+PSU,3,1527,마이크로닉스 Classic II 풀체인지 700W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,5,1529,마이크로닉스 Classic II 풀체인지 600W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,6,1530,마이크로닉스 Classic II 풀체인지 500W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,11,1535,마이크로닉스 Classic II 풀체인지 600W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,13,1537,마이크로닉스 Classic II 풀체인지 800W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,14,1538,마이크로닉스 Classic II 풀체인지 700W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,15,1539,마이크로닉스 Classic II 풀체인지 500W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,16,1540,마이크로닉스 Classic II 800W 80PLUS 230V EU,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,16,1540,마이크로닉스 Classic II 800W 80PLUS 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,17,1541,마이크로닉스 Classic II 풀체인지 650W 80PLUS스탠다드 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,17,1541,마이크로닉스 Classic II 풀체인지 650W 80PLUS스탠다드 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,18,1542,마이크로닉스 Classic II 풀체인지 800W 80PLUS실버 ATX3.1 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,19,1543,마이크로닉스 WIZMAX S-EVO 700W ETA실버 풀모듈러 ATX 3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,19,1543,마이크로닉스 WIZMAX S-EVO 700W ETA실버 풀모듈러 ATX 3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,20,1544,마이크로닉스 COOLMAX VISION II 600W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,20,1544,마이크로닉스 COOLMAX VISION II 600W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,22,1546,마이크로닉스 Classic II 풀체인지 900W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,23,1547,마이크로닉스 Classic II 1000W 80PLUS플래티넘 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,24,1548,마이크로닉스 Classic II 풀체인지 700W 80PLUS브론즈 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,25,1549,마이크로닉스 COOLMAX ELITE II 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,25,1549,마이크로닉스 COOLMAX ELITE II 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,26,1550,마이크로닉스 WIZMAX 750W 80PLUS실버 ATX3.0,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,27,1551,마이크로닉스 COOLMAX FOCUS II 800W ETA실버 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,27,1551,마이크로닉스 COOLMAX FOCUS II 800W ETA실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,28,1552,마이크로닉스 COOLMAX ELITE II 600W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,28,1552,마이크로닉스 COOLMAX ELITE II 600W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,29,1553,마이크로닉스 Classic II 풀체인지 750W 80PLUS스탠다드 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,29,1553,마이크로닉스 Classic II 풀체인지 750W 80PLUS스탠다드 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,30,1554,마이크로닉스 Classic II 풀체인지 600W 80PLUS브론즈 ATX3.1 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,31,1555,마이크로닉스 COOLMAX VISION II 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,31,1555,마이크로닉스 COOLMAX VISION II 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,32,1556,마이크로닉스 COOLMAX FOCUS II 700W ETA브론즈 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,32,1556,마이크로닉스 COOLMAX FOCUS II 700W ETA브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,33,1557,마이크로닉스 Classic II 풀체인지 700W 80PLUS실버 ATX3.1 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,34,1558,마이크로닉스 ASTRO II PT 1000W 80PLUS플래티넘 풀모듈러 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,35,1559,마이크로닉스 Classic II 1300W 80PLUS플래티넘 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,36,1560,마이크로닉스 Classic II 풀체인지 800W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,38,1562,마이크로닉스 ASTRO II PT 850W 80PLUS플래티넘 풀모듈러 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,40,1564,마이크로닉스 WIZMAX 750W 80PLUS골드 ATX 3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,43,1567,마이크로닉스 Classic II 풀체인지 550W 80PLUS스탠다드 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,43,1567,마이크로닉스 Classic II 풀체인지 550W 80PLUS스탠다드 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,44,1568,마이크로닉스 ZERO POWER 600W 벌크,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,44,1568,마이크로닉스 ZERO POWER 600W 벌크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,45,1569,마이크로닉스 COOLMAX ELITE II 700W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,45,1569,마이크로닉스 COOLMAX ELITE II 700W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,46,1570,마이크로닉스 Classic II 600W 80PLUS 230V EU,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,46,1570,마이크로닉스 Classic II 600W 80PLUS 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,49,1573,마이크로닉스 Classic II 풀체인지 700W 80PLUS브론즈 ATX3.1 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,51,1575,마이크로닉스 WIZMAX 850W 80PLUS골드 ATX 3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,52,1576,마이크로닉스 ASTRO II PT 1300W 80PLUS플래티넘 풀모듈러 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,53,1577,마이크로닉스 ASTRO II PT 1000W 80PLUS플래티넘 풀모듈러 ATX3.0,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,55,1579,마이크로닉스 COOLMAX FOCUS II 600W ETA BRONZE,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,55,1579,마이크로닉스 COOLMAX FOCUS II 600W ETA BRONZE,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,56,1580,마이크로닉스 COOLMAX VISION II 700W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,56,1580,마이크로닉스 COOLMAX VISION II 700W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,57,1581,마이크로닉스 WIZMAX 750W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,58,1582,마이크로닉스 COOLMAX FOCUS II 500W ETA BRONZE,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,58,1582,마이크로닉스 COOLMAX FOCUS II 500W ETA BRONZE,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,59,1583,마이크로닉스 WIZMAX 850W 80PLUS실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,60,1584,마이크로닉스 ASTRO II PT 850W 80PLUS플래티넘 풀모듈러 ATX3.0,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,62,1586,마이크로닉스 COOLMAX FOCUS II 900W ETA실버 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,62,1586,마이크로닉스 COOLMAX FOCUS II 900W ETA실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,64,1588,마이크로닉스 Performance II PV RGB Sync 600W 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,65,1589,마이크로닉스 Performance II PV 700W 80PLUS브론즈 FDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,68,1592,마이크로닉스 Performance II PV 600W 80PLUS브론즈 FDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,69,1593,마이크로닉스 Performance II PV 500W 80PLUS브론즈 FDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,70,1594,마이크로닉스 ZERO PLUS 600W Active PFC,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,70,1594,마이크로닉스 ZERO PLUS 600W Active PFC,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,70,1594,마이크로닉스 ZERO PLUS 600W Active PFC,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,71,1595,마이크로닉스 ZERO PLUS 500W Active PFC,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,71,1595,마이크로닉스 ZERO PLUS 500W Active PFC,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,71,1595,마이크로닉스 ZERO PLUS 500W Active PFC,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,72,1596,마이크로닉스 ZERO POWER 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,72,1596,마이크로닉스 ZERO POWER 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,73,1597,마이크로닉스 COOLMAX VISION II 800W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,73,1597,마이크로닉스 COOLMAX VISION II 800W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,74,1598,마이크로닉스 Classic II 풀체인지 800W 80PLUS브론즈 ATX3.1 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,75,1599,마이크로닉스 Classic II 750W 80PLUS브론즈 230V EU HDB 핑크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,76,1600,마이크로닉스 Classic II 700W 80PLUS 230V EU,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,76,1600,마이크로닉스 Classic II 700W 80PLUS 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,77,1601,마이크로닉스 Classic II 500W 80PLUS 230V EU,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,77,1601,마이크로닉스 Classic II 500W 80PLUS 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,78,1602,마이크로닉스 Classic II 750W 80PLUS실버 모듈러 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,79,1603,마이크로닉스 WIZMAX 850W 80PLUS실버 ATX3.0,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,81,1605,마이크로닉스 COOLMAX FOCUS II 900W ETA SILVER PCIE5,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,81,1605,마이크로닉스 COOLMAX FOCUS II 900W ETA SILVER PCIE5,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,83,1607,마이크로닉스 Performance II PV 600W 80PLUS브론즈 Surge 4K,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,84,1608,마이크로닉스 COOLMAX FOCUS II 800W ETA BRONZE,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,84,1608,마이크로닉스 COOLMAX FOCUS II 800W ETA BRONZE,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,85,1609,마이크로닉스 Classic II 650W 80PLUS브론즈 230V EU HDB 핑크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,86,1610,마이크로닉스 COOLMAX FOCUS II 700W ETA BRONZE PCIE5.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,86,1610,마이크로닉스 COOLMAX FOCUS II 700W ETA BRONZE PCIE5.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,88,1612,마이크로닉스 Classic II 850W 80PLUS실버 모듈러 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,89,1613,마이크로닉스 COOLMAX FOCUS II 700W ETA BRONZE,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,89,1613,마이크로닉스 COOLMAX FOCUS II 700W ETA BRONZE,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,91,1615,마이크로닉스 COOLMAX FOCUS II 800W ETA BRONZE PCIE5.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,91,1615,마이크로닉스 COOLMAX FOCUS II 800W ETA BRONZE PCIE5.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,92,1616,마이크로닉스 Classic II 750W 80PLUS브론즈 230V EU HDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,94,1618,마이크로닉스 WIZMAX 750W 80PLUS실버,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,95,1619,마이크로닉스 Classic II 700W 80PLUS 230V EU 화이트,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,95,1619,마이크로닉스 Classic II 700W 80PLUS 230V EU 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,96,1620,마이크로닉스 WIZMAX 850W 80PLUS실버,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,98,1622,마이크로닉스 Performance II PV 500W 80PLUS브론즈 Surge 4K,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,99,1623,마이크로닉스 Classic II 750W 80PLUS골드 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,100,1624,마이크로닉스 COOLMAX BASIC 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,100,1624,마이크로닉스 COOLMAX BASIC 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,102,1626,마이크로닉스 Classic II 600W 80PLUS 230V EU 화이트,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,102,1626,마이크로닉스 Classic II 600W 80PLUS 230V EU 화이트,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,103,1627,마이크로닉스 Performance II PV 700W 80PLUS브론즈 Surge 4K,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,104,1628,마이크로닉스 COOLMAX VISION 700W HDB,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,104,1628,마이크로닉스 COOLMAX VISION 700W HDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,105,1629,마이크로닉스 COOLMAX VISION 600W HDB,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,105,1629,마이크로닉스 COOLMAX VISION 600W HDB,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,106,,마이크로닉스 Classic II 500W +12V Single Rail (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,107,,마이크로닉스 Classic II 500W 80PLUS 230V EU (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,108,,마이크로닉스 Classic II 600W 80PLUS 230V EU (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,109,,마이크로닉스 COOLMAX VISION II 800W (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,110,,마이크로닉스 Classic II 700W 80PLUS 230V EU (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,111,,마이크로닉스 Cyclone III 600W After Cooling (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,112,1630,마이크로닉스 Classic II 700W 80PLUS 230V EU 벌크,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,112,1630,마이크로닉스 Classic II 700W 80PLUS 230V EU 벌크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,113,,마이크로닉스 The Classic II 600W +12V Single Rail 85+ (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,114,,마이크로닉스 쿨맥스 FOCUS 600W 80Plus 230V EU (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,115,,마이크로닉스 COOLMAX FOCUS 600W 80Plus 230V EU (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,116,,마이크로닉스 Performance 500W 80Plus 스탠다드 (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,118,1632,SuperFlower SF-850F14XG LEADEX VII GOLD ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,119,1633,SuperFlower SF-1200F14XP LEADEX VII PRO PLATINUM 블랙 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,120,1634,SuperFlower SF-1000F14XG LEADEX VII GOLD ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,121,1635,SuperFlower SF-1000F14XP LEADEX VII PRO PLATINUM 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,122,1636,SuperFlower SF-1200F14XP LEADEX VII PRO PLATINUM 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,123,1637,SuperFlower SF-1300F14XG LEADEX VII GOLD ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,125,1639,SuperFlower SF-1000F14XP LEADEX VII PRO PLATINUM 블랙 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,127,1641,SuperFlower SF-650Z12DB Zillion DB ETA실버 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,127,1641,SuperFlower SF-650Z12DB Zillion DB ETA실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,128,1642,SuperFlower SF-2200F14HP LEADEX TITANIUM ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,128,1642,SuperFlower SF-2200F14HP LEADEX TITANIUM ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,130,1644,SuperFlower SF-750Z12DB Zillion DB ETA실버 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,130,1644,SuperFlower SF-750Z12DB Zillion DB ETA실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,131,1645,SuperFlower SF-1700F14HT LEADEX ETA티타늄 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,134,1648,SuperFlower SF-1300F14XG LEADEX VII GOLD 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,137,1651,SuperFlower SF-1000F14XG LEADEX VII GOLD 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,138,1652,SuperFlower SF-1000C12DG COMBAT DG ETA골드 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,138,1652,SuperFlower SF-1000C12DG COMBAT DG ETA골드 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,140,1654,SuperFlower SF-850Z12DB Zillion DB ETA실버 ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,140,1654,SuperFlower SF-850Z12DB Zillion DB ETA실버 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,145,1659,SuperFlower SF-850F14XP LEADEX VII PRO PLATINUM 블랙 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,146,1660,SuperFlower SF-2800F14HP LEADEX TITANIUM ATX3.1,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,147,1661,SuperFlower SF-850F14XP LEADEX VII PRO PLATINUM 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,149,1663,SuperFlower SF-850F14XG LEADEX VII GOLD 화이트 ATX3.1,fan_size,원본에 값이 없거나 지원하지 않는 표기
+PSU,157,,SuperFlower SF-850F14MT LEADEX SILVER (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,158,,SuperFlower SF-600R14SE Silver Green FX (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,159,1671,잘만 MegaMax II 700W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,161,1673,잘만 EcoMax 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,161,1673,잘만 EcoMax 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,162,1674,잘만 EcoMax 600W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,162,1674,잘만 EcoMax 600W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,163,1675,잘만 DecaMax ET 700W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,163,1675,잘만 DecaMax ET 700W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,164,1676,잘만 DecaMax 700W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,164,1676,잘만 DecaMax 700W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,165,1677,잘만 MegaMax II 800W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,167,1679,잘만 MegaMax 800W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,167,1679,잘만 MegaMax 800W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,170,1682,잘만 MegaMax 600W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,170,1682,잘만 MegaMax 600W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,172,1684,잘만 EcoMax 700W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,172,1684,잘만 EcoMax 700W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,173,1685,잘만 MegaMax 700W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,173,1685,잘만 MegaMax 700W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,174,1686,잘만 MegaMax 500W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,174,1686,잘만 MegaMax 500W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,175,1687,잘만 ZM600W-XEII,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,175,1687,잘만 ZM600W-XEII,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,176,1688,잘만 MegaMax II 600W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,179,1691,잘만 MegaMax ET 700W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,179,1691,잘만 MegaMax ET 700W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,180,1692,잘만 DecaMax 600W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,180,1692,잘만 DecaMax 600W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,182,1694,잘만 DecaMax 500W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,182,1694,잘만 DecaMax 500W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,183,1695,잘만 ZM500W-XEII,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,183,1695,잘만 ZM500W-XEII,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,187,1699,잘만 Wattbit II 500W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,187,1699,잘만 Wattbit II 500W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,189,1701,잘만 Wattbit II 600W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,189,1701,잘만 Wattbit II 600W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,190,1702,잘만 ZM700W-XEII,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,190,1702,잘만 ZM700W-XEII,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,194,1706,잘만 DecaMax ET 600W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,194,1706,잘만 DecaMax ET 600W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,195,1707,잘만 Wattbit II 400W,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,195,1707,잘만 Wattbit II 400W,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,197,1709,잘만 GV2SE 800W 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,199,1711,잘만 MegaMax ET 600W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,199,1711,잘만 MegaMax ET 600W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,200,1712,잘만 GV2SE 700W 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,202,1714,잘만 GV2SE 600W 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,203,1715,잘만 GigaMax 650W 80PLUS브론즈 230V EU,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,206,1718,잘만 Tager GAMING 600W 벌크,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,206,1718,잘만 Tager GAMING 600W 벌크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,209,1721,잘만 MegaMax ET 500W 80PLUS스탠다드,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,209,1721,잘만 MegaMax ET 500W 80PLUS스탠다드,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,213,1725,잘만 GAMING 600W 벌크,efficiency_rating,원본에 값이 없거나 지원하지 않는 표기
+PSU,213,1725,잘만 GAMING 600W 벌크,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,217,1729,잘만 MegaMax II 500W 80PLUS브론즈 ATX3.1,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,218,,잘만 EcoMax 500W (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,219,,잘만 MegaMax 700W 80PLUS스탠다드 (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,220,,잘만 ZM700-LEII (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,221,,잘만 EcoMax 600W (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,222,,잘만 MegaMax 600W 80PLUS스탠다드 (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,245,1752,시소닉 B12 BRONZE BC-850,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,248,,시소닉 FOCUS GOLD GM-850 Modular (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,249,1755,시소닉 SSP-600ES2 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+PSU,250,,시소닉 FOCUS GOLD GX-750 풀모듈러 (중고),추천 제외,중고·리퍼·재생 상품 제외
+PSU,251,1756,시소닉 SSP-500ES2 80PLUS브론즈,modular_type,원본에 값이 없거나 지원하지 않는 표기
+GPU,4,,MSI 지포스 RTX 3050 벤투스 2X OC D6 6GB (중고),추천 제외,중고·리퍼·재생 상품 제외
+GPU,5,1759,MSI 지포스 RTX 3060 벤투스 2X OC D6 12GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,6,1760,MSI 지포스 RTX 3060 벤투스 2X OC D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,7,1761,MSI 지포스 RTX 3060 Ti 게이밍 X 트리오 D6X 8GB 트라이프로져2,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,8,1762,MSI 지포스 RTX 3070 게이밍 X 트리오 D6 8GB 트라이프로져2 (해외구매),tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,44,1798,GIGABYTE 지포스 RTX 3050 WINDFORCE OC V2 D6 6GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,45,1799,GIGABYTE 지포스 RTX 3050 WINDFORCE OC V2 D6 6GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,46,1800,GIGABYTE 지포스 RTX 3050 WINDFORCE OC D6 6GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,47,1801,GIGABYTE 지포스 RTX 3060 WINDFORCE OC D6 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,48,1802,GIGABYTE 지포스 RTX 3060 WINDFORCE OC D6 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,49,1803,GIGABYTE 지포스 RTX 3060 GAMING OC V2 D6 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,50,1804,GIGABYTE 지포스 RTX 4060 Ti WINDFORCE OC D6 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,51,1805,GIGABYTE 지포스 RTX 4060 Ti WINDFORCE OC D6 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,52,1806,GIGABYTE 지포스 RTX 4070 SUPER GAMING OC D6X 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,53,1807,GIGABYTE 지포스 RTX 4070 SUPER GAMING OC D6X 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,54,1808,GIGABYTE 지포스 RTX 5050 WINDFORCE OC D6 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,55,1809,GIGABYTE 지포스 RTX 5050 WINDFORCE OC D6 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,56,1810,GIGABYTE 지포스 RTX 5050 UD2 OC D6 8GB Nano LP 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,59,1813,GIGABYTE AORUS 지포스 RTX 5060 ARI D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,60,1814,GIGABYTE 지포스 RTX 5060 EAGLE OC ICE D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,61,1815,GIGABYTE AORUS 지포스 RTX 5060 ARI D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,62,1816,GIGABYTE 지포스 RTX 5060 WINDFORCE MAX OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,63,1817,GIGABYTE 지포스 RTX 5060 UD2 OC D7 8GB Nano LP 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,64,1818,GIGABYTE 지포스 RTX 5060 WINDFORCE MAX OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,65,1819,GIGABYTE 지포스 RTX 5060 GAMING OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,66,1820,GIGABYTE 지포스 RTX 5060 EAGLE MAX OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,67,1821,GIGABYTE 지포스 RTX 5060 GAMING OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,68,1822,GIGABYTE 지포스 RTX 5060 WINDFORCE MAX OC V2 D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,69,1823,GIGABYTE 지포스 RTX 5060 EAGLE OC ICE D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,70,1824,GIGABYTE 지포스 RTX 5060 EAGLE MAX OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,71,1825,GIGABYTE 지포스 RTX 5060 EAGLE OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,72,1826,GIGABYTE 지포스 RTX 5060 EAGLE OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,73,1827,GIGABYTE 지포스 RTX 5060 WINDFORCE OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,74,1828,GIGABYTE 지포스 RTX 5060 WINDFORCE MAX OC V2 D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,75,1829,GIGABYTE 지포스 RTX 5060 GAMING OC V2 D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,76,1830,GIGABYTE 지포스 RTX 5060 GAMING OC V2 D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,77,1831,GIGABYTE 지포스 RTX 5060 UD2 OC D7 8GB Nano LP 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,78,1832,GIGABYTE 지포스 RTX 5060 AERO OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,79,1833,GIGABYTE 지포스 RTX 5060 AERO OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,80,1834,GIGABYTE AORUS 지포스 RTX 5060 ELITE D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,81,1835,GIGABYTE 지포스 RTX 5060 WINDFORCE D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,82,1836,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE MAX OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,83,1837,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE MAX OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,84,,GIGABYTE AORUS 지포스 RTX 5060 Ti AI BOX D7 16GB 제이씨현,추천 제외,데스크톱 내장형 그래픽카드가 아닌 외장 GPU 제외
+GPU,85,1838,GIGABYTE 지포스 RTX 5060 Ti EAGLE MAX OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,86,1839,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE OC D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,87,1840,GIGABYTE 지포스 RTX 5060 Ti GAMING OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,89,1842,GIGABYTE 지포스 RTX 5060 Ti EAGLE OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,90,,GIGABYTE AORUS 지포스 RTX 5060 Ti AI BOX D7 16GB 피씨디렉트,추천 제외,데스크톱 내장형 그래픽카드가 아닌 외장 GPU 제외
+GPU,91,1843,GIGABYTE 지포스 RTX 5060 Ti GAMING OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,92,1844,GIGABYTE 지포스 RTX 5060 Ti EAGLE OC ICE D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,93,1845,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,94,1846,GIGABYTE 지포스 RTX 5060 Ti EAGLE OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,96,1848,GIGABYTE 지포스 RTX 5060 Ti EAGLE MAX OC D7 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,97,1849,GIGABYTE 지포스 RTX 5060 Ti EAGLE MAX OC D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,98,1850,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE OC D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,99,1851,GIGABYTE 지포스 RTX 5060 Ti WINDFORCE D7 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,101,1853,GIGABYTE 지포스 RTX 5070 GAMING OC D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,102,1854,GIGABYTE AORUS 지포스 RTX 5070 MASTER D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,103,1855,GIGABYTE 지포스 RTX 5070 WINDFORCE OC SFF D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,104,1856,GIGABYTE 지포스 RTX 5070 WINDFORCE OC SFF D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,105,1857,GIGABYTE 지포스 RTX 5070 AERO OC D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,106,1858,GIGABYTE 지포스 RTX 5070 EAGLE OC ICE SFF D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,107,1859,GIGABYTE 지포스 RTX 5070 AERO OC D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,108,1860,GIGABYTE 지포스 RTX 5070 EAGLE OC ICE SFF D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,109,1861,GIGABYTE 지포스 RTX 5070 GAMING OC D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,110,1862,GIGABYTE AORUS 지포스 RTX 5070 INFINITY D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,111,1863,GIGABYTE 지포스 RTX 5070 EAGLE OC SFF D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,112,1864,GIGABYTE 지포스 RTX 5070 EAGLE OC SFF D7 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,113,1865,GIGABYTE AORUS 지포스 RTX 5070 INFINITY D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,114,1866,GIGABYTE AORUS 지포스 RTX 5070 MASTER D7 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,115,1867,GIGABYTE 지포스 RTX 5070 Ti GAMING OC D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,116,1868,GIGABYTE 지포스 RTX 5070 Ti AERO OC D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,117,1869,GIGABYTE 지포스 RTX 5070 Ti WINDFORCE OC SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,118,1870,GIGABYTE 지포스 RTX 5070 Ti EAGLE OC ICE SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,119,1871,GIGABYTE 지포스 RTX 5070 Ti GAMING OC D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,120,1872,GIGABYTE 지포스 RTX 5070 Ti WINDFORCE OC V2 D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,121,1873,GIGABYTE AORUS 지포스 RTX 5070 Ti INFINITY D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,122,1874,GIGABYTE 지포스 RTX 5070 Ti WINDFORCE OC SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,123,1875,GIGABYTE 지포스 RTX 5070 Ti AERO OC D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,124,1876,GIGABYTE 지포스 RTX 5070 Ti EAGLE OC ICE SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,125,1877,GIGABYTE AORUS 지포스 RTX 5070 Ti INFINITY D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,126,1878,GIGABYTE 지포스 RTX 5070 Ti EAGLE OC SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,127,1879,GIGABYTE 지포스 RTX 5070 Ti EAGLE OC SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,128,1880,GIGABYTE AORUS 지포스 RTX 5070 Ti MASTER D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,129,1881,GIGABYTE AORUS 지포스 RTX 5080 MASTER D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,130,1882,GIGABYTE 지포스 RTX 5080 GAMING OC D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,131,1883,GIGABYTE AORUS 지포스 RTX 5080 MASTER ICE D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,132,1884,GIGABYTE 지포스 RTX 5080 GAMING OC D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,133,1885,GIGABYTE 지포스 RTX 5080 WINDFORCE OC SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,134,1886,GIGABYTE 지포스 RTX 5080 AERO OC SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,135,1887,GIGABYTE 지포스 RTX 5080 AERO OC SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,136,1888,GIGABYTE AORUS 지포스 RTX 5080 MASTER ICE D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,137,1889,GIGABYTE 지포스 RTX 5080 WINDFORCE OC SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,138,1890,GIGABYTE AORUS 지포스 RTX 5080 INFINITY WOOD D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,139,1891,GIGABYTE AORUS 지포스 RTX 5080 INFINITY D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,140,1892,GIGABYTE AORUS 지포스 RTX 5080 INFINITY WOOD D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,141,1893,GIGABYTE AORUS 지포스 RTX 5080 INFINITY D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,142,1894,GIGABYTE AORUS 지포스 RTX 5080 MASTER D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,143,1895,GIGABYTE 지포스 RTX 5080 WINDFORCE OC V2 SFF D7 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,144,1896,GIGABYTE 지포스 RTX 5080 WINDFORCE OC V2 SFF D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,145,1897,GIGABYTE AORUS 지포스 RTX 5080 XTREME 워터포스 D7 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,146,1898,GIGABYTE AORUS 지포스 RTX 5090 MASTER ICE D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,147,1899,GIGABYTE 지포스 RTX 5090 GAMING OC D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,148,1900,GIGABYTE AORUS 지포스 RTX 5090 XTREME 워터포스 D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,149,1901,GIGABYTE AORUS 지포스 RTX 5090 INFINITY D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,150,,GIGABYTE AORUS 지포스 RTX 5090 AI BOX D7 32GB 제이씨현,추천 제외,데스크톱 내장형 그래픽카드가 아닌 외장 GPU 제외
+GPU,151,1902,GIGABYTE AORUS 지포스 RTX 5090 INFINITY D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,152,1903,GIGABYTE AORUS 지포스 RTX 5090 MASTER D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,153,1904,GIGABYTE 지포스 RTX 5090 GAMING OC D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,154,1905,GIGABYTE AORUS 지포스 RTX 5090 MASTER D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,155,1906,GIGABYTE AORUS 지포스 RTX 5090 STEALTH ICE D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,156,1907,GIGABYTE AORUS 지포스 RTX 5090 STEALTH ICE D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,157,1908,GIGABYTE AORUS 지포스 RTX 5090 MASTER ICE D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,158,,GIGABYTE AORUS 지포스 RTX 5090 AI BOX D7 32GB 피씨디렉트,추천 제외,데스크톱 내장형 그래픽카드가 아닌 외장 GPU 제외
+GPU,159,1909,GIGABYTE 지포스 RTX 5090 WINDFORCE OC D7 32GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,160,1910,GIGABYTE 지포스 RTX 5090 WINDFORCE OC D7 32GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,161,1911,GIGABYTE 라데온 RX 7600 GAMING OC D6 8GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,167,1917,GIGABYTE 라데온 RX 9070 GAMING OC D6 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,168,1918,GIGABYTE 라데온 RX 9070 GRE Gaming OC D6 12GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,169,1919,GIGABYTE 라데온 RX 9070 GRE GAMING OC D6 12GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,170,1920,GIGABYTE 라데온 RX 9070 XT GAMING OC D6 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,171,1921,GIGABYTE 라데온 RX 9070 XT GAMING OC ICE D6 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,172,1922,GIGABYTE 라데온 RX 9070 XT GAMING OC D6 16GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,173,1923,GIGABYTE 라데온 RX 9070 XT GAMING OC ICE D6 16GB 제이씨현,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,174,1924,ASUS DUAL 지포스 RTX 3050 D6 6GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,175,1925,ASUS DUAL 지포스 RTX 3050 O6G OC D6 6GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,176,1926,ASUS DUAL 지포스 RTX 3050 O6G OC D6 6GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,177,1927,ASUS DUAL 지포스 RTX 3050 O6G OC D6 6GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,178,1928,ASUS DUAL 지포스 RTX 3050 D6 6GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,179,1929,ASUS PH 지포스 RTX 3060 D6 12GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,180,1930,ASUS DUAL 지포스 RTX 3060 Ti O8G OC MINI D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,181,1931,ASUS ROG STRIX 지포스 RTX 3060 Ti O8G GAMING OC D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,182,1932,ASUS TUF Gaming 지포스 RTX 3060 Ti O8G OC D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,183,1933,ASUS ROG STRIX 지포스 RTX 3080 O10G GAMING OC D6X 10GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,188,1938,ASUS DUAL 지포스 RTX 5060 EVO OC D7 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,189,1939,ASUS DUAL 지포스 RTX 5060 WHITE OC D7 8GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,190,1940,ASUS DUAL 지포스 RTX 5060 D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,191,1941,ASUS DUAL 지포스 RTX 5060 EVO OC D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,192,1942,ASUS DUAL 지포스 RTX 5060 EVO OC D7 8GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,193,1943,ASUS PRIME 지포스 RTX 5060 OC D7 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,194,1944,ASUS DUAL 지포스 RTX 5060 OC D7 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,195,1945,ASUS DUAL 지포스 RTX 5060 OC D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,196,1946,ASUS DUAL 지포스 RTX 5060 WHITE OC D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,197,1947,ASUS DUAL 지포스 RTX 5060 TI OC D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,198,1948,ASUS DUAL 지포스 RTX 5060 TI OC D7 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,199,1949,ASUS DUAL 지포스 RTX 5060 Ti OC D7 8GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,200,1950,ASUS DUAL 지포스 RTX 5060 Ti WHITE OC D7 8GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,201,1951,ASUS DUAL 지포스 RTX 5060 Ti OC D7 16GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,202,1952,ASUS DUAL 지포스 RTX 5060 TI OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,203,1953,ASUS DUAL 지포스 RTX 5060 TI OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,204,1954,ASUS 지포스 RTX 5060 Ti OC D7 8GB T1 Edition 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,205,1955,ASUS PRIME 지포스 RTX 5060 TI D7 8GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,206,1956,ASUS PRIME 지포스 RTX 5060 TI OC D7 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,207,1957,ASUS 지포스 RTX 5060 Ti OC D7 8GB T1 Edition 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,208,1958,ASUS DUAL 지포스 RTX 5070 OC D7 12GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,209,1959,ASUS PRIME 지포스 RTX 5070 WHITE OC D7 12GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,210,1960,ASUS PRIME 지포스 RTX 5070 OC D7 12GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,211,1961,ASUS PRIME 지포스 RTX 5070 WHITE OC D7 12GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,212,1962,ASUS PRIME 지포스 RTX 5070 OC D7 12GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,213,1963,ASUS PRIME 지포스 RTX 5070 OC D7 12GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,214,1964,ASUS 지포스 RTX 5070 OC D7 12GB T1 Edition 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,215,1965,ASUS DUAL 지포스 RTX 5070 OC D7 12GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,216,1966,ASUS DUAL 지포스 RTX 5070 OC D7 12GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,217,1967,ASUS PRIME 지포스 RTX 5070 D7 12GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,218,1968,ASUS 지포스 RTX 5070 OC D7 12GB T1 Edition 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,219,1969,ASUS TUF Gaming 지포스 RTX 5070 OC D7 12GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,220,1970,ASUS PRIME 지포스 RTX 5070 Ti OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,221,1971,ASUS PRIME 지포스 RTX 5070 Ti OC D7 16GB 코잇,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,222,1972,ASUS PRIME 지포스 RTX 5070 Ti D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,223,1973,ASUS TUF Gaming 지포스 RTX 5070 Ti OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,224,1974,ASUS PRIME 지포스 RTX 5070 Ti OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,225,1975,ASUS PRIME 지포스 RTX 5080 OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,226,1976,ASUS ROG Astral 지포스 RTX 5080 OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,227,1977,ASUS PRIME 지포스 RTX 5080 OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,228,1978,ASUS ROG Astral 지포스 RTX 5080 OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,229,1979,ASUS PRIME 지포스 RTX 5080 EVO OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,230,1980,ASUS PRIME 지포스 RTX 5080 D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,231,1981,ASUS ProArt 지포스 RTX 5080 OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,232,1982,ASUS TUF Gaming 지포스 RTX 5080 OC D7 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,233,1983,ASUS TUF Gaming 지포스 RTX 5080 OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,234,1984,ASUS PRIME 지포스 RTX 5080 D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,235,1985,ASUS ProArt 지포스 RTX 5080 OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,236,1986,ASUS PRIME 지포스 RTX 5080 EVO OC D7 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,237,1987,ASUS ROG Astral 지포스 RTX 5090 OC D7 32GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,238,1988,ASUS ROG Astral 지포스 RTX 5090 OC D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,239,1989,ASUS ROG Astral 지포스 RTX 5090 WHITE OC D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,240,1990,ASUS TUF Gaming 지포스 RTX 5090 D7 32GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,241,1991,ASUS ROG Astral 지포스 RTX 5090 WHITE OC D7 32GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,242,1992,ASUS ROG Astral LC 지포스 RTX 5090 OC D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,243,1993,ASUS ROG Astral 지포스 RTX 5090 BTF OC D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,244,1994,ASUS TUF Gaming 지포스 RTX 5090 OC D7 32GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,245,1995,ASUS TUF Gaming 지포스 RTX 5090 D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,246,1996,ASUS ROG Astral LC 지포스 RTX 5090 OC D7 32GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,247,1997,ASUS TUF Gaming 지포스 RTX 5090 OC D7 32GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,248,1998,ASUS DUAL 라데온 RX 7600 O8G EVO OC D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,252,2002,ASUS DUAL 라데온 RX 9060 XT D6 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,256,2006,ASUS DUAL 라데온 RX 9060 XT D6 8GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,257,2007,ASUS TUF Gaming 라데온 RX 9060 XT OC D6 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,258,2008,ASUS PRIME 라데온 RX 9070 EVO OC D6 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,259,2009,ASUS PRIME 라데온 RX 9070 GRE EVO OC D6 12GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,260,2010,ASUS PRIME 라데온 RX 9070 XT OC D6 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,261,2011,ASUS PRIME 라데온 RX 9070 XT WHITE OC D6 16GB 대원씨티에스,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,262,2012,ASUS PRIME 라데온 RX 9070 XT OC D6 16GB 인텍앤컴퍼니,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,263,2013,갤럭시 GALAX 지포스 GTX 1660 SUPER OC D6 6GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,264,2014,갤럭시 BOY 지포스 GTX 1660 SUPER OC D6 6GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,267,2017,갤럭시 갤라즈 GALAX 지포스 RTX 3050 D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,268,2018,갤럭시 GALAX 지포스 RTX 3060 V2 D6 12GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,269,2019,갤럭시 GALAX 지포스 RTX 3070 Ti D6X 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,309,2059,COLORFUL iGame 지포스 RTX 3050 ULTRA DUO OC V2 White D6 8GB 피씨디렉트,recommended_psu_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,311,2061,COLORFUL 지포스 RTX 3050 토마호크 DUO V2 D6 8GB 피씨디렉트,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,312,2062,COLORFUL 지포스 RTX 3050 BATTLE AX DUO V2 D6 8GB 도우정보,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,313,2063,COLORFUL iGame 지포스 RTX 3050 Ultra DUO OC V2 D6 8GB White,recommended_psu_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,367,2117,이엠텍 지포스 GTX 1660 SUPER MIRACLE II D6 6GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,368,2118,이엠텍 지포스 RTX 2060 STORM X Dual BASIC D6 12GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,373,2123,이엠텍 지포스 RTX 5050 MIRACLE WHITE D6 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,375,2125,이엠텍 지포스 RTX 5060 Ti MIRACLE X2 WHITE D7 8GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,376,2126,이엠텍 지포스 RTX 5070 MIRACLE WHITE D7 12GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기
+GPU,377,2127,이엠텍 지포스 RTX 5070 Ti MIRACLE WHITE D7 16GB,tdp_watt,원본에 값이 없거나 지원하지 않는 표기

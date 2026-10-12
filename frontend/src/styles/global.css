@@ -51,6 +51,11 @@ input {
   color: inherit;
 }
 
+.search-input::placeholder {
+  color: var(--search-placeholder);
+  opacity: 1;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -60,6 +65,12 @@ img {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: var(--r-sm);
+}
+
+.theme-toggle:focus-visible {
+  outline-color: var(--line-strong);
+  outline-offset: -2px;
+  border-radius: var(--r-full);
 }
 
 ::selection {
@@ -95,7 +106,8 @@ img {
 
 /* 기본 라이트 모드 */
 .flex.min-h-screen.flex-col {
-  background-color: #ffffff;
+  background-color: var(--bg-base);
+  background-color: #EEF2ED;
   color: #111827;
 
   transition:
