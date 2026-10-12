@@ -141,9 +141,6 @@ public class Estimate {
     public Long getBudgetMax() {
         return budgetMax;
     }
- 
-    public boolean isRecommend() {
-        return recommend;
-    }
+
 
 }

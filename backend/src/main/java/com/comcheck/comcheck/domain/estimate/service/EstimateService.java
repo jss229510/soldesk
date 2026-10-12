@@ -59,10 +59,7 @@ public class EstimateService {
         return estimateRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
-    // 공용 견적 목록
-    public List<Estimate> getRecommendedEstimatesByUsageType(String usageType) {
-        return estimateRepository.findByRecommendTrueAndUsageTypeOrderByCreatedAtDesc(usageType);
-    }
+
 
     // 견적 수정
     @Transactional

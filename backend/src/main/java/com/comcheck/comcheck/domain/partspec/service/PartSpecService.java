@@ -36,6 +36,5 @@ public class PartSpecService {
         return partSpecRepository.findBySpecIdAndPartId(specId, partId);
     }
 
-
 }   
 
