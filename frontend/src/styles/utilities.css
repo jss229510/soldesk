@@ -27,3 +27,37 @@
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* 아래로 슬라이드하며 나타나는 애니메이션 */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* 오른쪽으로 슬라이드하며 나타나는 애니메이션 */
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-right {
+  animation: slideRight 0.5s ease-out;
+}
