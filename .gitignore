@@ -5,6 +5,8 @@ node_modules/
 HELP.md
 .gradle
 build/
+!frontend/src/components/build/
+!frontend/src/components/build/**
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
