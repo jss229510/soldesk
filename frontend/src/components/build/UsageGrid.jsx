@@ -1,9 +1,9 @@
 import UsageCard from './UsageCard';
 
-export const UsageGrid = ({ usages = [], selected, onSelect, expanded }) => {
+export const UsageGrid = ({ usages = [], selected, onSelect,}) => {
   return (
     <div
-      className={`grid gap-4 transition-all duration-500 ${expanded ? 'grid-cols-2 lg:grid-cols-4' : 'grid-cols-2 lg:grid-cols-3'}`}
+      className='grid grid-cols-2 gap-4'
     >
       {usages.map((usage) => (
         <UsageCard key={usage.id} usage={usage} active={selected === usage.id} onSelect={onSelect} />
