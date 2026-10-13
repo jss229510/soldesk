@@ -79,6 +79,28 @@ export const fetchPart = async (partId) => {
   return mockResponse(part);
 };
 
+  // 선택한 부품의 상세 스펙 목록 조회
+export const fetchPartSpecs = async (partId) => {
+  // 실제 서버에서는 GET /api/parts/{partId}/specs 요청을 보낸다.
+  if (!USE_MOCK) {
+    return request(`/parts/${partId}/specs`);
+  }
+  // mock 모드에서도 실제 API와 비슷한 객체 배열 형태로 반환한다.
+  const part = PARTS_BY_ID[partId];
+  if (!part) {
+    throw new ApiError('부품을 찾을 수 없습니다.', 404);
+  }
+  return mockResponse(
+    part.specs.map((spec, index) => ({
+      specId: index + 1,
+      partId,
+      specKey: `spec_${index + 1}`,
+      specValue: spec,
+      specUnit: '',
+    }))
+  );
+};
+
 /** 최근 12개월 시세 */
 export const fetchPriceHistory = async (partId) => {
   if (!USE_MOCK) return request(`/parts/${partId}/price-history`);
