@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 import { StateBox } from '../components/common';
 import SearchBar from '../components/layout/SearchBar';
@@ -6,6 +7,7 @@ import {
   CategoryHero,
   CategoryTabs,
   PartGrid,
+  PartSpecModal,
 } from '../components/shop';
 import { CATEGORY_MAP, DEFAULT_CATEGORY, getCategory } from '../constants/categories';
 import { DEFAULT_SORT } from '../constants/sortOptions';
@@ -16,6 +18,7 @@ import { useParts } from '../hooks/useParts';
 export const ShopPage = () => {
   const { categoryId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedPart, setSelectedPart] = useState(null);
 
   // URL에 sort가 없으면 백엔드의 기본순(partId 내림차순)을 사용한다.
   const sort = searchParams.get('sort') ?? DEFAULT_SORT;
@@ -45,9 +48,14 @@ export const ShopPage = () => {
 
   // 검색어만 URL에서 제거하므로, 현재 카테고리와 정렬 기준은 그대로 유지된다.
   const clearKeyword = () => {
+    // 선택한 부품을 비우면 PartSpecModal의 open 값도 false가 되어 모달이 닫힌다.
     const next = new URLSearchParams(searchParams);
     next.delete('keyword');
     setSearchParams(next, { replace: true });
+  };
+
+  const closePartSpecModal = () => {
+  setSelectedPart(null);
   };
 
   return (
@@ -74,7 +82,14 @@ export const ShopPage = () => {
       {!loading && !error && parts.length === 0 && (
         <StateBox status="empty" title="등록된 제품이 없습니다" description="다른 카테고리를 확인해 보세요." />
       )}
-      {!loading && !error && parts.length > 0 && <PartGrid parts={parts} />}
+      {!loading && !error && parts.length > 0 && (
+      <PartGrid parts={parts} onSelect={setSelectedPart} />
+      )}
+      <PartSpecModal
+      part={selectedPart}
+      open={Boolean(selectedPart)}
+      onClose={closePartSpecModal}
+      />
     </div>
   );
 };

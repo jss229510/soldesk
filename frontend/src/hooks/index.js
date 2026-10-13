@@ -1,5 +1,6 @@
 export * from './useAsync';
 export * from './useParts';
+export * from './usePartSpecs';
 export * from './usePriceHistory';
 export * from './useCategorySummaries';
 export * from './useBudgetBuild';
