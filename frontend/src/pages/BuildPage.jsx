@@ -45,9 +45,9 @@ export const BuildPage = () => {
           용도를 고른 뒤 세부 용도를 선택해주세요.
         </p>
       </header>
-
-      <div className={`grid items-start gap-4 transition-all duration-500
-        ${isExpanded ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
+      <div className='rounded-2xl border gb-white p-6 shadow-sm'>
+       <div className={`grid items-start gap-4 transition-all duration-500
+         ${isExpanded ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
         <div className={`min-w-0 ${isExpanded ? 'slide-right':''}`}>
           <UsageGrid
             usages={PC_BUILD_PROFILES}
@@ -64,6 +64,7 @@ export const BuildPage = () => {
             onSelect={handleTierSelect}
           />
         </div>
+       </div>
       </div>
 
       {selectedTier && (
