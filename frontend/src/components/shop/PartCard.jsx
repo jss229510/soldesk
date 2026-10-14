@@ -4,7 +4,7 @@ import { sparklineValues } from '../../mock/priceHistory';
 import { discountRate, formatNumber, formatPrice } from '../../utils/format';
 
 /**
- * 부품 카드. 카드 전체 또는 하단 버튼으로 시세 모달을 연다.
+ * 부품 카드. 하단 버튼으로 선택한 부품의 상세 스펙 모달을 연다.
  * @param {{ part: import('../../types').Part, onSelect: (part) => void }} props
  */
 export const PartCard = ({ part, onSelect }) => {
@@ -59,10 +59,10 @@ export const PartCard = ({ part, onSelect }) => {
 )}
         </div>
 
-        {/* 시세 이력 조회와 장바구니 담기를 서로 독립된 동작으로 유지한다. */}
+        {/* 상세 스펙 조회와 장바구니 담기를 서로 독립된 동작으로 유지한다. */}
         <div className="grid grid-cols-2 gap-2">
           <Button variant="soft" block onClick={() => onSelect?.(part)}>
-            시세 차트 보기
+            부품 스펙 보기
           </Button>
           <Button block onClick={() => addItem(part)}>
             장바구니 담기

@@ -18,6 +18,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.SequenceGenerator;
 
 @Entity
 
@@ -26,6 +29,8 @@ import jakarta.persistence.Table;
 public class Cart {
     @Id
     // cart_id를 PK로 지정
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CARTS_GENERATOR")
+    @SequenceGenerator(name = "SEQ_CARTS_GENERATOR", sequenceName = "SEQ_CARTS", allocationSize = 1)
 
     @Column(name = "\"cart_id\"")
     private Long cartId;
@@ -40,8 +45,12 @@ public class Cart {
     @Column(name = "\"updated_at\"", nullable = false)
     LocalDateTime updatedAt;
 
-    protected Cart(){
-        //JPA 기본 생성자
+    protected Cart() {
+        // JPA 기본 생성자
+    }
+
+    public Cart(User user) {
+        this.user = user;
     }
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -104,5 +113,9 @@ public class Cart {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<CartItem> getItems() {
+        return items;
     }
 }

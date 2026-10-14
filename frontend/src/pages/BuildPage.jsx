@@ -12,7 +12,6 @@ export const BuildPage = () => {
   //isExpanded가 바뀌면 레이아웃이 바뀌게 하는 함수
   const handleTierSelect = (tierCode) => {
     setSelectedTierCode(tierCode);
-    setIsExpanded(true);
   }
 
   const selectedUsage =
@@ -26,10 +25,10 @@ export const BuildPage = () => {
   const handleUsageSelect = (nextUsageId) => {
     setUsageId(nextUsageId);
     setSelectedTierCode(null);
-    setIsExpanded(false);
+    setIsExpanded(true);
   }
   return (
-    <div className="container mx-auto px-4 pb-12">
+    <div className="container mx-auto px-4 pb-12 -translate-x-25">
       <header className="max-w-3xl py-12">
         <p className="text-sm text-gray-500">
           용도 선택
@@ -39,32 +38,33 @@ export const BuildPage = () => {
         <h1 className="my-3 text-3xl font-bold">
           어떤 PC가 필요하신가요?
         </h1>
-        <span class="block h-4"></span>
+        <span className="block h-4"></span>
 
         <p className="text-gray-400">
           용도를 고른 뒤 세부 용도를 선택해주세요.
         </p>
       </header>
-      <div className='rounded-2xl border gb-white p-6 shadow-sm'>
-       <div className={`grid items-start gap-4 transition-all duration-500
-         ${isExpanded ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
-        <div className={`min-w-0 ${isExpanded ? 'slide-right':''}`}>
-          <UsageGrid
-            usages={PC_BUILD_PROFILES}
-            selected={usageId}
-            onSelect={handleUsageSelect}
-            expanded={isExpanded}
-          />
-        </div>
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+        <div className='rounded-2xl p-5 shadow-sm'>
 
-        <div className={`min-w-0 ${isExpanded ? 'slide-down' : ''}`}>
-          <UsageTierPanel
-            usage={selectedUsage}
-            selectedTierCode={selectedTierCode}
-            onSelect={handleTierSelect}
-          />
+          <div className=''>
+            <UsageGrid
+              usages={PC_BUILD_PROFILES}
+              selected={usageId}
+              onSelect={handleUsageSelect}
+            />
+          </div>
+          <div className={`grid items-start gap-4 transition-all duration-500
+        ${isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'}`}>
+            <div className={`min-w-0 ${isExpanded ? 'slide-down' : ''}`}>
+              <UsageTierPanel
+                usage={selectedUsage}
+                selectedTierCode={selectedTierCode}
+                onSelect={handleTierSelect}
+              />
+            </div>
+          </div>
         </div>
-       </div>
       </div>
 
       {selectedTier && (
