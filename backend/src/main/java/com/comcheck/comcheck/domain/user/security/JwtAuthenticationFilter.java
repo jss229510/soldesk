@@ -1,12 +1,14 @@
 package com.comcheck.comcheck.domain.user.security;
 
 import com.comcheck.comcheck.domain.user.service.JwtTokenProvider;
+import com.comcheck.comcheck.global.exception.SecurityErrorResponseWriter;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -19,9 +21,14 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final SecurityErrorResponseWriter securityErrorResponseWriter;
 
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtAuthenticationFilter(
+            JwtTokenProvider jwtTokenProvider,
+            SecurityErrorResponseWriter securityErrorResponseWriter
+    ) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.securityErrorResponseWriter = securityErrorResponseWriter;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (JwtException | IllegalArgumentException exception) {
             // 변조되었거나 만료된 토큰은 보호된 Controller까지 도달하면 안 된다.
             SecurityContextHolder.clearContext();
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired access token.");
+            securityErrorResponseWriter.write(response, HttpStatus.UNAUTHORIZED, "유효하지 않거나 만료된 접근 토큰입니다.");
         }
     }
 }

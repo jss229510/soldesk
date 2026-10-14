@@ -13,18 +13,31 @@ const sorters = {
 /** 카테고리 목록 + 각 카테고리의 제품 수/가격 범위 (홈 카드에서 사용) */
 export const fetchCategorySummaries = async () => {
   // 백엔드에 /categories API가 없으므로 PARTS 전체 목록을 받아 홈 카드에서 계산한다.
-  if (!USE_MOCK) return request('/parts');
+  if (!USE_MOCK) {
+    const { items = [], total = 0 } = await request('/parts');
 
-  const summaries = CATEGORIES.map((category) => {
-    const items = PARTS.filter((p) => p.category === category.id);
-    const prices = items.map((p) => p.price);
+    const categories = CATEGORIES.map((category) => {
+      const categoryItems = items.filter(
+        (item) => item.category === category.id,
+      );
+
+      const prices = categoryItems
+        .map((item) => item.price)
+        .filter(Number.isFinite);
+
+      return {
+        ...category,
+        count: categoryItems.length,
+        minPrice: prices.length > 0 ? Math.min(...prices) : null,
+        maxPrice: prices.length > 0 ? Math.max(...prices) : null,
+      };
+    });
+
     return {
-      ...category,
-      count: items.length,
-      minPrice: Math.min(...prices),
-      maxPrice: Math.max(...prices),
+      categories,
+      totalCount: total,
     };
-  });
+  }
 
   return mockResponse({ categories: summaries, totalCount: PARTS.length });
 };
@@ -79,7 +92,7 @@ export const fetchPart = async (partId) => {
   return mockResponse(part);
 };
 
-  // 선택한 부품의 상세 스펙 목록 조회
+// 선택한 부품의 상세 스펙 목록 조회
 export const fetchPartSpecs = async (partId) => {
   // 실제 서버에서는 GET /api/parts/{partId}/specs 요청을 보낸다.
   if (!USE_MOCK) {

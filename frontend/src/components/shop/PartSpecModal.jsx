@@ -9,11 +9,45 @@ const SPEC_LABELS = {
     tdp_watt: '소비 전력 (TDP)',
     cpu_core: '코어 수',
     thread: '스레드 수',
+    cpu_thread: '스레드 수',
     cpu_clock: '최대 클럭',
+    cpu_clock_boost: '부스트 클럭',
     cpu_L2: 'L2 캐시',
     cpu_L3: 'L3 캐시',
     DDR: '메모리 규격',
+    ddr_support: '지원 메모리 규격',
+    integrated_graphics: '내장 그래픽',
+    chipset: '칩셋',
+    length_mm: '길이',
+    performance_tier: '성능 등급',
+    recommended_psu_watt: '권장 파워 용량',
+    vram_gb: '그래픽 메모리 용량',
+    vram_type: '그래픽 메모리 규격',
+    form_factor: '폼팩터',
+    m2_slots: 'M.2 슬롯 수',
+    max_ram_capacity_gb: '최대 메모리 용량',
+    nvme_supported: 'NVMe 지원',
+    ram_socket: '메모리 슬롯',
+    ram_type: '메모리 규격',
+    atx_version: 'ATX 버전',
+    efficiency_rating: '에너지 효율 등급',
+    fan_size: '팬 크기',
+    modular_type: '모듈러 방식',
+    pcie_connector: 'PCIe 보조전원 커넥터',
+    wattage: '정격 출력',
+    capacity_gb: '용량',
+    module_count: '모듈 수',
+    speed_mhz: '동작 속도',
+    interface: '인터페이스',
+    nand_type: 'NAND 종류',
+    read_speed_mbs: '순차 읽기 속도',
+    storage_gb: '저장 용량',
+    tbw: 'TBW',
+    write_speed_mbs: '순차 쓰기 속도',
 };
+
+// 추천 알고리즘이 사용하는 내부 판정값은 상세 화면에 노출하지 않는다.
+const HIDDEN_SPEC_KEYS = new Set(['has_igpu', 'cpu_level']);
 
 const formatSpecKey = (specKey) => (
     SPEC_LABELS[specKey] ?? specKey.replaceAll('_', ' ')
@@ -23,6 +57,7 @@ const formatSpecKey = (specKey) => (
 export const PartSpecModal = ({ part, open, onClose }) => {
   // 모달이 열렸고 부품이 선택된 경우에만 스펙 API를 요청한다.
     const { specs, loading, error } = usePartSpecs(open ? part?.id : null);
+    const displaySpecs = specs.filter((spec) => !HIDDEN_SPEC_KEYS.has(spec.specKey));
 
   // 선택한 부품이 없으면 모달 자체를 만들지 않는다.
     if (!part) return null;
@@ -46,9 +81,9 @@ export const PartSpecModal = ({ part, open, onClose }) => {
             </div>
 
           {/* 핵심 스펙 세 개는 기존 목업 화면처럼 Chip으로 빠르게 보여 준다. */}
-            {!loading && !error && specs.length > 0 && (
+            {!loading && !error && displaySpecs.length > 0 && (
             <div className="flex flex-wrap gap-2">
-                {specs.slice(0, 3).map((spec) => (
+                {displaySpecs.slice(0, 3).map((spec) => (
                 <Chip key={spec.specId}>
                     {spec.specValue}{spec.specUnit ? ` ${spec.specUnit}` : ''}
                 </Chip>
@@ -87,13 +122,13 @@ export const PartSpecModal = ({ part, open, onClose }) => {
             />
             )}
 
-            {!loading && !error && specs.length === 0 && (
+            {!loading && !error && displaySpecs.length === 0 && (
             <StateBox status="empty" title="등록된 상세 스펙이 없습니다" />
             )}
 
-            {!loading && !error && specs.length > 0 && (
+            {!loading && !error && displaySpecs.length > 0 && (
             <dl className="divide-y divide-gray-700 overflow-hidden rounded-lg border border-gray-700 bg-gray-800">
-                {specs.map((spec) => (
+                {displaySpecs.map((spec) => (
                 <div
                     key={spec.specId}
                     className="grid grid-cols-2 gap-4 px-5 py-3"

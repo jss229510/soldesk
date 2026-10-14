@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signupUser } from "../api/users";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,8 @@ const RegisterPage = () => {
   const passwordRef = useRef();
   const passwordCheckRef = useRef();
   const nicknameRef = useRef();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const onChange = (e) => {
     setInput({
@@ -23,7 +26,10 @@ const RegisterPage = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    if (loading) return;
+    setError("");
+
     // 이메일 빈칸 확인
     if (!input.email.trim()) {
       alert("이메일을 입력해주세요.");
@@ -45,9 +51,9 @@ const RegisterPage = () => {
       return;
     }
 
-    // 비밀번호 길이 확인
-    if (input.password.length < 8) {
-      alert("비밀번호는 8자 이상 입력해주세요.");
+    // 서버의 회원가입 규칙과 동일하게 영문·숫자·8~20자·공백 없음 여부를 확인한다.
+    if (!/^(?=.*[A-Za-z])(?=.*\d)\S{8,20}$/.test(input.password)) {
+      alert("비밀번호는 영문과 숫자를 포함해 공백 없이 8~20자로 입력해주세요.");
       passwordRef.current.focus();
       return;
     }
@@ -73,11 +79,21 @@ const RegisterPage = () => {
       return;
     }
 
-    console.log(input);
-
-    alert("회원가입 정보 확인 완료!");
-
-    // 나중에 여기에 백엔드 연결
+    setLoading(true);
+    try {
+      await signupUser({
+        email: input.email.trim(),
+        password: input.password,
+        nickname: input.nickname.trim(),
+      });
+      alert("회원가입이 완료되었습니다. 로그인해주세요.");
+      navigate("/login");
+    } catch (err) {
+      const firstFieldError = Object.values(err.errors ?? {})[0];
+      setError(firstFieldError ?? err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const goLogin = () => {
@@ -194,10 +210,13 @@ const RegisterPage = () => {
         <button
           type="button"
           onClick={onSubmit}
+          disabled={loading}
           className="w-full rounded-lg bg-cyan-500 py-2.5 font-semibold text-gray-950 hover:bg-cyan-400"
         >
-          회원가입
+          {loading ? "회원가입 중..." : "회원가입"}
         </button>
+
+        {error && <p role="alert" className="mt-3 text-sm text-red-500">{error}</p>}
 
         <button
           type="button"

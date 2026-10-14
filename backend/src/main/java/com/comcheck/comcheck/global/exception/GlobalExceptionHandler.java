@@ -1,17 +1,40 @@
 package com.comcheck.comcheck.global.exception;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 
 // 여러 Controller와 Service에서 발생한 예외를 한곳에서 JSON 응답으로 바꾸는 전역 처리기다.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // @Valid DTO의 필드 규칙을 어긴 경우에도 프로젝트 공통 오류 JSON을 반환한다.
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            errors.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.name(),
+                "입력값을 다시 확인해주세요.",
+                LocalDateTime.now(),
+                errors
+        );
+
+        return ResponseEntity.badRequest().body(response);
+    }
 
     // UserService 등이 던지는 ResponseStatusException을 가로채 공통 오류 응답으로 변환한다.
     // @ExceptionHandler(예외타입.class)는 "이 예외 또는 그 자식 예외가 발생하면 아래 메서드를 실행"하라는 Spring 표시다.

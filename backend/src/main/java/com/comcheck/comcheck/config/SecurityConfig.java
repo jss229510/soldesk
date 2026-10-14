@@ -1,20 +1,22 @@
 package com.comcheck.comcheck.config;
 
 import com.comcheck.comcheck.domain.user.security.JwtAuthenticationFilter;
+import com.comcheck.comcheck.global.exception.SecurityErrorResponseWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.List;
 
 @Configuration
@@ -22,7 +24,16 @@ import java.util.List;
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter)
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            SecurityErrorResponseWriter securityErrorResponseWriter
+    )
             throws Exception {
         return http
                 // 이 API는 토큰 기반이므로 HTTP 세션을 만들지 않는다.
@@ -31,9 +42,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication is required."))
+                                securityErrorResponseWriter.write(response, HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
-                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access is denied."))
+                                securityErrorResponseWriter.write(response, HttpStatus.FORBIDDEN, "접근 권한이 없습니다."))
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         // 로그인, 회원가입, 상품 조회는 인증 전에도 사용할 수 있어야 한다.
