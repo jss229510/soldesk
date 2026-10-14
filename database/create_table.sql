@@ -24,20 +24,21 @@
 -- DELETE FROM "CARTS";
 -- DELETE FROM "CART_ITEMS";
 
-CREATE TABLE "USERS" (
-    "user_id" NUMBER NOT NULL,
-    "role" VARCHAR2(20) DEFAULT 'USER' NOT NULL,
-    "email" VARCHAR2(255) NOT NULL,
-    "password" VARCHAR2(255) NOT NULL,
-    "nickname" VARCHAR2(50) NOT NULL,
-    "phone_number" VARCHAR2(20),
-    "profile_image" VARCHAR2(500),
-    "status" VARCHAR2(20) DEFAULT 'ACTIVE' NOT NULL,
-    "last_login_at" DATE,
-    "login_fail_count" NUMBER DEFAULT 0 NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "updated_at" DATE
-);
+-- 유저쪽 테이블 업데이트 예정
+--CREATE TABLE "USERS" (
+--    "user_id" NUMBER NOT NULL,
+--    "role" VARCHAR2(20) DEFAULT 'USER' NOT NULL,
+--    "email" VARCHAR2(255) NOT NULL,
+--    "password" VARCHAR2(255) NOT NULL,
+--    "nickname" VARCHAR2(50) NOT NULL,
+--    "phone_number" VARCHAR2(20),
+--    "profile_image" VARCHAR2(500),
+--    "status" VARCHAR2(20) DEFAULT 'ACTIVE' NOT NULL,
+--    "last_login_at" DATE,
+--    "login_fail_count" NUMBER DEFAULT 0 NOT NULL,
+--    "created_at" DATE DEFAULT SYSDATE NOT NULL,
+--    "updated_at" DATE
+--);
 
 CREATE TABLE "PARTS" (
     "part_id" NUMBER NOT NULL,
@@ -60,13 +61,14 @@ CREATE TABLE "PART_SPECS" (
 
 CREATE TABLE "ESTIMATES" (
     "estimated_id" NUMBER NOT NULL,
-    "user_id" NUMBER NOT NULL,
-    "source_recommended_id" NUMBER,
-    "title" VARCHAR2(100 CHAR) DEFAULT '내 견적' NOT NULL,
+    "estimate_key" VARCHAR2(100 CHAR) NOT NULL,
+    "title" VARCHAR2(150 CHAR) NOT NULL,
     "usage_type" VARCHAR2(30 CHAR),
-    "budget_max" NUMBER,
+    "tier_code" VARCHAR2(40 CHAR),
+    "budget_max" NUMBER(12, 0),
+    "total_price" NUMBER(12, 0) NOT NULL,
     "total_power" NUMBER,
-    "is_shared" CHAR(1) DEFAULT 'N' NOT NULL,
+    "is_recommend" CHAR(1) DEFAULT 'N' NOT NULL,
     "created_at" DATE DEFAULT SYSDATE NOT NULL,
     "updated_at" DATE DEFAULT SYSDATE NOT NULL
 );
@@ -80,70 +82,54 @@ CREATE TABLE "ESTIMATE_ITEMS" (
 );
 
 CREATE TABLE "CARTS" (
-    "cart_id"    NUMBER NOT NULL,
-    "user_id"    NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
     "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
 CREATE TABLE "CART_ITEMS" (
     "cart_item_id" NUMBER NOT NULL,
-    "cart_id"      NUMBER NOT NULL,
-    "part_id"      NUMBER NOT NULL,
-    "quantity"    NUMBER DEFAULT 1 NOT NULL,
-    "added_at"    TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
-);
-
-CREATE TABLE "PRICE_HISTORY" (
-    "price_history_id" NUMBER NOT NULL,
-    "part_id" NUMBER NOT NULL,
-    "dateprice" NUMBER(12, 0) NOT NULL,
-    "Field" VARCHAR2(10) NOT NULL,
-    "source" VARCHAR2(50) DEFAULT '다나와' NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "recorded_at" GENERATED ALWAYS AS (
-        TO_DATE("Field", 'FXYYYY-MM-DD')
-    ) VIRTUAL
-);
-
-CREATE TABLE "RESELL_POSTS" (
-    "post_id" NUMBER NOT NULL,
-    "seller_id" NUMBER NOT NULL,
-    "part_id" NUMBER,
-    "target_type" VARCHAR2(20),
-    "condition_grade" VARCHAR2(20),
-    "price" NUMBER,
-    "status" VARCHAR2(20),
-    "created_at" DATE
-);
-
-CREATE TABLE "RECOMMENDATIONS" (
-    "recommended_id" NUMBER NOT NULL,
-    "recommendation_key" VARCHAR2(100 CHAR) NOT NULL,
-    "purpose_code" VARCHAR2(30 CHAR) NOT NULL,
-    "tier_code" VARCHAR2(40 CHAR) NOT NULL,
-    "recommendation_name" VARCHAR2(150 CHAR) NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL
-);
-
-CREATE TABLE "RECOMMENDATION_PRODUCT" (
-    "recommended_id" NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
     "part_id" NUMBER NOT NULL,
     "quantity" NUMBER DEFAULT 1 NOT NULL,
-    "unit_price" NUMBER(12, 0) NOT NULL
+    "added_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
-CREATE TABLE "BOARD_POSTS" (
-    "post_id" NUMBER NOT NULL,
-    "user_id" NUMBER NOT NULL,
-    "board_type" VARCHAR2(20 CHAR) NOT NULL,
-    "estimated_id" NUMBER,
-    "title" VARCHAR2(200 CHAR) NOT NULL,
-    "content" CLOB NOT NULL,
-    "view_count" NUMBER DEFAULT 0 NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "updated_at" DATE DEFAULT SYSDATE NOT NULL
+CREATE TABLE "CART_ESTIMATES" (
+    "cart_estimate_id" NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
+    "estimated_id" NUMBER NOT NULL,
+    "quantity" NUMBER DEFAULT 1 NOT NULL,
+    "added_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
+
+--CREATE TABLE "PRICE_HISTORY" (
+--    "price_history_id" NUMBER NOT NULL,
+--    "part_id" NUMBER NOT NULL,
+--    "dateprice" NUMBER(12, 0) NOT NULL,
+--    "Field" VARCHAR2(10) NOT NULL,
+--    "source" VARCHAR2(50) DEFAULT '다나와' NOT NULL,
+--    "created_at" DATE DEFAULT SYSDATE NOT NULL,
+--    "recorded_at" GENERATED ALWAYS AS (
+--        TO_DATE("Field", 'FXYYYY-MM-DD')
+--    ) VIRTUAL
+--);
+
+-- 나중에 게시판 테이블 업데이트 예정
+--CREATE TABLE "BOARD_POSTS" (
+--    "post_id" NUMBER NOT NULL,
+--    "user_id" NUMBER NOT NULL,
+--    "board_type" VARCHAR2(20 CHAR) NOT NULL,
+--    "estimated_id" NUMBER,
+--    "title" VARCHAR2(200 CHAR) NOT NULL,
+--    "content" CLOB NOT NULL,
+--    "view_count" NUMBER DEFAULT 0 NOT NULL,
+--    "created_at" DATE DEFAULT SYSDATE NOT NULL,
+--    "updated_at" DATE DEFAULT SYSDATE NOT NULL
+--);
+
+
     
     
     
