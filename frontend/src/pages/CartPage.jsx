@@ -4,12 +4,17 @@ import { formatPrice } from '../utils/format';
 export const CartPage = () => {
   const {
     items,
+    selectedIds,
+    selectedItems,
+    selectedTotalPrice,
+    toggleSelectedItem,
     totalPrice,
     totalQuantity,
     changeQuantity,
     removeItem,
     clearCart,
   } = useCart();
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -26,6 +31,13 @@ export const CartPage = () => {
           <section className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
             {items.map((item) => (
               <article key={item.id} className="flex flex-col gap-4 border-b border-gray-700 p-5 last:border-b-0 sm:flex-row sm:items-center">
+                <input
+                  className="select-box h-5 w-5 shrink-0 cursor-pointer rounded border border-slate-300 accent-cyan-500 focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
+                  type="checkbox"
+                  checked={selectedIds.includes(item.id)}
+                  onChange={() => toggleSelectedItem(item.id)}
+                  aria-label={`${item.name} 선택`}
+                />
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-md bg-gray-800 text-xs text-cyan-400">
                   {item.category}
                 </div>
@@ -55,8 +67,12 @@ export const CartPage = () => {
               <button type="button" onClick={clearCart} className="text-sm text-gray-400 hover:text-red-400">전체 삭제</button>
             </div>
             <div className="mt-5 flex items-center justify-between border-t border-gray-700 pt-5">
-              <span className="text-sm text-gray-400">총 {totalQuantity}개 상품</span>
-              <strong className="text-xl text-cyan-400">{formatPrice(totalPrice)}</strong>
+              <span className="text-sm text-gray-400">
+                총 {selectedItems.reduce((total, item) => total + item.quantity, 0)}개 상품
+              </span>
+              <strong className="text-xl text-cyan-400">
+                {formatPrice(selectedTotalPrice)}
+              </strong>
             </div>
             {/* 로그인 기반 장바구니·주문 API가 생기기 전까지 주문 기능을 비활성화한다. */}
             <button type="button" disabled className="mt-5 w-full cursor-not-allowed rounded-md bg-gray-700 py-3 font-semibold text-gray-400">

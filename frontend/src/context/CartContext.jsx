@@ -5,7 +5,7 @@ const CartContext = createContext(null);
 
 export const CartProvider = ({ children }) => {
   const [items, setItems] = useState([]);
-
+  const [selectedIds, setSelectedIds] = useState([]);
   // 같은 상품을 다시 담으면 행을 추가하지 않고 수량만 증가시킨다.
   const addItem = useCallback((part) => {
     setItems((currentItems) => {
@@ -32,24 +32,43 @@ export const CartProvider = ({ children }) => {
     )));
   }, []);
 
+  const toggleSelectedItem = useCallback((id) => {
+    setSelectedIds((currentIds) => (
+      currentIds.includes(id)
+        ? currentIds.filter((selectedId) => selectedId !== id)
+        : [...currentIds, id]
+    ));
+  }, []);
+
   const removeItem = useCallback((id) => {
     setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+
+    setSelectedIds((currentIds) => (
+      currentIds.filter((selectedId) => selectedId !== id)
+    ));
   }, []);
 
   const clearCart = useCallback(() => {
     setItems([]);
+    setSelectedIds([]);
   }, []);
 
   // 현재 상품 목록에서 합계를 계산해 수량과 가격이 어긋나지 않게 한다.
   const value = useMemo(() => ({
     items,
+    selectedIds,
+    selectedItems: items.filter((item) => selectedIds.includes(item.id)),
+    selectedTotalPrice: items
+      .filter((item) => selectedIds.includes(item.id))
+      .reduce((total, item) => total + item.price * item.quantity, 0),
     totalQuantity: items.reduce((total, item) => total + item.quantity, 0),
     totalPrice: items.reduce((total, item) => total + item.price * item.quantity, 0),
     addItem,
     changeQuantity,
     removeItem,
     clearCart,
-  }), [items, addItem, changeQuantity, removeItem, clearCart]);
+    toggleSelectedItem,
+  }), [items, selectedIds, addItem, changeQuantity, removeItem, clearCart, toggleSelectedItem]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
