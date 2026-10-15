@@ -6,13 +6,16 @@ export const ROUTES = {
   build: '/build',
   // 메뉴 링크와 라우트 선언에서 같은 경로를 사용한다.
   cart: '/cart',
+  login: '/login',
+  register: '/register',
+  forgotPassword: '/forgot-password',
 };
 
 export const NAV_ITEMS = [
   { id: 'shop', to: ROUTES.shop, label: '시세 쇼핑' },
-  { id: 'budget', to: ROUTES.budget, label: '예산 추천', icon: '💰' },
-  { id: 'build', to: ROUTES.build, label: 'PC 구성', icon: '📋' },
-  { id: 'cart', to: ROUTES.cart, label: '장바구니', icon: '🛒' },
+  { id: 'budget', to: ROUTES.budget, label: '예산 추천' },
+  { id: 'build', to: ROUTES.build, label: 'PC 구성' },
+  { id: 'cart', to: ROUTES.cart, label: '장바구니' },
 ];
 
 export const FOOTER_LINKS = [
@@ -22,22 +25,15 @@ export const FOOTER_LINKS = [
       { label: '시세 현황', to: ROUTES.shop },
       { label: '예산 추천', to: ROUTES.budget },
       { label: 'PC 구성', to: ROUTES.build },
+      { label: '장바구니', to: ROUTES.cart },
     ],
   },
   {
-    title: '고객센터',
+    title: '계정',
     items: [
-      { label: 'FAQ', to: '/faq' },
-      { label: '1:1 문의', to: '/support' },
-      { label: '공지사항', to: '/notice' },
-    ],
-  },
-  {
-    title: '회사',
-    items: [
-      { label: '소개', to: '/about' },
-      { label: '채용', to: '/careers' },
-      { label: '약관', to: '/terms' },
+      { label: '로그인', to: ROUTES.login },
+      { label: '회원가입', to: ROUTES.register },
+      { label: '비밀번호 찾기', to: ROUTES.forgotPassword },
     ],
   },
 ];

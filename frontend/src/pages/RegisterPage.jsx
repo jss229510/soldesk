@@ -26,7 +26,8 @@ const RegisterPage = () => {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (event) => {
+    event.preventDefault();
     if (loading) return;
     setError("");
 
@@ -102,7 +103,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex justify-center px-4 py-8">
-      <div
+      <form
         className="w-full max-w-sm rounded-xl border p-5 shadow-lg"
         style={{
           backgroundColor: "var(--bg-surface)",
@@ -208,10 +209,15 @@ const RegisterPage = () => {
         </div>
 
         <button
-          type="button"
-          onClick={onSubmit}
+          type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-cyan-500 py-2.5 font-semibold text-gray-950 hover:bg-cyan-400"
+          className="w-full rounded-lg py-2.5 font-semibold"
+          style={{
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+            color: "var(--text)",
+            boxShadow: "0 2px 4px rgba(15, 23, 42, 0.12)",
+          }}
         >
           {loading ? "회원가입 중..." : "회원가입"}
         </button>
@@ -226,7 +232,7 @@ const RegisterPage = () => {
         >
           이미 계정이 있으신가요? 로그인
         </button>
-      </div>
+      </form>
     </div>
   );
 };
