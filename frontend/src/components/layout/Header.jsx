@@ -3,7 +3,7 @@ import { NAV_ITEMS } from '../../constants/routes';
 import { useCart } from '../../context/CartContext';
 import Logo from './Logo';
 
-export const Header = ({ onLogin, user, onLogout }) => {
+export const Header = ({ onLogin, user, onLogout, isDark, onToggleDark }) => {
   // 상품 종류 수가 아니라 장바구니에 담긴 전체 수량을 배지에 표시한다.
   const { totalQuantity } = useCart();
 
@@ -26,7 +26,7 @@ export const Header = ({ onLogin, user, onLogout }) => {
           <NavLink
             key={item.id}
             to={item.to}
-            className="inline-flex h-9 items-center gap-2 rounded-md px-2 text-sm md:px-4 md:text-base"
+            className="inline-flex h-9 items-center rounded-md px-2 text-sm md:px-4 md:text-base"
             style={({ isActive }) => ({
               color: isActive ? 'var(--brand)' : 'var(--text)',
               backgroundColor: isActive
@@ -50,11 +50,25 @@ export const Header = ({ onLogin, user, onLogout }) => {
       </nav>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          onClick={onToggleDark}
+          className="inline-flex h-9 items-center rounded-md px-3 text-sm font-medium"
+          aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
+          aria-pressed={isDark}
+          style={{
+            backgroundColor: 'var(--bg-surface-2)',
+            color: 'var(--text)',
+            boxShadow: 'inset 0 0 0 1px var(--line-strong)',
+          }}
+        >
+          {isDark ? '라이트 모드' : '다크 모드'}
+        </button>
         {user && <span className="max-w-32 truncate text-sm">{user.nickname}님</span>}
         <button
           type="button"
           onClick={user ? onLogout : onLogin}
-          className="inline-flex h-9 items-center rounded-md bg-cyan-500 px-3 text-sm font-semibold text-gray-950 hover:bg-cyan-400"
+          className="inline-flex h-9 items-center rounded-md bg-cyan-500 px-3 text-base font-semibold text-gray-950 hover:bg-cyan-400"
         >
           {user ? '로그아웃' : '로그인'}
         </button>
