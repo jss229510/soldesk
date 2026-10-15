@@ -11,10 +11,9 @@ import java.util.List;
 public interface EstimateRepository extends JpaRepository<Estimate, Long> {
 
     // 특정 회원의 견적 목록(최신순)
-    List<Estimate> findByUserIdOrderByCreatedAtDesc(Long userId);
+
 
     // 공개 여부로 견적 조회 (최신순, 페이지 단위)
-    Page<Estimate> findBySharedOrderByCreatedAtDesc(boolean shared, Pageable pageable);
 
 
 }
