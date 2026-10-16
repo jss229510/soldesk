@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter 
 @Setter 
 @NoArgsConstructor 
-public class BoardRepository {
+public class BoardRequest {
     @NotNull (message = "카테고리를 선택하세요.")
     private Category category;
 

@@ -92,6 +92,12 @@ public class Board {
         return writer.getUserId().equals(userid);
     }
 
+    //삭제 메서드
+    public void delete(){
+        this.isDeleted = true;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // 공지사항 상단 고정/해제
     public void changePinned(boolean pinned){
         if(this.category != Category.NOTICE){

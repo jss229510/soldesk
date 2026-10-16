@@ -15,6 +15,14 @@ import org.springframework.web.server.ResponseStatusException;
 // 여러 Controller와 Service에서 발생한 예외를 한곳에서 JSON 응답으로 바꾸는 전역 처리기다.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // @param message: 전체 안내 문구
+    // @param errors: 칸별로 안내 문구
+    private Map<String, Object> body(String message, Map<String, String> errors) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("message", message);
+        body.put("errors", errors);
+        return body;
+    }
 
     // @Valid DTO의 필드 규칙을 어긴 경우에도 프로젝트 공통 오류 JSON을 반환한다.
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -61,5 +69,12 @@ public class GlobalExceptionHandler {
 
         // HTTP 상태 코드와 JSON 본문을 함께 클라이언트에 전송한다.
         return ResponseEntity.status(status).body(response);
+    }
+
+    // 409 삭제된 게시물입니다.
+    @ExceptionHandler(DeletedBoardException.class)
+    public ResponseEntity<Map<String, Object>>handleDeletedBoard(DeletedBoardException e){
+        return ResponseEntity.status(HttpStatus.GONE) // 410
+        .body(body(e.getMessage(), new LinkedHashMap<>()));
     }
 }
