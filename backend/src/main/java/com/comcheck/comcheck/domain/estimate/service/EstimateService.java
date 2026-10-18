@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.comcheck.comcheck.domain.estimate.entity.Estimate;
 import com.comcheck.comcheck.domain.estimate.repository.EstimateRepository;
+import com.comcheck.comcheck.domain.user.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,67 +17,31 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 // 이 클래스를 Spring의 Service 계층으로 등록
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 // Transactional: 여러 DB 작업을 전부 성공하거나, 전부 없던 일로 하거나 하나로 묶을 때 (견적 수정용)
 // readOnly = true : 조회만 하는 메서드 (전체에 걸고 수정을 하는 메서드에는 Transactional만)
 public class EstimateService {
 
+    // 한쪽에 최대 몇 개까지 허용할건지 결정
+    private static final int MAX_PAGE_SIZE = 20;
+
+    // 외장 GPU가 없는 견적(사무용 등)에 필요한 최소 파워 출력(RECOMMENDATION_PROFILES.py 271L~ )
+    // recommendation_engin.py 696번쨰 줄 office_psu_min_watt=400(찾기 ㅈㄴ힘듦...)
+    private static final long NO_GPU_MIN_PSU_WATT = 400L;
+    // GPU에 권장 파워 값이 없을 때 쓰는 여유율 : 소비전력 합계의 1.3배
+    private static final double POWER_MARGIN = 1.3;
+
+    // PART_SPECS의 spec_key 이름
+    private static final String SPEC_TDP = "tdp_watt";    // CPU, GPU 소비전력
+
+    private static final String SPEC_PSU_WATTAGE = "wattage"; // psu 정격출력
+
+    private static final String SPEC_GPU_RECOMMENDED = "recommended_psu_watt"; // GPU 제조사 권장 파워 출력
+
+    private static final List<String> POWER_SPEC_KEYS =
+            List.of(SPEC_TDP, SPEC_PSU_WATTAGE, SPEC_GPU_RECOMMENDED);
+ 
     private final EstimateRepository estimateRepository;
-
-    // Repository를 주입받아 DB에 접근 할 수 있도록 함
-    public EstimateService(EstimateRepository estimateRepository) {
-        this.estimateRepository = estimateRepository;
-    }
-
-    // 견적생성(userId, Title, useagetype, budgetMax, shared)
-    @Transactional
-    public Estimate create(Estimate request) {
-        // 1. 검사: 필수 값이 없으면 400 Bad Request
-        if (request.getUserId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "userId는 필수입니다.");
-        }
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "견적 이름은 필수입니다.");
-        }
-        // 2. 필요한 값만 꺼내서 새 견적 객체 생성
-        Estimate estimate = new Estimate(
-                request.getUserId(),
-                request.getTitle(),
-                request.getUsageType(),
-                request.getBudgetMax(),
-                request.isShared());
-
-        // 3. 저장 후, 번호가 매겨진 견적을 반환
-        return estimateRepository.save(estimate);
-    }
-
-    // 견적 조회 없으면 404
-    public Estimate getEstimate(Long estimateId) {
-        return estimateRepository.findById(estimateId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다." + estimateId));
-    }
-
-    // 특정 회원 견적
-    public List<Estimate> getEstimatesByUser(Long userId) {
-        return estimateRepository.findByUserIdOrderByCreatedAtDesc(userId);
-    }
-
-
-
-    // 견적 수정
-    @Transactional
-    public Estimate update(Long estimateId, Estimate request) {
-        // estimateId : 몇번 견적 고칠지, request : 무엇으로 고칠지
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED,
-                "견적 수정 기능은 아직 구현되지 않았습니다.");
-    }
-
-    // 견적 삭제 (delete)
-    @Transactional
-    public void delete(Long estimateId) {
-        Estimate estimate = getEstimate(estimateId);
-        estimateRepository.delete(estimate);
-    }
-    // 견적 이름
+    private final UserRepository userRepository;
 
 }

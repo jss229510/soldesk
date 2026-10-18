@@ -9,20 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 // 견적의 API와 User의 API를 한 Controller에서 함께 다루기 위해 api까지만 지정
 
 public class EstimateController {
-
-    // POST /api/estimates
-    
-
-
-      // 견적 생성
-
-      // 공개 견적 목록 조회
-
-      // 견적 하나 조회
-
-      // 특정 회원의 견적 목록 조회
-
-      // 견적 수정
-
-      // 견적 삭제
+     
 }
