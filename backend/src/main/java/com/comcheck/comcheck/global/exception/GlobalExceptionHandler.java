@@ -15,14 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 // 여러 Controller와 Service에서 발생한 예외를 한곳에서 JSON 응답으로 바꾸는 전역 처리기다.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    // @param message: 전체 안내 문구
-    // @param errors: 칸별로 안내 문구
-    private Map<String, Object> body(String message, Map<String, String> errors) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("message", message);
-        body.put("errors", errors);
-        return body;
-    }
 
     // @Valid DTO의 필드 규칙을 어긴 경우에도 프로젝트 공통 오류 JSON을 반환한다.
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -71,10 +63,42 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
-    // 409 삭제된 게시물입니다.
+    // 410 삭제된 게시물입니다.
     @ExceptionHandler(DeletedBoardException.class)
-    public ResponseEntity<Map<String, Object>>handleDeletedBoard(DeletedBoardException e){
-        return ResponseEntity.status(HttpStatus.GONE) // 410
-        .body(body(e.getMessage(), new LinkedHashMap<>()));
+    public ResponseEntity<ApiErrorResponse> handleDeletedBoard(DeletedBoardException e){
+        return errorResponse(HttpStatus.GONE, e.getMessage()); // 410
+
     }
+
+    // 401 로그인 필요한 작업입니다.
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiErrorResponse> handleUnauthorized(UnauthorizedException e){
+        return errorResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
+    }
+
+    // 403 수정·삭제 권한 없음
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiErrorResponse> handleForbidden(ForbiddenException e){
+        return errorResponse(HttpStatus.FORBIDDEN, e.getMessage());
+    }
+
+    // 404 게시물이 존재하지 않습니다
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotFound(NotFoundException e){
+        return errorResponse(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    private ResponseEntity<ApiErrorResponse> errorResponse(HttpStatus status, String message){
+        ApiErrorResponse response = new ApiErrorResponse(
+            status.value(),
+            status.name(),
+            message,
+            LocalDateTime.now(),
+            Map.of()
+        );
+        return ResponseEntity.status(status).body(response); 
+    }
+
+    
+
 }
