@@ -60,6 +60,7 @@ CREATE TABLE "PART_SPECS" (
 
 CREATE TABLE "ESTIMATES" (
     "estimated_id" NUMBER NOT NULL,
+    "user_id" NUMBER, -- 견적 소유자 / 공통 견적은 NULL, 개인 견적은 회원 번호
     "estimate_key" VARCHAR2(100 CHAR) NOT NULL,
     "title" VARCHAR2(150 CHAR) NOT NULL,
     "usage_type" VARCHAR2(30 CHAR),
