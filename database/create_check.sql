@@ -115,6 +115,10 @@ ADD CONSTRAINT "FK_BOARD_POSTS_USERS"
 FOREIGN KEY ("user_id")
 REFERENCES "USERS" ("user_id");
 
+ALTER TABLE "ESTIMATES"
+ADD CONSTRAINT "FK_ESTIMATES_USERS"
+FOREIGN KEY ("user_id")
+REFERENCES "USERS" ("user_id");
 -- ============================================================
 -- CHECK
 -- ============================================================

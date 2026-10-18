@@ -5,6 +5,7 @@ import useToggle from '../hooks/useToggle';
 import Modal from '../components/common/Modal';
 import LoginPage from '../pages/LoginPage';
 import { fetchCurrentUser } from '../api/users';
+import { useCart } from '../context/CartContext';
 
 /** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
 export const MainLayout = () => {
@@ -13,6 +14,7 @@ export const MainLayout = () => {
   const [loginOpen, toggleLogin] = useToggle(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const { resetCart } = useCart();
   // 새로고침 때 저장된 토큰을 서버에 확인한다. 비밀번호는 저장하지 않는다.
   useEffect(() => {
     let active = true;
@@ -23,10 +25,14 @@ export const MainLayout = () => {
         fetchCurrentUser(session.accessToken).then((profile) => {
           if (active) setUser({ ...profile, accessToken: session.accessToken });
         }).catch(() => {
-          if (active) sessionStorage.removeItem('partzone-login');
+          if (active) {
+            sessionStorage.removeItem('partzone-login');
+            resetCart();
+          }
         });
       } catch {
         sessionStorage.removeItem('partzone-login');
+        resetCart();
       }
     }
     return () => { active = false; };
@@ -39,6 +45,8 @@ export const MainLayout = () => {
   };
 
   const onLogout = () => {
+    // 현재 사용자의 장바구니가 다음 로그인 화면에 남지 않게 화면 상태만 비운다.
+    resetCart();
     sessionStorage.removeItem('partzone-login');
     setUser(null);
   };

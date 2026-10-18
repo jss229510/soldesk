@@ -14,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.GenerationType;
@@ -35,7 +36,7 @@ public class Board {
     private Long boardId; // 글번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User writer;
 
     @Enumerated(EnumType.STRING)
@@ -84,31 +85,38 @@ public class Board {
         this.updatedAt = this.createdAt;
     }
 
+    public void update(Category category, String title, String content) {
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public void increaseViewCount() {
         this.viewCount = this.viewCount + 1;
     }
 
-    public boolean isWritterBy(Long userid){
+    public boolean isWritterBy(Long userid) {
         return writer.getUserId().equals(userid);
     }
 
-    //삭제 메서드
-    public void delete(){
+    // 삭제 메서드
+    public void delete() {
         this.isDeleted = true;
         this.updatedAt = LocalDateTime.now();
     }
 
     // 공지사항 상단 고정/해제
-    public void changePinned(boolean pinned){
-        if(this.category != Category.NOTICE){
+    public void changePinned(boolean pinned) {
+        if (this.category != Category.NOTICE) {
             throw new IllegalStateException("공지사항만 고정할 수 있습니다.");
         }
         this.isPinned = pinned;
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void changeResolved(boolean resolved){
-        if(this.category != Category.QNA){
+    public void changeResolved(boolean resolved) {
+        if (this.category != Category.QNA) {
             throw new IllegalStateException("Q&N 게시글만 해결 상태를 변경할 수 있습니다.");
         }
     }

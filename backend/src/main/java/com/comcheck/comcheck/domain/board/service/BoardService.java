@@ -79,6 +79,8 @@ public class BoardService {
     }
 
     // 조회수 증가
+    // @Transactional: Spring Boot에서 데이터베이스 작업을 하나의 트랜잭션(Transaction)으로 묶어서 관리하는 어노테이션,
+    // DB작업이 모두 성공하면 저장, 못하면 이전 상태로 되돌리기
     @Transactional
     public void increaseView(Long boardId) {
 
@@ -100,6 +102,18 @@ public class BoardService {
         Board saved = boardRepository.save(board);
 
         return new BoardDetailResponse(saved);
+    }
+
+    // 글 수정
+    @Transactional 
+    public BoardDetailResponse updateBoard(Long boardId, BoardRequest request, Long loginUserId){
+        Board board = findBoard(boardId);
+        checkWritter(board, loginUserId);
+
+        // 값 바꾸기
+        board.update(request.getCategory(), request.getTitle().trim(), request.getContent());
+
+        return new BoardDetailResponse(board);
     }
 
     // 글삭제
