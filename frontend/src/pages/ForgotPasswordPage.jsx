@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { requestPasswordReset } from "../api/users";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -7,11 +8,13 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const emailRef = useRef();
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     // 제출 시 새로고침 방지
     event.preventDefault();
+    if (loading) return;
     setError("");
     setMessage("");
     // 이메일 빈칸 확인
@@ -26,8 +29,17 @@ const ForgotPasswordPage = () => {
       emailRef.current.focus();
       return;
     }
-    // 메일 발송 API는 아직 연결하지 않음
-    setMessage("메일 발송 기능은 준비 중입니다. 현재는 입력 화면만 이용할 수 있습니다.");
+    setLoading(true);
+    try {
+      await requestPasswordReset(email.trim());
+      setMessage("가입된 이메일이면 재설정 링크가 발송됩니다. 받은메일함과 스팸함을 확인해주세요. 재요청은 1분 후 가능합니다.");
+    } catch (err) {
+      setError(err.status === 503
+        ? "지금은 메일을 보낼 수 없습니다. 관리자에게 문의해주세요."
+        : "메일 요청에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const goLogin = () => {
@@ -59,6 +71,7 @@ const ForgotPasswordPage = () => {
           type="email"
           autoComplete="email"
           maxLength={255}
+          disabled={loading}
           value={email}
           onChange={(event) => {
             setEmail(event.target.value);
@@ -71,11 +84,11 @@ const ForgotPasswordPage = () => {
           className="w-full rounded-lg border px-3 py-2 outline-none"
           style={{ backgroundColor: "var(--bg-surface-2)", borderColor: "var(--line)", color: "var(--text)" }}
         />
-        <p id="reset-note" className="mt-2 text-xs" style={{ color: "var(--text-2)" }}>비밀번호 재설정 메일 발송은 준비 중입니다.</p>
+        <p id="reset-note" className="mt-2 text-xs" style={{ color: "var(--text-2)" }}>재설정 링크는 15분 동안 한 번 사용할 수 있습니다.</p>
         {error && <p id="reset-error" role="alert" className="mt-3 text-sm text-red-500">{error}</p>}
         {message && <p role="status" className="mt-3 rounded-lg border border-cyan-400 bg-cyan-950 p-3 text-sm text-cyan-400">{message}</p>}
-        <button type="submit" className="mt-5 w-full rounded-lg bg-cyan-500 py-2.5 font-semibold text-gray-950 hover:bg-cyan-400">
-          재설정 메일 요청
+        <button type="submit" disabled={loading} className="mt-5 w-full rounded-lg bg-cyan-500 py-2.5 font-semibold text-gray-950 hover:bg-cyan-400 disabled:opacity-60">
+          {loading ? "메일 요청 중..." : "재설정 메일 요청"}
         </button>
         <button
           type="button"

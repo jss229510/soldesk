@@ -20,3 +20,15 @@ export const loginUser = (email, password) => request('/users/login', {
 export const fetchCurrentUser = (accessToken) => request('/users/me', {
   headers: { Authorization: `Bearer ${accessToken}` },
 });
+
+// 비밀번호 재설정 메일 요청
+export const requestPasswordReset = (email) => request('/users/forgot-password', {
+  method: 'POST',
+  body: JSON.stringify({ email }),
+});
+
+// 메일에서 받은 링크로 새 비밀번호 저장
+export const resetPassword = (token, newPassword) => request('/users/reset-password', {
+  method: 'POST',
+  body: JSON.stringify({ token, newPassword }),
+});

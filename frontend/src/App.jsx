@@ -7,6 +7,7 @@ import { DEFAULT_CATEGORY } from './constants/categories';
 import { ROUTES } from './constants/routes';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 const App = () => (
   <BrowserRouter>
@@ -40,6 +41,7 @@ const App = () => (
           {/* 회원가입 페이지 */}
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

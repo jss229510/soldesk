@@ -39,6 +39,7 @@ public class SecurityConfig {
                         // 로그인, 회원가입, 상품 조회는 인증 전에도 사용할 수 있어야 한다.
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/forgot-password", "/api/users/reset-password").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/check-email", "/api/users/check-nickname").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/parts/**").permitAll()
                         .anyRequest().authenticated()

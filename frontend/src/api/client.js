@@ -33,5 +33,6 @@ export const request = async (path, options = {}) => {
     throw new ApiError('요청을 처리하지 못했습니다.', response.status);
   }
 
+  if (response.status === 204) return null;
   return response.json();
 };
