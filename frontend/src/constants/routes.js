@@ -13,6 +13,8 @@ export const ROUTES = {
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
+  // 제한된 추천 교체 부품들의 위한 모달창 경로
+  rec_build: '/build/recommend', 
 };
 
 export const NAV_ITEMS = [

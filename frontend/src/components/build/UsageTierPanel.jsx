@@ -6,7 +6,7 @@ export const UsageTierPanel = ({
     selectedTierCode,
     onSelect,
 }) => {
-    if(!usage){
+    if (!usage) {
         return null;
     }
 
@@ -18,8 +18,8 @@ export const UsageTierPanel = ({
             aria-label={`${usage.title} 세부 용도`}
         >
             <h2 className="text-lg font-bold">
-                {usage.title}    
-            </h2>    
+                {usage.title}
+            </h2>
 
             <p className="mt-2 text-sm text-gray-400">
                 세부 용도를 선택해주세요.
@@ -37,14 +37,13 @@ export const UsageTierPanel = ({
                             type="button"
                             aria-pressed={selectedTierCode === tier.code}
                             onClick={() => onSelect?.(tier.code)}
-                            className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-                                selectedTierCode === tier.code
-                                ? 'border-cyan-400 bg-cyan-950 text-cyan-400'
-                                : 'border-gray-700 hover:border-gray-500'
-                            }`}
-                            >
-                                {tier.label}
-                            </button>
+                            className={`rounded-lg border px-4 py-3 text-left transition-colors ${selectedTierCode === tier.code
+                                    ? 'border-cyan-400 bg-cyan-950 text-cyan-400'
+                                    : 'border-gray-700 hover:border-gray-500'
+                                }`}
+                        >
+                            {tier.label}
+                        </button>
                     ))
                 )}
             </div>
