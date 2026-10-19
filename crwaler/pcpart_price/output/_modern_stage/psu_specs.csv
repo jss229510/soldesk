@@ -1,0 +1,970 @@
+﻿spec_id,part_id,spec_key,spec_value,spec_unit
+2596,389,wattage,700,W
+2597,389,efficiency_rating,80PLUS BRONZE,
+2598,389,form_factor,ATX,
+2599,389,pcie_power_connector,"16핀x1,8핀x2",
+2600,389,atx_version,ATX3.1,
+2601,389,fan_size,120,mm
+2602,390,wattage,850,W
+2603,390,efficiency_rating,80PLUS GOLD,
+2604,390,modular_type,FULL-MODULAR,
+2605,390,form_factor,ATX,
+2606,390,pcie_power_connector,"16핀x1,8핀x3",
+2607,390,atx_version,ATX3.1,
+2608,390,fan_size,120,mm
+2609,391,wattage,700,W
+2610,391,efficiency_rating,80PLUS SILVER,
+2611,391,form_factor,ATX,
+2612,391,pcie_power_connector,"16핀x1,8핀x2",
+2613,391,atx_version,ATX3.1,
+2614,391,fan_size,120,mm
+2615,392,wattage,1000,W
+2616,392,efficiency_rating,80PLUS GOLD,
+2617,392,modular_type,FULL-MODULAR,
+2618,392,form_factor,ATX,
+2619,392,pcie_power_connector,"16핀x1,8핀x4",
+2620,392,atx_version,ATX3.1,
+2621,392,fan_size,140,mm
+2622,393,wattage,850,W
+2623,393,efficiency_rating,80PLUS GOLD,
+2624,393,modular_type,FULL-MODULAR,
+2625,393,form_factor,ATX,
+2626,393,pcie_power_connector,"16핀x1,8핀x3",
+2627,393,atx_version,ATX3.1,
+2628,393,fan_size,140,mm
+2629,394,wattage,1000,W
+2630,394,efficiency_rating,80PLUS GOLD,
+2631,394,modular_type,FULL-MODULAR,
+2632,394,form_factor,ATX,
+2633,394,pcie_power_connector,"16핀x1,8핀x3",
+2634,394,atx_version,ATX3.1,
+2635,394,fan_size,120,mm
+2636,395,wattage,850,W
+2637,395,efficiency_rating,80PLUS GOLD,
+2638,395,modular_type,FULL-MODULAR,
+2639,395,form_factor,ATX,
+2640,395,pcie_power_connector,"16핀x1,8핀x3",
+2641,395,atx_version,ATX3.1,
+2642,395,fan_size,120,mm
+2643,396,wattage,750,W
+2644,396,efficiency_rating,80PLUS GOLD,
+2645,396,modular_type,FULL-MODULAR,
+2646,396,form_factor,ATX,
+2647,396,pcie_power_connector,"16핀x1,8핀x2",
+2648,396,atx_version,ATX3.1,
+2649,396,fan_size,120,mm
+2650,397,wattage,850,W
+2651,397,efficiency_rating,80PLUS BRONZE,
+2652,397,modular_type,SEMI-MODULAR,
+2653,397,form_factor,ATX,
+2654,397,pcie_power_connector,"16핀x1,8핀x4",
+2655,397,atx_version,ATX3.1,
+2656,397,fan_size,120,mm
+2657,398,wattage,600,W
+2658,398,efficiency_rating,80PLUS SILVER,
+2659,398,form_factor,ATX,
+2660,398,pcie_power_connector,8핀x2,
+2661,398,atx_version,ATX3.1,
+2662,398,fan_size,120,mm
+2663,399,wattage,850,W
+2664,399,efficiency_rating,80PLUS GOLD,
+2665,399,modular_type,FULL-MODULAR,
+2666,399,form_factor,ATX,
+2667,399,pcie_power_connector,"16핀x1,8핀x3",
+2668,399,atx_version,ATX3.1,
+2669,399,fan_size,140,mm
+2670,400,wattage,1050,W
+2671,400,efficiency_rating,80PLUS GOLD,
+2672,400,modular_type,FULL-MODULAR,
+2673,400,form_factor,ATX,
+2674,400,pcie_power_connector,"16핀x1,8핀x3",
+2675,400,atx_version,ATX3.1,
+2676,400,fan_size,120,mm
+2677,401,wattage,1000,W
+2678,401,efficiency_rating,80PLUS GOLD,
+2679,401,modular_type,FULL-MODULAR,
+2680,401,form_factor,ATX,
+2681,401,pcie_power_connector,"16핀x1,8핀x4",
+2682,401,atx_version,ATX3.1,
+2683,401,fan_size,140,mm
+2684,402,wattage,500,W
+2685,402,efficiency_rating,80PLUS SILVER,
+2686,402,form_factor,ATX,
+2687,402,pcie_power_connector,8핀x2,
+2688,402,atx_version,ATX3.1,
+2689,402,fan_size,120,mm
+2690,403,wattage,850,W
+2691,403,efficiency_rating,80PLUS GOLD,
+2692,403,modular_type,FULL-MODULAR,
+2693,403,form_factor,ATX,
+2694,403,pcie_power_connector,"16핀x1,8핀x4",
+2695,403,atx_version,ATX3.1,
+2696,403,fan_size,135,mm
+2697,404,wattage,1000,W
+2698,404,efficiency_rating,80PLUS GOLD,
+2699,404,modular_type,FULL-MODULAR,
+2700,404,form_factor,ATX,
+2701,404,pcie_power_connector,"16핀x1,8핀x4",
+2702,404,atx_version,ATX3.1,
+2703,404,fan_size,140,mm
+2704,405,wattage,1200,W
+2705,405,efficiency_rating,80PLUS PLATINUM,
+2706,405,modular_type,FULL-MODULAR,
+2707,405,form_factor,ATX,
+2708,405,pcie_power_connector,"16핀x2,8핀x4",
+2709,405,atx_version,ATX3.1,
+2710,405,fan_size,140,mm
+2711,406,wattage,650,W
+2712,406,efficiency_rating,80PLUS SILVER,
+2713,406,modular_type,NON-MODULAR,
+2714,406,form_factor,ATX,
+2715,406,pcie_power_connector,8핀x2,
+2716,406,atx_version,ATX3.0,
+2717,406,fan_size,120,mm
+2718,407,wattage,650,W
+2719,407,efficiency_rating,80PLUS STANDARD,
+2720,407,form_factor,ATX,
+2721,407,pcie_power_connector,8핀x2,
+2722,407,atx_version,ATX3.1,
+2723,407,fan_size,120,mm
+2724,408,wattage,1200,W
+2725,408,efficiency_rating,80PLUS GOLD,
+2726,408,modular_type,FULL-MODULAR,
+2727,408,form_factor,ATX,
+2728,408,pcie_power_connector,"16핀x2,8핀x3",
+2729,408,atx_version,ATX3.1,
+2730,408,fan_size,140,mm
+2731,409,wattage,750,W
+2732,409,efficiency_rating,80PLUS GOLD,
+2733,409,modular_type,FULL-MODULAR,
+2734,409,form_factor,ATX,
+2735,409,pcie_power_connector,"16핀x1,8핀x4",
+2736,409,atx_version,ATX3.1,
+2737,409,fan_size,120,mm
+2738,410,wattage,750,W
+2739,410,efficiency_rating,80PLUS BRONZE,
+2740,410,modular_type,NON-MODULAR,
+2741,410,form_factor,ATX,
+2742,410,pcie_power_connector,"16핀x1,8핀x2",
+2743,410,atx_version,ATX3.1,
+2744,410,fan_size,140,mm
+2745,411,wattage,1000,W
+2746,411,efficiency_rating,80PLUS GOLD,
+2747,411,modular_type,FULL-MODULAR,
+2748,411,form_factor,ATX,
+2749,411,pcie_power_connector,"16핀x1,8핀x3",
+2750,411,atx_version,ATX3.1,
+2751,411,fan_size,135,mm
+2752,412,wattage,850,W
+2753,412,efficiency_rating,80PLUS GOLD,
+2754,412,modular_type,FULL-MODULAR,
+2755,412,form_factor,ATX,
+2756,412,pcie_power_connector,"16핀x1,8핀x3",
+2757,412,atx_version,ATX3.1,
+2758,412,fan_size,120,mm
+2759,413,wattage,500,W
+2760,413,modular_type,NON-MODULAR,
+2761,413,form_factor,ATX,
+2762,413,pcie_power_connector,8핀x2,
+2763,413,fan_size,120,mm
+2764,414,wattage,600,W
+2765,414,efficiency_rating,80PLUS BRONZE,
+2766,414,form_factor,ATX,
+2767,414,pcie_power_connector,8핀x2,
+2768,414,atx_version,ATX3.1,
+2769,414,fan_size,120,mm
+2770,415,wattage,1200,W
+2771,415,efficiency_rating,80PLUS GOLD,
+2772,415,modular_type,FULL-MODULAR,
+2773,415,form_factor,ATX,
+2774,415,pcie_power_connector,"16핀x1,8핀x3",
+2775,415,atx_version,ATX3.1,
+2776,415,fan_size,135,mm
+2777,416,wattage,850,W
+2778,416,efficiency_rating,80PLUS GOLD,
+2779,416,modular_type,FULL-MODULAR,
+2780,416,form_factor,ATX,
+2781,416,pcie_power_connector,"16핀x1,8핀x3",
+2782,416,atx_version,ATX3.1,
+2783,416,fan_size,135,mm
+2784,417,wattage,1300,W
+2785,417,efficiency_rating,80PLUS TITANIUM,
+2786,417,modular_type,FULL-MODULAR,
+2787,417,form_factor,ATX,
+2788,417,pcie_power_connector,"16핀x2,8핀x7",
+2789,417,atx_version,ATX3.1,
+2790,417,fan_size,135,mm
+2791,418,wattage,800,W
+2792,418,efficiency_rating,80PLUS SILVER,
+2793,418,form_factor,ATX,
+2794,418,pcie_power_connector,"16핀x1,8핀x2",
+2795,418,atx_version,ATX3.1,
+2796,418,fan_size,120,mm
+2797,419,wattage,650,W
+2798,419,efficiency_rating,80PLUS BRONZE,
+2799,419,modular_type,NON-MODULAR,
+2800,419,form_factor,ATX,
+2801,419,pcie_power_connector,8핀x2,
+2802,419,atx_version,ATX3.1,
+2803,419,fan_size,120,mm
+2804,420,wattage,1200,W
+2805,420,efficiency_rating,80PLUS PLATINUM,
+2806,420,modular_type,FULL-MODULAR,
+2807,420,form_factor,ATX,
+2808,420,pcie_power_connector,"16핀x2,8핀x4",
+2809,420,atx_version,ATX3.1,
+2810,420,fan_size,140,mm
+2811,421,wattage,700,W
+2812,421,efficiency_rating,80PLUS BRONZE,
+2813,421,modular_type,NON-MODULAR,
+2814,421,form_factor,ATX,
+2815,421,pcie_power_connector,"16핀x1,8핀x2",
+2816,421,atx_version,ATX3.1,
+2817,421,fan_size,120,mm
+2818,422,wattage,1000,W
+2819,422,efficiency_rating,80PLUS PLATINUM,
+2820,422,modular_type,FULL-MODULAR,
+2821,422,form_factor,ATX,
+2822,422,pcie_power_connector,"16핀x1,8핀x4",
+2823,422,atx_version,ATX3.1,
+2824,422,fan_size,140,mm
+2825,423,wattage,1000,W
+2826,423,efficiency_rating,80PLUS GOLD,
+2827,423,modular_type,FULL-MODULAR,
+2828,423,form_factor,ATX,
+2829,423,pcie_power_connector,"16핀x1,8핀x4",
+2830,423,atx_version,ATX3.1,
+2831,423,fan_size,140,mm
+2832,424,wattage,1000,W
+2833,424,efficiency_rating,80PLUS GOLD,
+2834,424,modular_type,FULL-MODULAR,
+2835,424,form_factor,ATX,
+2836,424,pcie_power_connector,"16핀x1,8핀x4",
+2837,424,atx_version,ATX3.1,
+2838,424,fan_size,140,mm
+2839,425,wattage,1000,W
+2840,425,efficiency_rating,80PLUS PLATINUM,
+2841,425,modular_type,FULL-MODULAR,
+2842,425,form_factor,SFX,
+2843,425,pcie_power_connector,"16핀x1,8핀x3",
+2844,425,atx_version,ATX3.1,
+2845,425,fan_size,92,mm
+2846,426,wattage,700,W
+2847,426,efficiency_rating,ETA SILVER,
+2848,426,modular_type,FULL-MODULAR,
+2849,426,form_factor,ATX,
+2850,426,pcie_power_connector,8핀x2,
+2851,426,atx_version,ATX3.1,
+2852,427,wattage,850,W
+2853,427,efficiency_rating,80PLUS BRONZE,
+2854,427,modular_type,NON-MODULAR,
+2855,427,form_factor,ATX,
+2856,427,pcie_power_connector,"16핀x1,8핀x3",
+2857,427,atx_version,ATX3.1,
+2858,427,fan_size,140,mm
+2859,428,wattage,1600,W
+2860,428,efficiency_rating,80PLUS TITANIUM,
+2861,428,modular_type,FULL-MODULAR,
+2862,428,form_factor,ATX,
+2863,428,pcie_power_connector,"16핀x2,8핀x7",
+2864,428,atx_version,ATX3.1,
+2865,428,fan_size,135,mm
+2866,429,wattage,1200,W
+2867,429,efficiency_rating,80PLUS PLATINUM,
+2868,429,modular_type,FULL-MODULAR,
+2869,429,form_factor,ATX,
+2870,429,pcie_power_connector,"16핀x2,8핀x5",
+2871,429,atx_version,ATX3.1,
+2872,429,fan_size,140,mm
+2873,430,wattage,1000,W
+2874,430,efficiency_rating,80PLUS GOLD,
+2875,430,modular_type,FULL-MODULAR,
+2876,430,form_factor,ATX,
+2877,430,pcie_power_connector,"16핀x1,8핀x3",
+2878,430,atx_version,ATX3.1,
+2879,430,fan_size,135,mm
+2880,431,wattage,850,W
+2881,431,efficiency_rating,80PLUS GOLD,
+2882,431,modular_type,FULL-MODULAR,
+2883,431,form_factor,ATX,
+2884,431,pcie_power_connector,"16핀x1,8핀x3",
+2885,431,atx_version,ATX3.1,
+2886,431,fan_size,135,mm
+2887,432,wattage,850,W
+2888,432,efficiency_rating,80PLUS GOLD,
+2889,432,modular_type,FULL-MODULAR,
+2890,432,form_factor,ATX,
+2891,432,pcie_power_connector,8핀x3,
+2892,432,fan_size,120,mm
+2893,433,wattage,1200,W
+2894,433,efficiency_rating,80PLUS PLATINUM,
+2895,433,modular_type,FULL-MODULAR,
+2896,433,form_factor,ATX,
+2897,433,pcie_power_connector,"16핀x1,8핀x4",
+2898,434,wattage,650,W
+2899,434,efficiency_rating,80PLUS GOLD,
+2900,434,modular_type,FULL-MODULAR,
+2901,434,form_factor,ATX,
+2902,434,pcie_power_connector,"16핀x1,8핀x2",
+2903,434,atx_version,ATX3.1,
+2904,434,fan_size,135,mm
+2905,435,wattage,700,W
+2906,435,efficiency_rating,80PLUS SILVER,
+2907,435,form_factor,ATX,
+2908,435,pcie_power_connector,"16핀x1,8핀x2",
+2909,435,atx_version,ATX3.1,
+2910,435,fan_size,120,mm
+2911,436,wattage,750,W
+2912,436,efficiency_rating,80PLUS PLATINUM,
+2913,436,modular_type,FULL-MODULAR,
+2914,436,form_factor,SFX,
+2915,436,pcie_power_connector,"16핀x1,8핀x2",
+2916,436,atx_version,ATX3.1,
+2917,436,fan_size,92,mm
+2918,437,wattage,600,W
+2919,437,efficiency_rating,80PLUS STANDARD,
+2920,437,modular_type,NON-MODULAR,
+2921,437,form_factor,ATX,
+2922,437,pcie_power_connector,8핀x2,
+2923,437,fan_size,120,mm
+2924,438,wattage,1000,W
+2925,438,efficiency_rating,80PLUS GOLD,
+2926,438,modular_type,FULL-MODULAR,
+2927,438,form_factor,ATX,
+2928,438,pcie_power_connector,"16핀x1,8핀x2",
+2929,438,fan_size,140,mm
+2930,439,wattage,850,W
+2931,439,efficiency_rating,80PLUS GOLD,
+2932,439,modular_type,FULL-MODULAR,
+2933,439,form_factor,ATX,
+2934,439,pcie_power_connector,"16핀x1,8핀x3",
+2935,439,atx_version,ATX3.1,
+2936,439,fan_size,140,mm
+2937,440,wattage,1300,W
+2938,440,efficiency_rating,80PLUS GOLD,
+2939,440,modular_type,FULL-MODULAR,
+2940,440,form_factor,ATX,
+2941,440,pcie_power_connector,"16핀x2,8핀x4",
+2942,440,atx_version,ATX3.1,
+2943,440,fan_size,140,mm
+2944,441,wattage,800,W
+2945,441,efficiency_rating,80PLUS SILVER,
+2946,441,form_factor,ATX,
+2947,441,pcie_power_connector,"16핀x1,8핀x2",
+2948,441,atx_version,ATX3.1,
+2949,441,fan_size,120,mm
+2950,442,wattage,1000,W
+2951,442,efficiency_rating,ETA GOLD,
+2952,442,modular_type,NON-MODULAR,
+2953,442,form_factor,ATX,
+2954,442,pcie_power_connector,"16핀x1,8핀x4",
+2955,442,atx_version,ATX3.1,
+2956,442,fan_size,120,mm
+2957,443,wattage,1000,W
+2958,443,efficiency_rating,ETA SILVER,
+2959,443,modular_type,FULL-MODULAR,
+2960,443,form_factor,ATX,
+2961,443,pcie_power_connector,"16핀x1,8핀x3",
+2962,444,wattage,500,W
+2963,444,modular_type,NON-MODULAR,
+2964,444,form_factor,ATX,
+2965,444,pcie_power_connector,8핀x2,
+2966,444,fan_size,120,mm
+2967,445,wattage,700,W
+2968,445,efficiency_rating,80PLUS STANDARD,
+2969,445,modular_type,NON-MODULAR,
+2970,445,form_factor,ATX,
+2971,445,pcie_power_connector,8핀x2,
+2972,445,atx_version,ATX3.1,
+2973,445,fan_size,120,mm
+2974,446,wattage,500,W
+2975,446,modular_type,NON-MODULAR,
+2976,446,form_factor,ATX,
+2977,446,pcie_power_connector,8핀x2,
+2978,446,fan_size,120,mm
+2979,447,wattage,800,W
+2980,447,efficiency_rating,80PLUS STANDARD,
+2981,447,modular_type,NON-MODULAR,
+2982,447,form_factor,ATX,
+2983,447,pcie_power_connector,8핀x4,
+2984,447,fan_size,120,mm
+2985,448,wattage,1300,W
+2986,448,efficiency_rating,80PLUS GOLD,
+2987,448,modular_type,FULL-MODULAR,
+2988,448,form_factor,ATX,
+2989,448,pcie_power_connector,"16핀x1,8핀x3",
+2990,448,atx_version,ATX3.1,
+2991,449,wattage,500,W
+2992,449,modular_type,NON-MODULAR,
+2993,449,form_factor,ATX,
+2994,449,pcie_power_connector,8핀x2,
+2995,449,fan_size,120,mm
+2996,450,wattage,1000,W
+2997,450,efficiency_rating,80PLUS GOLD,
+2998,450,modular_type,FULL-MODULAR,
+2999,450,form_factor,ATX,
+3000,450,pcie_power_connector,"16핀x1,8핀x3",
+3001,450,atx_version,ATX3.1,
+3002,451,wattage,650,W
+3003,451,efficiency_rating,80PLUS BRONZE,
+3004,451,modular_type,NON-MODULAR,
+3005,451,form_factor,ATX,
+3006,451,pcie_power_connector,8핀x2,
+3007,451,atx_version,ATX3.1,
+3008,451,fan_size,140,mm
+3009,452,wattage,2000,W
+3010,452,efficiency_rating,80PLUS GOLD,
+3011,452,modular_type,FULL-MODULAR,
+3012,452,form_factor,ATX,
+3013,452,pcie_power_connector,"16핀x2,8핀x8",
+3014,452,atx_version,ATX3.1,
+3015,452,fan_size,140,mm
+3016,453,wattage,850,W
+3017,453,efficiency_rating,80PLUS GOLD,
+3018,453,modular_type,NON-MODULAR,
+3019,453,form_factor,ATX,
+3020,453,pcie_power_connector,"16핀x1,8핀x4",
+3021,453,atx_version,ATX3.1,
+3022,453,fan_size,120,mm
+3023,454,wattage,850,W
+3024,454,efficiency_rating,ETA GOLD,
+3025,454,modular_type,FULL-MODULAR,
+3026,454,form_factor,ATX,
+3027,454,pcie_power_connector,"16핀x1,8핀x3",
+3028,454,atx_version,ATX3.1,
+3029,454,fan_size,140,mm
+3030,455,wattage,850,W
+3031,455,efficiency_rating,80PLUS GOLD,
+3032,455,modular_type,FULL-MODULAR,
+3033,455,form_factor,ATX,
+3034,455,pcie_power_connector,"16핀x1,8핀x2",
+3035,455,atx_version,ATX3.1,
+3036,455,fan_size,120,mm
+3037,456,wattage,750,W
+3038,456,efficiency_rating,80PLUS GOLD,
+3039,456,modular_type,FULL-MODULAR,
+3040,456,form_factor,ATX,
+3041,456,pcie_power_connector,"16핀x1,8핀x2",
+3042,456,atx_version,ATX3.1,
+3043,456,fan_size,120,mm
+3044,457,wattage,1000,W
+3045,457,efficiency_rating,80PLUS PLATINUM,
+3046,457,modular_type,FULL-MODULAR,
+3047,457,form_factor,ATX,
+3048,457,pcie_power_connector,"16핀x1,8핀x3",
+3049,457,atx_version,ATX3.1,
+3050,458,wattage,500,W
+3051,458,modular_type,NON-MODULAR,
+3052,458,form_factor,ATX,
+3053,458,pcie_power_connector,8핀x2,
+3054,458,fan_size,120,mm
+3055,459,wattage,1000,W
+3056,459,efficiency_rating,80PLUS GOLD,
+3057,459,modular_type,FULL-MODULAR,
+3058,459,form_factor,ATX,
+3059,459,pcie_power_connector,"16핀x1,8핀x4",
+3060,459,atx_version,ATX3.1,
+3061,459,fan_size,140,mm
+3062,460,wattage,500,W
+3063,460,efficiency_rating,80PLUS STANDARD,
+3064,460,modular_type,NON-MODULAR,
+3065,460,form_factor,ATX,
+3066,460,pcie_power_connector,8핀x2,
+3067,461,wattage,850,W
+3068,461,efficiency_rating,80PLUS GOLD,
+3069,461,modular_type,FULL-MODULAR,
+3070,461,form_factor,ATX,
+3071,461,pcie_power_connector,"16핀x1,8핀x4",
+3072,461,atx_version,ATX3.1,
+3073,461,fan_size,120,mm
+3074,462,wattage,850,W
+3075,462,efficiency_rating,80PLUS GOLD,
+3076,462,modular_type,FULL-MODULAR,
+3077,462,form_factor,ATX,
+3078,462,pcie_power_connector,"16핀x1,8핀x3",
+3079,462,atx_version,ATX3.1,
+3080,462,fan_size,140,mm
+3081,463,wattage,850,W
+3082,463,efficiency_rating,80PLUS GOLD,
+3083,463,modular_type,FULL-MODULAR,
+3084,463,form_factor,SFX,
+3085,463,pcie_power_connector,"16핀x1,8핀x4",
+3086,463,atx_version,ATX3.1,
+3087,463,fan_size,92,mm
+3088,464,wattage,1000,W
+3089,464,efficiency_rating,80PLUS GOLD,
+3090,464,modular_type,FULL-MODULAR,
+3091,464,form_factor,ATX,
+3092,464,pcie_power_connector,"16핀x1,8핀x3",
+3093,464,atx_version,ATX3.1,
+3094,464,fan_size,135,mm
+3095,465,wattage,750,W
+3096,465,efficiency_rating,ETA SILVER,
+3097,465,modular_type,NON-MODULAR,
+3098,465,form_factor,ATX,
+3099,465,pcie_power_connector,"16핀x1,8핀x4",
+3100,465,atx_version,ATX3.1,
+3101,465,fan_size,120,mm
+3102,466,wattage,1500,W
+3103,466,efficiency_rating,80PLUS PLATINUM,
+3104,466,modular_type,FULL-MODULAR,
+3105,466,form_factor,ATX,
+3106,466,pcie_power_connector,"16핀x2,8핀x5",
+3107,466,atx_version,ATX3.1,
+3108,466,fan_size,140,mm
+3109,467,wattage,800,W
+3110,467,efficiency_rating,80PLUS STANDARD,
+3111,467,modular_type,NON-MODULAR,
+3112,467,form_factor,ATX,
+3113,467,pcie_power_connector,"16핀x1,8핀x2",
+3114,467,atx_version,ATX3.1,
+3115,467,fan_size,120,mm
+3116,468,wattage,1000,W
+3117,468,efficiency_rating,80PLUS GOLD,
+3118,468,modular_type,FULL-MODULAR,
+3119,468,form_factor,ATX,
+3120,468,pcie_power_connector,"16핀x1,8핀x3",
+3121,468,atx_version,ATX3.1,
+3122,468,fan_size,135,mm
+3123,469,wattage,1000,W
+3124,469,efficiency_rating,80PLUS GOLD,
+3125,469,modular_type,FULL-MODULAR,
+3126,469,form_factor,ATX,
+3127,469,pcie_power_connector,"16핀x1,8핀x3",
+3128,469,atx_version,ATX3.1,
+3129,469,fan_size,135,mm
+3130,470,wattage,1200,W
+3131,470,efficiency_rating,80PLUS GOLD,
+3132,470,modular_type,FULL-MODULAR,
+3133,470,form_factor,ATX,
+3134,470,pcie_power_connector,"16핀x1,8핀x3",
+3135,470,atx_version,ATX3.1,
+3136,470,fan_size,135,mm
+3137,471,wattage,650,W
+3138,471,efficiency_rating,80PLUS BRONZE,
+3139,471,modular_type,NON-MODULAR,
+3140,471,form_factor,ATX,
+3141,471,pcie_power_connector,8핀x2,
+3142,471,atx_version,ATX3.1,
+3143,471,fan_size,140,mm
+3144,472,wattage,1000,W
+3145,472,efficiency_rating,80PLUS PLATINUM,
+3146,472,modular_type,FULL-MODULAR,
+3147,472,form_factor,ATX,
+3148,472,pcie_power_connector,"16핀x1,8핀x4",
+3149,472,atx_version,ATX3.1,
+3150,472,fan_size,140,mm
+3151,473,wattage,850,W
+3152,473,efficiency_rating,80PLUS GOLD,
+3153,473,modular_type,FULL-MODULAR,
+3154,473,form_factor,ATX,
+3155,473,pcie_power_connector,"16핀x1,8핀x4",
+3156,473,atx_version,ATX3.1,
+3157,473,fan_size,120,mm
+3158,474,wattage,1000,W
+3159,474,efficiency_rating,80PLUS GOLD,
+3160,474,modular_type,FULL-MODULAR,
+3161,474,form_factor,ATX,
+3162,474,pcie_power_connector,"16핀x1,8핀x3",
+3163,474,atx_version,ATX3.1,
+3164,474,fan_size,135,mm
+3165,475,wattage,700,W
+3166,475,efficiency_rating,80PLUS STANDARD,
+3167,475,modular_type,NON-MODULAR,
+3168,475,form_factor,ATX,
+3169,475,pcie_power_connector,8핀x2,
+3170,475,atx_version,ATX3.1,
+3171,475,fan_size,120,mm
+3172,476,wattage,850,W
+3173,476,efficiency_rating,80PLUS GOLD,
+3174,476,modular_type,FULL-MODULAR,
+3175,476,form_factor,ATX,
+3176,476,pcie_power_connector,"16핀x1,8핀x3",
+3177,476,atx_version,ATX3.1,
+3178,476,fan_size,140,mm
+3179,477,wattage,800,W
+3180,477,efficiency_rating,80PLUS STANDARD,
+3181,477,modular_type,NON-MODULAR,
+3182,477,form_factor,ATX,
+3183,477,pcie_power_connector,"16핀x1,8핀x2",
+3184,477,atx_version,ATX3.1,
+3185,477,fan_size,120,mm
+3186,478,wattage,1300,W
+3187,478,efficiency_rating,80PLUS PLATINUM,
+3188,478,modular_type,FULL-MODULAR,
+3189,478,form_factor,ATX,
+3190,478,pcie_power_connector,"16핀x2,8핀x3",
+3191,478,atx_version,ATX3.1,
+3192,479,wattage,850,W
+3193,479,efficiency_rating,80PLUS GOLD,
+3194,479,modular_type,FULL-MODULAR,
+3195,479,form_factor,ATX,
+3196,479,pcie_power_connector,"16핀x1,8핀x2",
+3197,479,atx_version,ATX3.1,
+3198,479,fan_size,120,mm
+3199,480,wattage,1200,W
+3200,480,efficiency_rating,80PLUS GOLD,
+3201,480,modular_type,FULL-MODULAR,
+3202,480,form_factor,ATX,
+3203,480,pcie_power_connector,"16핀x1,8핀x3",
+3204,480,atx_version,ATX3.1,
+3205,480,fan_size,135,mm
+3206,481,wattage,1200,W
+3207,481,efficiency_rating,80PLUS GOLD,
+3208,481,modular_type,FULL-MODULAR,
+3209,481,form_factor,ATX,
+3210,481,pcie_power_connector,"16핀x1,8핀x3",
+3211,481,atx_version,ATX3.1,
+3212,481,fan_size,135,mm
+3213,482,wattage,650,W
+3214,482,efficiency_rating,80PLUS GOLD,
+3215,482,modular_type,FULL-MODULAR,
+3216,482,form_factor,ATX,
+3217,482,pcie_power_connector,"16핀x1,8핀x2",
+3218,482,atx_version,ATX3.1,
+3219,482,fan_size,120,mm
+3220,483,wattage,850,W
+3221,483,efficiency_rating,80PLUS PLATINUM,
+3222,483,modular_type,FULL-MODULAR,
+3223,483,form_factor,SFX,
+3224,483,pcie_power_connector,"16핀x1,8핀x2",
+3225,483,atx_version,ATX3.1,
+3226,483,fan_size,92,mm
+3227,484,wattage,700,W
+3228,484,efficiency_rating,80PLUS STANDARD,
+3229,484,modular_type,NON-MODULAR,
+3230,484,form_factor,ATX,
+3231,484,pcie_power_connector,8핀x2,
+3232,484,fan_size,120,mm
+3233,485,wattage,300,W
+3234,485,form_factor,SFX,
+3235,485,pcie_power_connector,8핀x2,
+3236,485,fan_size,80,mm
+3237,486,wattage,1000,W
+3238,486,efficiency_rating,80PLUS GOLD,
+3239,486,modular_type,FULL-MODULAR,
+3240,486,form_factor,ATX,
+3241,486,pcie_power_connector,"16핀x1,8핀x3",
+3242,486,atx_version,ATX3.1,
+3243,486,fan_size,140,mm
+3244,487,wattage,2500,W
+3245,487,efficiency_rating,80PLUS PLATINUM,
+3246,487,modular_type,FULL-MODULAR,
+3247,487,form_factor,ATX,
+3248,487,pcie_power_connector,"16핀x4,8핀x7",
+3249,487,atx_version,ATX3.1,
+3250,487,fan_size,135,mm
+3251,488,wattage,500,W
+3252,488,efficiency_rating,80PLUS STANDARD,
+3253,488,modular_type,NON-MODULAR,
+3254,488,form_factor,ATX,
+3255,488,pcie_power_connector,8핀x2,
+3256,488,fan_size,120,mm
+3257,489,wattage,700,W
+3258,489,form_factor,ATX,
+3259,489,pcie_power_connector,8핀x4,
+3260,489,fan_size,120,mm
+3261,490,wattage,850,W
+3262,490,efficiency_rating,80PLUS PLATINUM,
+3263,490,modular_type,FULL-MODULAR,
+3264,490,form_factor,ATX,
+3265,490,pcie_power_connector,"16핀x1,8핀x3",
+3266,490,atx_version,ATX3.1,
+3267,490,fan_size,140,mm
+3268,491,wattage,1200,W
+3269,491,efficiency_rating,80PLUS GOLD,
+3270,491,modular_type,FULL-MODULAR,
+3271,491,form_factor,ATX,
+3272,491,pcie_power_connector,"16핀x1,8핀x3",
+3273,491,atx_version,ATX3.1,
+3274,491,fan_size,135,mm
+3275,492,wattage,700,W
+3276,492,modular_type,NON-MODULAR,
+3277,492,form_factor,ATX,
+3278,492,pcie_power_connector,8핀x3,
+3279,492,fan_size,120,mm
+3280,493,wattage,850,W
+3281,493,efficiency_rating,80PLUS GOLD,
+3282,493,modular_type,FULL-MODULAR,
+3283,493,form_factor,ATX,
+3284,493,pcie_power_connector,"16핀x1,8핀x2",
+3285,493,atx_version,ATX3.1,
+3286,493,fan_size,120,mm
+3287,494,wattage,750,W
+3288,494,efficiency_rating,80PLUS GOLD,
+3289,494,modular_type,NON-MODULAR,
+3290,494,form_factor,ATX,
+3291,494,pcie_power_connector,"16핀x1,8핀x4",
+3292,494,atx_version,ATX3.1,
+3293,494,fan_size,120,mm
+3294,495,wattage,1000,W
+3295,495,efficiency_rating,80PLUS GOLD,
+3296,495,modular_type,FULL-MODULAR,
+3297,495,form_factor,ATX,
+3298,495,pcie_power_connector,"16핀x1,8핀x4",
+3299,495,fan_size,135,mm
+3300,496,wattage,700,W
+3301,496,efficiency_rating,80PLUS STANDARD,
+3302,496,form_factor,ATX,
+3303,496,pcie_power_connector,8핀x4,
+3304,496,fan_size,120,mm
+3305,497,wattage,850,W
+3306,497,efficiency_rating,80PLUS GOLD,
+3307,497,modular_type,FULL-MODULAR,
+3308,497,form_factor,ATX,
+3309,497,pcie_power_connector,"16핀x1,8핀x3",
+3310,497,atx_version,ATX3.0,
+3311,497,fan_size,135,mm
+3312,498,wattage,600,W
+3313,498,efficiency_rating,80PLUS BRONZE,
+3314,498,modular_type,NON-MODULAR,
+3315,498,form_factor,ATX,
+3316,498,pcie_power_connector,8핀x2,
+3317,498,atx_version,ATX3.1,
+3318,498,fan_size,120,mm
+3319,499,wattage,500,W
+3320,499,modular_type,NON-MODULAR,
+3321,499,form_factor,ATX,
+3322,499,pcie_power_connector,8핀x2,
+3323,499,fan_size,120,mm
+3324,500,wattage,700,W
+3325,500,efficiency_rating,80PLUS STANDARD,
+3326,500,modular_type,NON-MODULAR,
+3327,500,form_factor,ATX,
+3328,500,pcie_power_connector,8핀x4,
+3329,500,fan_size,120,mm
+3330,501,wattage,850,W
+3331,501,efficiency_rating,80PLUS PLATINUM,
+3332,501,modular_type,FULL-MODULAR,
+3333,501,form_factor,ATX,
+3334,501,pcie_power_connector,"16핀x1,8핀x3",
+3335,501,fan_size,120,mm
+3336,502,wattage,2000,W
+3337,502,efficiency_rating,80PLUS PLATINUM,
+3338,502,modular_type,FULL-MODULAR,
+3339,502,form_factor,ATX,
+3340,502,pcie_power_connector,"16핀x4,8핀x6,6핀x2",
+3341,502,fan_size,140,mm
+3342,503,wattage,600,W
+3343,503,modular_type,NON-MODULAR,
+3344,503,form_factor,ATX,
+3345,503,pcie_power_connector,8핀x2,
+3346,503,fan_size,120,mm
+3347,504,wattage,750,W
+3348,504,efficiency_rating,80PLUS BRONZE,
+3349,504,modular_type,NON-MODULAR,
+3350,504,form_factor,ATX,
+3351,504,pcie_power_connector,"16핀x1,8핀x2",
+3352,504,atx_version,ATX3.1,
+3353,504,fan_size,140,mm
+3354,505,wattage,500,W
+3355,505,efficiency_rating,ETA BRONZE,
+3356,505,form_factor,ATX,
+3357,505,pcie_power_connector,8핀x2,
+3358,505,fan_size,120,mm
+3359,506,wattage,2200,W
+3360,506,efficiency_rating,ETA TITANIUM,
+3361,506,modular_type,FULL-MODULAR,
+3362,506,form_factor,ATX,
+3363,506,pcie_power_connector,"16핀x2,8핀x6",
+3364,506,atx_version,ATX3.1,
+3365,506,fan_size,140,mm
+3366,507,wattage,850,W
+3367,507,efficiency_rating,80PLUS GOLD,
+3368,507,modular_type,FULL-MODULAR,
+3369,507,form_factor,ATX,
+3370,507,pcie_power_connector,"16핀x1,8핀x3",
+3371,507,atx_version,ATX3.1,
+3372,507,fan_size,140,mm
+3373,508,wattage,1000,W
+3374,508,efficiency_rating,80PLUS GOLD,
+3375,508,modular_type,FULL-MODULAR,
+3376,508,form_factor,ATX,
+3377,508,pcie_power_connector,"16핀x1,8핀x3",
+3378,508,atx_version,ATX3.1,
+3379,508,fan_size,135,mm
+3380,509,wattage,850,W
+3381,509,efficiency_rating,80PLUS GOLD,
+3382,509,modular_type,FULL-MODULAR,
+3383,509,form_factor,ATX,
+3384,509,pcie_power_connector,"16핀x1,8핀x3",
+3385,509,atx_version,ATX3.1,
+3386,510,wattage,750,W
+3387,510,efficiency_rating,80PLUS BRONZE,
+3388,510,modular_type,FULL-MODULAR,
+3389,510,form_factor,ATX,
+3390,510,pcie_power_connector,8핀x4,
+3391,510,atx_version,ATX3.1,
+3392,510,fan_size,140,mm
+3393,511,wattage,750,W
+3394,511,efficiency_rating,80PLUS BRONZE,
+3395,511,modular_type,NON-MODULAR,
+3396,511,form_factor,ATX,
+3397,511,pcie_power_connector,8핀x3,
+3398,511,fan_size,135,mm
+3399,512,wattage,400,W
+3400,512,form_factor,TFX,
+3401,512,fan_size,80,mm
+3402,513,wattage,1000,W
+3403,513,efficiency_rating,80PLUS PLATINUM,
+3404,513,modular_type,FULL-MODULAR,
+3405,513,form_factor,ATX,
+3406,513,pcie_power_connector,"16핀x1,8핀x3",
+3407,513,atx_version,ATX3.1,
+3408,513,fan_size,120,mm
+3409,514,wattage,650,W
+3410,514,efficiency_rating,80PLUS GOLD,
+3411,514,modular_type,NON-MODULAR,
+3412,514,form_factor,ATX,
+3413,514,pcie_power_connector,8핀x2,
+3414,514,fan_size,120,mm
+3415,515,wattage,800,W
+3416,515,efficiency_rating,80PLUS BRONZE,
+3417,515,form_factor,ATX,
+3418,515,pcie_power_connector,"16핀x1,8핀x2",
+3419,515,atx_version,ATX3.1,
+3420,515,fan_size,120,mm
+3421,516,wattage,1200,W
+3422,516,efficiency_rating,80PLUS PLATINUM,
+3423,516,modular_type,FULL-MODULAR,
+3424,516,form_factor,ATX,
+3425,516,pcie_power_connector,"16핀x1,8핀x4",
+3426,516,atx_version,ATX3.1,
+3427,516,fan_size,135,mm
+3428,517,wattage,750,W
+3429,517,efficiency_rating,80PLUS GOLD,
+3430,517,modular_type,FULL-MODULAR,
+3431,517,form_factor,ATX,
+3432,517,pcie_power_connector,"16핀x1,8핀x2",
+3433,517,atx_version,ATX3.1,
+3434,517,fan_size,120,mm
+3435,518,wattage,1000,W
+3436,518,efficiency_rating,80PLUS GOLD,
+3437,518,modular_type,FULL-MODULAR,
+3438,518,form_factor,ATX,
+3439,518,pcie_power_connector,"16핀x1,8핀x3",
+3440,518,atx_version,ATX3.1,
+3441,519,wattage,850,W
+3442,519,efficiency_rating,80PLUS GOLD,
+3443,519,modular_type,FULL-MODULAR,
+3444,519,form_factor,ATX,
+3445,519,pcie_power_connector,"16핀x1,8핀x3",
+3446,519,atx_version,ATX3.1,
+3447,519,fan_size,120,mm
+3448,520,wattage,850,W
+3449,520,efficiency_rating,80PLUS GOLD,
+3450,520,modular_type,FULL-MODULAR,
+3451,520,form_factor,ATX,
+3452,520,pcie_power_connector,"16핀x1,8핀x3",
+3453,520,atx_version,ATX3.1,
+3454,520,fan_size,120,mm
+3455,521,wattage,850,W
+3456,521,efficiency_rating,80PLUS GOLD,
+3457,521,modular_type,FULL-MODULAR,
+3458,521,form_factor,ATX,
+3459,521,pcie_power_connector,"16핀x1,8핀x3",
+3460,521,atx_version,ATX3.1,
+3461,521,fan_size,140,mm
+3462,522,wattage,1000,W
+3463,522,efficiency_rating,80PLUS GOLD,
+3464,522,modular_type,FULL-MODULAR,
+3465,522,form_factor,ATX,
+3466,522,pcie_power_connector,"16핀x1,8핀x4",
+3467,522,atx_version,ATX3.1,
+3468,522,fan_size,120,mm
+3469,523,wattage,700,W
+3470,523,efficiency_rating,80PLUS PLATINUM,
+3471,523,modular_type,FULL-MODULAR,
+3472,523,form_factor,SFX,
+3473,523,pcie_power_connector,"16핀x1,8핀x4",
+3474,523,atx_version,ATX3.1,
+3475,523,fan_size,92,mm
+3476,524,wattage,1200,W
+3477,524,efficiency_rating,80PLUS PLATINUM,
+3478,524,modular_type,FULL-MODULAR,
+3479,524,form_factor,ATX,
+3480,524,pcie_power_connector,"16핀x1,8핀x4",
+3481,524,atx_version,ATX3.1,
+3482,524,fan_size,120,mm
+3483,525,wattage,650,W
+3484,525,efficiency_rating,80PLUS GOLD,
+3485,525,modular_type,NON-MODULAR,
+3486,525,form_factor,ATX,
+3487,525,pcie_power_connector,8핀x4,
+3488,525,atx_version,ATX3.1,
+3489,525,fan_size,120,mm
+3490,526,wattage,450,W
+3491,526,efficiency_rating,80PLUS BRONZE,
+3492,526,modular_type,NON-MODULAR,
+3493,526,form_factor,SFX,
+3494,526,pcie_power_connector,"8핀x1,6핀x1",
+3495,526,fan_size,80,mm
+3496,527,wattage,1600,W
+3497,527,efficiency_rating,80PLUS TITANIUM,
+3498,527,modular_type,FULL-MODULAR,
+3499,527,form_factor,ATX,
+3500,527,pcie_power_connector,"16핀x2,8핀x6",
+3501,527,atx_version,ATX3.1,
+3502,527,fan_size,135,mm
+3503,528,wattage,1300,W
+3504,528,efficiency_rating,80PLUS TITANIUM,
+3505,528,modular_type,FULL-MODULAR,
+3506,528,form_factor,ATX,
+3507,528,pcie_power_connector,"16핀x1,8핀x6",
+3508,528,atx_version,ATX3.1,
+3509,528,fan_size,135,mm
+3510,529,wattage,750,W
+3511,529,efficiency_rating,80PLUS GOLD,
+3512,529,modular_type,FULL-MODULAR,
+3513,529,form_factor,ATX,
+3514,529,pcie_power_connector,"16핀x1,8핀x2",
+3515,529,atx_version,ATX3.1,
+3516,529,fan_size,120,mm
+3517,530,wattage,600,W
+3518,530,efficiency_rating,80PLUS STANDARD,
+3519,530,modular_type,NON-MODULAR,
+3520,530,form_factor,ATX,
+3521,530,pcie_power_connector,8핀x2,
+3522,530,atx_version,ATX3.1,
+3523,530,fan_size,120,mm
+3524,531,wattage,850,W
+3525,531,efficiency_rating,80PLUS PLATINUM,
+3526,531,modular_type,FULL-MODULAR,
+3527,531,form_factor,ATX,
+3528,531,pcie_power_connector,"16핀x1,8핀x3",
+3529,531,atx_version,ATX3.1,
+3530,531,fan_size,120,mm
+3531,532,wattage,1200,W
+3532,532,efficiency_rating,80PLUS PLATINUM,
+3533,532,modular_type,FULL-MODULAR,
+3534,532,form_factor,ATX,
+3535,532,pcie_power_connector,"16핀x1,8핀x4",
+3536,533,wattage,650,W
+3537,533,efficiency_rating,ETA SILVER,
+3538,533,modular_type,NON-MODULAR,
+3539,533,form_factor,ATX,
+3540,533,pcie_power_connector,8핀x4,
+3541,533,atx_version,ATX3.1,
+3542,533,fan_size,120,mm
+3543,534,wattage,750,W
+3544,534,efficiency_rating,80PLUS GOLD,
+3545,534,modular_type,FULL-MODULAR,
+3546,534,form_factor,ATX,
+3547,534,pcie_power_connector,"16핀x1,8핀x3",
+3548,534,atx_version,ATX3.1,
+3549,535,wattage,600,W
+3550,535,modular_type,NON-MODULAR,
+3551,535,form_factor,ATX,
+3552,535,pcie_power_connector,8핀x2,
+3553,535,fan_size,120,mm
+3554,536,wattage,500,W
+3555,536,efficiency_rating,80PLUS STANDARD,
+3556,536,form_factor,ATX,
+3557,536,pcie_power_connector,8핀x2,
+3558,536,fan_size,120,mm
+3559,537,wattage,1300,W
+3560,537,efficiency_rating,80PLUS GOLD,
+3561,537,modular_type,FULL-MODULAR,
+3562,537,form_factor,ATX,
+3563,537,pcie_power_connector,"16핀x1,8핀x3",
+3564,537,atx_version,ATX3.1,

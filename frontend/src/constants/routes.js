@@ -6,6 +6,10 @@ export const ROUTES = {
   build: '/build',
   // 메뉴 링크와 라우트 선언에서 같은 경로를 사용한다.
   cart: '/cart',
+  boards: '/boards',
+  boardWrite: '/boards/new',
+  boardDetail: (boardId) => `/boards/${boardId}`,
+  boardEdit: (boardId) => `/boards/${boardId}/edit`,
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
@@ -16,6 +20,7 @@ export const NAV_ITEMS = [
   { id: 'budget', to: ROUTES.budget, label: '예산 추천' },
   { id: 'build', to: ROUTES.build, label: 'PC 구성' },
   { id: 'cart', to: ROUTES.cart, label: '장바구니' },
+  { id: 'boards', to: ROUTES.boards, label: '게시판' },
 ];
 
 export const FOOTER_LINKS = [

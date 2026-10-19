@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Header, Footer } from '../components/layout';
 import useToggle from '../hooks/useToggle';
@@ -11,47 +11,72 @@ import { useCart } from '../context/CartContext';
 export const MainLayout = () => {
   const { pathname } = useLocation();
   const [isDark, toggleDark] = useToggle(false);
-  const [loginOpen, toggleLogin] = useToggle(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [authChecking, setAuthChecking] = useState(true);
+  const authVersion = useRef(0);
   const { resetCart } = useCart();
-  // 새로고침 때 저장된 토큰을 서버에 확인한다. 비밀번호는 저장하지 않는다.
+
+  // Restore the existing session without overwriting a newer login or logout.
   useEffect(() => {
     let active = true;
-    const saved = sessionStorage.getItem('partzone-login');
-    if (saved) {
+    const version = authVersion.current;
+    const isCurrent = () => active && version === authVersion.current;
+
+    const restoreUser = async () => {
       try {
+        const saved = sessionStorage.getItem('partzone-login');
+        if (!saved) return;
+
         const session = JSON.parse(saved);
-        fetchCurrentUser(session.accessToken).then((profile) => {
-          if (active) setUser({ ...profile, accessToken: session.accessToken });
-        }).catch(() => {
-          if (active) {
-            sessionStorage.removeItem('partzone-login');
-            resetCart();
-          }
-        });
+        if (typeof session?.accessToken !== 'string' || !session.accessToken.trim()) {
+          sessionStorage.removeItem('partzone-login');
+          resetCart();
+          return;
+        }
+
+        const profile = await fetchCurrentUser(session.accessToken);
+        if (isCurrent()) {
+          setUser({ ...profile, accessToken: session.accessToken });
+        }
       } catch {
-        sessionStorage.removeItem('partzone-login');
-        resetCart();
+        if (isCurrent()) {
+          sessionStorage.removeItem('partzone-login');
+          resetCart();
+        }
+      } finally {
+        if (isCurrent()) setAuthChecking(false);
       }
-    }
+    };
+
+    restoreUser();
     return () => { active = false; };
-  }, []);
+  }, [resetCart]);
 
   const onLoginSuccess = (profile) => {
+    authVersion.current += 1;
     sessionStorage.setItem('partzone-login', JSON.stringify(profile));
     setUser(profile);
+    setAuthChecking(false);
     closeLogin();
   };
 
   const onLogout = () => {
-    // 현재 사용자의 장바구니가 다음 로그인 화면에 남지 않게 화면 상태만 비운다.
+    authVersion.current += 1;
+    // Clear only client-side cart state; keep the stored server cart intact.
     resetCart();
     sessionStorage.removeItem('partzone-login');
     setUser(null);
+    setAuthChecking(false);
   };
+
+  const openLogin = () => {
+    setLoginOpen(true);
+  };
+
   const closeLogin = () => {
-    if (loginOpen) toggleLogin();
+    setLoginOpen(false);
     if (pathname === '/login') navigate('/', { replace: true });
   };
 
@@ -62,7 +87,7 @@ export const MainLayout = () => {
   return (
     <div className={`flex min-h-screen flex-col ${isDark ? 'dark' : ''}`}>
       <Header
-        onLogin={toggleLogin}
+        onLogin={openLogin}
         user={user}
         onLogout={onLogout}
         isDark={isDark}
@@ -74,7 +99,7 @@ export const MainLayout = () => {
       </Modal>
 
       <main className="flex-1">
-        <Outlet />
+        <Outlet context={{ user, authChecking, openLogin }} />
       </main>
 
       <Footer />

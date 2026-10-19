@@ -1,8 +1,4 @@
-/**
- * API 클라이언트.
- * 지금은 mock 데이터를 지연시켜 돌려주고, 실제 서버가 준비되면
- * USE_MOCK 을 false 로 두고 request() 만 실제 fetch 로 바꾸면 된다.
- */
+/** Shared JSON API client and mock-response helpers. */
 export const BASE_URL = import.meta.env?.VITE_API_BASE_URL ?? '/api';
 export const USE_MOCK = import.meta.env?.VITE_USE_MOCK !== 'false';
 
@@ -13,7 +9,9 @@ export class ApiError extends Error {
     super(message);
     this.name = 'ApiError';
     this.status = status;
-    this.errors = errors;
+    this.errors = errors && typeof errors === 'object' && !Array.isArray(errors)
+      ? errors
+      : {};
   }
 }
 
@@ -24,21 +22,41 @@ export const mockResponse = async (data, ms = 220) => {
 };
 
 export const request = async (path, options = {}) => {
-  const response = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
-  });
+  const headers = new Headers(options.headers);
 
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
-    throw new ApiError(
-      errorBody.message ?? '요청을 처리하지 못했습니다.',
-      response.status,
-      errorBody.errors ?? {},
-    );
+  // Callers serialize JSON bodies and explicitly provide authentication headers.
+  if (options.body != null && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
   }
+
+  const response = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers,
+  });
 
   if (response.status === 204) return null;
 
-  return response.json();
+  const text = await response.text();
+  let data = null;
+
+  if (text.trim()) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // Preserve HTTP error status even when a proxy returns HTML instead of JSON.
+      if (response.ok) {
+        throw new ApiError('서버 응답이 올바른 JSON 형식이 아닙니다.', response.status);
+      }
+    }
+  }
+
+  if (!response.ok) {
+    const message = typeof data?.message === 'string' && data.message.trim()
+      ? data.message
+      : '요청을 처리하지 못했습니다.';
+
+    throw new ApiError(message, response.status, data?.errors);
+  }
+
+  return data;
 };
