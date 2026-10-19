@@ -1,4 +1,4 @@
-package com.comcheck.comcheck.domain.Board.exception;
+package com.comcheck.comcheck.domain.board.exception;
 
 public class NotFoundException extends RuntimeException{
     

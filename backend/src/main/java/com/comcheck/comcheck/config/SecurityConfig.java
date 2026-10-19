@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/check-email", "/api/users/check-nickname").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/parts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/boards", "/api/boards/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -62,7 +63,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         // Vite 개발 서버가 JSON과 Authorization 헤더를 보낼 수 있게 허용한다.
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173", "http://127.0.0.1:5173"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 

@@ -14,13 +14,15 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
     @EntityGraph(attributePaths = "writer")
     @Query(value = """
             SELECT b FROM Board b
-             WHERE (:category IS NULL OR b.category= :category)
+             WHERE b.isDeleted = false
+               AND (:category IS NULL OR b.category = :category)
                AND (:keyword IS NULL
                     OR b.title LIKE CONCAT('%', :keyword, '%')
                     OR b.content LIKE CONCAT('%', :keyword, '%'))
             """, countQuery = """
             SELECT COUNT(b) FROM Board b
-             WHERE (:category IS NULL OR b.category = :category)
+             WHERE b.isDeleted = false
+               AND (:category IS NULL OR b.category = :category)
                AND (:keyword IS NULL
                     OR b.title   LIKE CONCAT('%', :keyword, '%')
                     OR b.content LIKE CONCAT('%', :keyword, '%'))

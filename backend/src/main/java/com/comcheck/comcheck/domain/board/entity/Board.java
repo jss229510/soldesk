@@ -15,6 +15,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.GenerationType;
@@ -32,44 +33,45 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_seq_generator")
     @SequenceGenerator(name = "board_seq_generator", sequenceName = "SEQ_BOARD_POSTS", allocationSize = 1)
 
-    @Column(name = "post_id")
+    @Column(name = "\"post_id\"")
     private Long boardId; // 글번호
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "\"user_id\"")
     private User writer;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "board_type")
+    @Column(name = "\"board_type\"")
     private Category category;
 
-    @Column(name = "title")
+    @Column(name = "\"title\"")
     private String title;
 
-    @Column(name = "content")
+    @Lob
+    @Column(name = "\"content\"")
     private String content;
 
-    @Column(name = "view_count")
+    @Column(name = "\"view_count\"")
     private long viewCount;
 
     // 공지용
     @Convert(converter = YesNoConverter.class)
-    @Column(name = "is_pinned", nullable = false)
+    @Column(name = "\"is_pinned\"", nullable = false)
     private boolean isPinned;
 
     @Convert(converter = YesNoConverter.class)
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "\"is_deleted\"", nullable = false)
     private boolean isDeleted;
 
     // Q&N용
     @Convert(converter = YesNoConverter.class)
-    @Column(name = "is_resolved", nullable = false)
+    @Column(name = "\"is_resolved\"", nullable = false)
     private boolean isResolved;
 
-    @Column(name = "created_at")
+    @Column(name = "\"created_at\"")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "\"updated_at\"")
     private LocalDateTime updatedAt;
 
     public Board(User writer, Category category, String title, String content) {
@@ -89,6 +91,9 @@ public class Board {
         this.category = category;
         this.title = title;
         this.content = content;
+        // Keep category-specific flags consistent with database constraints.
+        if (category != Category.NOTICE) this.isPinned = false;
+        if (category != Category.QNA) this.isResolved = false;
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -96,8 +101,8 @@ public class Board {
         this.viewCount = this.viewCount + 1;
     }
 
-    public boolean isWritterBy(Long userid) {
-        return writer.getUserId().equals(userid);
+    public boolean isWrittenBy(Long userId) {
+        return userId != null && writer != null && userId.equals(writer.getUserId());
     }
 
     // 삭제 메서드
@@ -119,5 +124,7 @@ public class Board {
         if (this.category != Category.QNA) {
             throw new IllegalStateException("Q&N 게시글만 해결 상태를 변경할 수 있습니다.");
         }
+        this.isResolved = resolved;
+        this.updatedAt = LocalDateTime.now();
     }
 }

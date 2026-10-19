@@ -1,4 +1,4 @@
-package com.comcheck.comcheck.domain.Board.entity;
+package com.comcheck.comcheck.domain.board.entity;
 
 import java.time.LocalDateTime;
 

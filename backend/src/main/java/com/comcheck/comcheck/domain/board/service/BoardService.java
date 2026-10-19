@@ -71,10 +71,6 @@ public class BoardService {
     // 글 상세
     public BoardDetailResponse getBoard(Long boardId) {
         Board board = findBoard(boardId);
-
-        if(board.isDeleted()){
-            throw new DeletedBoardException("삭제된 게시물입니다.");
-        }
         return new BoardDetailResponse(board);
     }
 
@@ -91,7 +87,10 @@ public class BoardService {
     // 글 작성
     @Transactional
     public BoardDetailResponse createBoard(BoardRequest request, Long loginUserId) {
-        // 1. 작성자(로그인 회원) 찾기 : 세션에는 번호만 있으므로 DB에서 회원을 꺼낸다
+        if (loginUserId == null) {
+            throw new UnauthorizedException("로그인이 필요합니다.");
+        }
+        // Resolve the writer from the authenticated JWT user ID.
         User writer = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new UnauthorizedException("회원 정보를 찾을 수 없습니다."));
 
@@ -105,10 +104,10 @@ public class BoardService {
     }
 
     // 글 수정
-    @Transactional 
+    @Transactional
     public BoardDetailResponse updateBoard(Long boardId, BoardRequest request, Long loginUserId){
         Board board = findBoard(boardId);
-        checkWritter(board, loginUserId);
+        checkWriter(board, loginUserId);
 
         // 값 바꾸기
         board.update(request.getCategory(), request.getTitle().trim(), request.getContent());
@@ -120,20 +119,24 @@ public class BoardService {
     @Transactional
     public void deleteBoard(Long boardId, Long loginUserId) {
         Board board = findBoard(boardId);
-        checkWritter(board, loginUserId);
+        checkWriter(board, loginUserId);
 
         board.delete();
     }
 
     // 글삭제 안내문구
     private Board findBoard(Long boardId) {
-        return boardRepository.findById(boardId)
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+        if (board.isDeleted()) {
+            throw new DeletedBoardException("삭제된 게시물입니다.");
+        }
+        return board;
     }
 
     // 작성자 본인이 아니면 권한 불충분 - 403 예외 처리
-    private void checkWritter(Board board, Long loginUserId) {
-        if (!board.isWritterBy(loginUserId)) {
+    private void checkWriter(Board board, Long loginUserId) {
+        if (!board.isWrittenBy(loginUserId)) {
             throw new ForbiddenException("작성자만 수정하거나 삭제할 수 있습니다.");
         }
     }

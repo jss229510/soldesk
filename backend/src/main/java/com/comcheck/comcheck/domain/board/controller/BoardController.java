@@ -2,6 +2,7 @@ package com.comcheck.comcheck.domain.board.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.comcheck.comcheck.domain.board.dto.BoardDetailResponse;
 import com.comcheck.comcheck.domain.board.dto.BoardPageResponse;
@@ -66,10 +66,10 @@ public class BoardController {
     @PostMapping
     // @Valid: 전달받은 데이터가 유효한지 검사
     // @RequestBody: React가 보낸 JSON 데이터를 Java 객체로 변환
-    // @SessionAttribute: 서버의 세션에 미리 저장된 값을 꺼내오는 어노테이션
+    // The JWT filter stores the verified user ID in Authentication.
     public ResponseEntity<BoardDetailResponse> create(@Valid @RequestBody BoardRequest request,
-            @SessionAttribute(name = SessionConst.LOGIN_USER_ID, required = false) Long loginUserId) {
-        Long userId = requireLogin(loginUserId);
+            Authentication authentication) {
+        Long userId = requireLogin(authentication);
         BoardDetailResponse saved = boardService.createBoard(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -79,9 +79,9 @@ public class BoardController {
     public BoardDetailResponse update(
             @PathVariable("boardId") Long boardId,
             @Valid @RequestBody BoardRequest request,
-            @SessionAttribute(name = SessionConst.LOGIN_USER_ID, required = false) Long loginUserId) {
+            Authentication authentication) {
 
-        Long userId = requireLogin(loginUserId);
+        Long userId = requireLogin(authentication);
         return boardService.updateBoard(boardId, request, userId);
     }
 
@@ -89,16 +89,17 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> delete(
             @PathVariable("boardId") Long boardId,
-            @SessionAttribute(name = SessionConst.LOGIN_USER_ID, required = false) Long loginUserId) {
-        
-        Long userId = requireLogin(loginUserId);
+            Authentication authentication) {
+
+        Long userId = requireLogin(authentication);
         boardService.deleteBoard(boardId, userId);
         return ResponseEntity.noContent().build();
     }
 
     // 로그인 검사
-    private Long requireLogin(Long loginUserId) {
-        if (loginUserId == null) {
+    private Long requireLogin(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof Long loginUserId)) {
             throw new UnauthorizedException("로그인이 필요합니다.");
         }
         return loginUserId;
