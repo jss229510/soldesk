@@ -1,18 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UsageGrid } from '../components/build';
 import { UsageTierPanel } from '../components/build/UsageTierPanel'
 import { PC_BUILD_PROFILES } from '../constants/usages';
+import { getRecommendEstimates } from '../api/estimates';
+import { UsagePartRow } from '../components/build/UsagePartRow';
 
 const PART_SLOTS = [
-  { key: "cpu", label: "프로세스(CPU)", btnText: "교체" },
-  { key: "gpu", label: "그래픽카드(GPU)", btnText: "교체" },
-  { key: "motherboard", label: "메인보드", btnText: "교체" },
-  { key: "ram", label: "메모리(RAM)", btnText: "교체" },
-  { key: "ssd", label: "저장장치(SSD)", btnText: "교체" },
-  { key: "spu", label: "파워(SPU)", btnText: "교체" },
-  { key: "cooler", label: "쿨러", btnText: "교체" },
-  { key: "case", label: "케이스", btnText: "교체" },
-]
+  { key: "cpu", label: "프로세서(CPU)" },
+  { key: "gpu", label: "그래픽카드(GPU)" },
+  { key: "motherboard", label: "메인보드" },
+  { key: "ram", label: "메모리(RAM)" },
+  { key: "ssd", label: "저장장치(SSD)" },
+  { key: "psu", label: "파워(PSU)" },
+  { key: "cooler", label: "쿨러" },
+  { key: "case", label: "케이스" },
+];
 
 /** PC 구성: 용도를 고르면 호환성이 검증된 구성을 제안한다 */
 
@@ -21,11 +23,49 @@ export const BuildPage = () => {
   const [usageId, setUsageId] = useState(null);
   const [selectedTierCode, setSelectedTierCode] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedParts, setSelectedParts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    // 용도와 등급을 모두 골랐을 때만 조회
+    if (!usageId || !selectedTier) return;
+
+    let ignore = false;
+
+    async function loadEstimate() {
+      setLoading(true);
+      setError("");
+
+      try {
+        const data = await getRecommendEstimates(
+          usageId, selectedTierCode
+        );
+        if (!ignore) {
+          setSelectedParts(data.items ?? []);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setSelectedParts([]);
+          setError(err.message || "견적 조회 중 오류가 발생했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }
+    loadEstimate();
+
+    //선택이 바뀌거나 화면을 떠나면 이전 요청 결과를 반영하지 않음
+    return () => {
+      ignore = true;
+    }
+  }, [usageId, selectedTierCode]);
+
+
 
   // 선택된 용도와 세부 등급으로 부품 조회
-  const selectedParts =
-    PARTS_BY_USAGE[usageId]?.[selectedTierCode] ?? [];
-
   const selectedUsage =
     PC_BUILD_PROFILES.find(
       (usage) => usage.id === usageId
@@ -40,12 +80,20 @@ export const BuildPage = () => {
   const handleUsageSelect = (nextUsageId) => {
     setUsageId(nextUsageId);
     setSelectedTierCode(null);
+    setSelectedParts([]);
+    setError("");
+    setLoading(false);
     setIsExpanded(true);
   };
 
   // 세부 등급 선택
   const handleTierSelect = (tierCode) => {
+    if (tierCode === setSelectedTierCode) return;
+
     setSelectedTierCode(tierCode);
+    setSelectedParts([]),
+      setError("");
+    setLoading(true);
   };
 
   return (
@@ -67,11 +115,11 @@ export const BuildPage = () => {
       </header>
 
       {/* 왼쪽 + 오른쪽 */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[520px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[420px_minmax(0,1fr)]">
 
         {/* 왼쪽: 용도 선택 */}
         <section className="min-w-0">
-          <div className="rounded-2xl p-5 shadow-sm">
+          <div className="rounded-2xl p-3 shadow-sm">
 
             <UsageGrid
               usages={PC_BUILD_PROFILES}
@@ -80,10 +128,10 @@ export const BuildPage = () => {
             />
 
             <div
-              className={`grid items-start gap-4
+              className={`grid items-start gap-2
                 transition-all duration-500
                 ${isExpanded
-                  ? "grid-rows-[1fr] opacity-100 mt-4"
+                  ? "grid-rows-[1fr] opacity-100 mt-2"
                   : "grid-rows-[0fr] opacity-0 mt-0"
                 }`}
             >
@@ -114,28 +162,28 @@ export const BuildPage = () => {
                 {selectedUsage.title} · {selectedTier.label}
               </p>
 
-              {selectedParts.length > 0 ? (
-                <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {selectedParts.map((part) => (
-                    <div
-                      key={part.label}
-                      className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                    >
-                      <p className="text-sm font-semibold text-slate-500">
-                        {part.label}
-                      </p>
-
-                      <p className="mt-2 font-bold text-slate-900">
-                        {part.value}
-                      </p>
-                    </div>
+              {loading ? (
+                <p className='mt-6 text-slate-500'>
+                  추천 견적을 불러오는 중입니다.
+                </p>
+              ) : (
+                <div className='mt-6'>
+                  {selectedParts.length === 0 && (
+                    <p className='mb-4 text-xm text-slate-500'>
+                      아직 등록된 구성 부품이 없습니다.
+                    </p>
+                  )}
+                  {PART_SLOTS.map((slot) => (
+                    <UsagePartRow
+                      key={slot.key}
+                      categoryId={slot.key}
+                      label={slot.label}
+                      item={selectedParts.find((item) => item.category === slot.key)}
+                    />
                   ))}
                 </div>
-              ) : (
-                <div>
-
-                </div>
               )}
+
             </>
           ) : (
             <p className="mt-6 text-slate-500">

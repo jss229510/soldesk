@@ -17,15 +17,15 @@ export const UsageCard = ({ usage, active, onSelect }) => (
       {usage.icon}
     </span>
 
-    <span className="mt-3 text-lg font-bold">
+    <span className="mt-2 text-lg font-bold">
       {usage.title}
     </span>
 
-    <span className="mt-2 text-sm text-gray-400">
+    <span className="mt-1 text-sm text-gray-400">
       {usage.description}
     </span>
 
-    <span className="mt-auto pt-5 text-sm text-cyan-400">
+    <span className="mt-auto pt-2 text-sm text-cyan-400">
       {active ? '선택됨' : '세부 용도 보기 →'}
     </span>
   </button>

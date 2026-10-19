@@ -25,7 +25,7 @@ export const UsageTierPanel = ({
                 세부 용도를 선택해주세요.
             </p>
 
-            <div className="mt-5 flex flex-col gap-3">
+            <div className="mt-3 grid grid-cols-3 gap-2">
                 {tiers.length === 0 ? (
                     <p className="text-sm text-gray-400">
                         선택할 수 있는 세부 용도가 없습니다.
@@ -37,7 +37,7 @@ export const UsageTierPanel = ({
                             type="button"
                             aria-pressed={selectedTierCode === tier.code}
                             onClick={() => onSelect?.(tier.code)}
-                            className={`rounded-lg border px-4 py-3 text-left transition-colors ${selectedTierCode === tier.code
+                            className={`rounded-lg border px-2 py-3 text-left transition-colors ${selectedTierCode === tier.code
                                     ? 'border-cyan-400 bg-cyan-950 text-cyan-400'
                                     : 'border-gray-700 hover:border-gray-500'
                                 }`}
