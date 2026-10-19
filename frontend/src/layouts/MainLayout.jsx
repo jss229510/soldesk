@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Header, Footer } from '../components/layout';
 import useToggle from '../hooks/useToggle';
@@ -10,40 +10,65 @@ import { fetchCurrentUser } from '../api/users';
 export const MainLayout = () => {
   const { pathname } = useLocation();
   const [isDark, toggleDark] = useToggle(false);
-  const [loginOpen, toggleLogin] = useToggle(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  // 새로고침 때 저장된 토큰을 서버에 확인한다. 비밀번호는 저장하지 않는다.
+  const [authChecking, setAuthChecking] = useState(true);
+  const authVersion = useRef(0);
+
+  // Restore the existing session without overwriting a newer login or logout.
   useEffect(() => {
     let active = true;
-    const saved = sessionStorage.getItem('partzone-login');
-    if (saved) {
+    const version = authVersion.current;
+    const isCurrent = () => active && version === authVersion.current;
+
+    const restoreUser = async () => {
       try {
+        const saved = sessionStorage.getItem('partzone-login');
+        if (!saved) return;
+
         const session = JSON.parse(saved);
-        fetchCurrentUser(session.accessToken).then((profile) => {
-          if (active) setUser({ ...profile, accessToken: session.accessToken });
-        }).catch(() => {
-          if (active) sessionStorage.removeItem('partzone-login');
-        });
+        if (typeof session?.accessToken !== 'string' || !session.accessToken.trim()) {
+          sessionStorage.removeItem('partzone-login');
+          return;
+        }
+
+        const profile = await fetchCurrentUser(session.accessToken);
+        if (isCurrent()) {
+          setUser({ ...profile, accessToken: session.accessToken });
+        }
       } catch {
-        sessionStorage.removeItem('partzone-login');
+        if (isCurrent()) sessionStorage.removeItem('partzone-login');
+      } finally {
+        if (isCurrent()) setAuthChecking(false);
       }
-    }
+    };
+
+    restoreUser();
     return () => { active = false; };
   }, []);
 
   const onLoginSuccess = (profile) => {
+    authVersion.current += 1;
     sessionStorage.setItem('partzone-login', JSON.stringify(profile));
     setUser(profile);
+    setAuthChecking(false);
     closeLogin();
   };
 
   const onLogout = () => {
+    authVersion.current += 1;
     sessionStorage.removeItem('partzone-login');
     setUser(null);
+    setAuthChecking(false);
   };
+
+  const openLogin = () => {
+    setLoginOpen(true);
+  };
+
   const closeLogin = () => {
-    if (loginOpen) toggleLogin();
+    setLoginOpen(false);
     if (pathname === '/login') navigate('/', { replace: true });
   };
 
@@ -68,14 +93,14 @@ export const MainLayout = () => {
         {isDark ? '☀️ 라이트 모드' : '🌙 다크 모드'}
       </button>
 
-      <Header onLogin={toggleLogin} user={user} onLogout={onLogout} />
+      <Header onLogin={openLogin} user={user} onLogout={onLogout} />
 
       <Modal open={loginOpen || pathname === '/login'} onClose={closeLogin} labelledBy="login-title" compact>
         <LoginPage onNavigate={closeLogin} onSuccess={onLoginSuccess} />
       </Modal>
 
       <main className="flex-1">
-        <Outlet />
+        <Outlet context={{ user, authChecking, openLogin }} />
       </main>
 
       <Footer />

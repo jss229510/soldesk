@@ -7,6 +7,10 @@ import { DEFAULT_CATEGORY } from './constants/categories';
 import { ROUTES } from './constants/routes';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import BoardListPage from './pages/BoardListPage';
+import BoardDetailPage from './pages/BoardDetailPage';
+import BoardWritePage from './pages/BoardWritePage';
+import BoardEditPage from './pages/BoardEditPage';
 
 const App = () => (
   <BrowserRouter>
@@ -35,6 +39,14 @@ const App = () => (
           <Route path={ROUTES.budget} element={<BudgetPage />} />
           <Route path={ROUTES.build} element={<BuildPage />} />
           <Route path={ROUTES.cart} element={<CartPage />} />
+          <Route path={ROUTES.boards} element={<BoardListPage />} />
+          <Route path={ROUTES.boardWrite} element={<BoardWritePage />} />
+          <Route path={`${ROUTES.boards}/:boardId`} element={<BoardDetailPage />} />
+          <Route path={`${ROUTES.boards}/:boardId/edit`} element={<BoardEditPage />} />
+          <Route
+            path="/notice"
+            element={<Navigate to={`${ROUTES.boards}?category=NOTICE`} replace />}
+          />
           <Route path="/login" element={<HomePage />} />
 
           {/* 회원가입 페이지 */}

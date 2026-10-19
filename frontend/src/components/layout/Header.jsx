@@ -15,11 +15,13 @@ export const Header = ({ onLogin, user, onLogout }) => {
       borderColor: 'var(--line)',
     }}
   >
-    <div className="container mx-auto flex h-16 items-center gap-3 px-4 md:gap-6">
+    <div className="container mx-auto flex min-h-16 flex-wrap
+      items-center gap-3 px-4 py-3 md:gap-6">
       <Logo />
 
       <nav
-        className="flex shrink-0 items-center gap-1"
+        className="order-3 flex w-full min-w-0 flex-wrap items-center gap-1
+          lg:order-none lg:w-auto lg:flex-1"
         aria-label="주요 메뉴"
       >
         {NAV_ITEMS.map((item) => (
