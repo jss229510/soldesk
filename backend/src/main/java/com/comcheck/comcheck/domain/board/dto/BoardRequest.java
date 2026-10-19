@@ -13,14 +13,15 @@ import lombok.Setter;
 @Setter 
 @NoArgsConstructor 
 public class BoardRequest {
-    @NotNull (message = "카테고리를 선택하세요.")
+
+    @NotNull(message = "카테고리를 선택하세요.")
     private Category category;
 
-    @NotBlank (message = "제목을 입력하세요")
-    @Size(max = 100, message = "제목은 100자 이하로 입력하세요")
+    @NotBlank(message = "제목을 입력하세요.")
+    @Size(max = 100, message = "제목은 100자 이하로 입력하세요.")
     private String title;
 
-    @NotBlank (message = "내용을 입력하세요")
-    @Size (max = 1000, message = "내용은 1000자 이하로 입력하세요")
+    @NotBlank(message = "내용을 입력하세요.")
+    @Size(max = 1000, message = "내용은 1000자 이하로 입력하세요.")
     private String content;
 }

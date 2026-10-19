@@ -39,7 +39,7 @@ public class BoardDetailResponse {
         this.isDeleted = board.isDeleted();
         this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
-        
+
         //게시판별 용도
         this.isPinned = board.isPinned();
         this.isResolved = board.isResolved();

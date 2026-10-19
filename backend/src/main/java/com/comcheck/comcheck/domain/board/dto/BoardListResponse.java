@@ -34,7 +34,7 @@ public class BoardListResponse {
         this.viewCount = board.getViewCount();
         this.isDeleted = board.isDeleted();
         this.createdAt = board.getCreatedAt();
-        
+
         //게시판별 용도
         this.isPinned = board.isPinned();
         this.isResolved = board.isResolved();
