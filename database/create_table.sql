@@ -1,6 +1,9 @@
 -- 테이블 삭제
 -- ============================================================
 -- DROP TABLE "ESTIMATE_ITEMS" CASCADE CONSTRAINTS;
+-- DROP TABLE "PAYMENT_CANCELLATIONS" CASCADE CONSTRAINTS;
+-- DROP TABLE "PAYMENT_ITEMS" CASCADE CONSTRAINTS;
+-- DROP TABLE "PAYMENTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "PART_SPECS" CASCADE CONSTRAINTS;
 -- DROP TABLE "CART_ITEMS" CASCADE CONSTRAINTS;
 -- DROP TABLE "CART_ESTIMATES" CASCADE CONSTRAINTS;
@@ -14,6 +17,9 @@
 -- 데이터 삭제
 -- ============================================================
 -- DELETE FROM "ESTIMATE_ITEMS";
+-- DELETE FROM "PAYMENT_CANCELLATIONS";
+-- DELETE FROM "PAYMENT_ITEMS";
+-- DELETE FROM "PAYMENTS";
 -- DELETE FROM "PART_SPECS";
 -- DELETE FROM "CART_ITEMS";
 -- DELETE FROM "CART_ESTIMATES";
@@ -129,6 +135,36 @@ CREATE TABLE "BOARD_POSTS" (
 --        TO_DATE("Field", 'FXYYYY-MM-DD')
 --    ) VIRTUAL
 --);
+
+-- 카카오페이 결제 거래와 결제 당시 부품 스냅샷, 취소 이력을 저장한다.
+CREATE TABLE "PAYMENTS" (
+    "payment_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
+    "order_key" VARCHAR2(100 CHAR) NOT NULL,
+    "kakao_tid" VARCHAR2(100 CHAR),
+    "total_amount" NUMBER(12, 0) NOT NULL,
+    "status" VARCHAR2(20 CHAR) DEFAULT 'READY' NOT NULL,
+    "approved_at" TIMESTAMP,
+    "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+
+CREATE TABLE "PAYMENT_ITEMS" (
+    "payment_item_id" NUMBER NOT NULL,
+    "payment_id" NUMBER NOT NULL,
+    "part_id" NUMBER NOT NULL,
+    "part_name" VARCHAR2(150 CHAR) NOT NULL,
+    "unit_price" NUMBER(12, 0) NOT NULL,
+    "quantity" NUMBER NOT NULL
+);
+
+CREATE TABLE "PAYMENT_CANCELLATIONS" (
+    "payment_cancel_id" NUMBER NOT NULL,
+    "payment_id" NUMBER NOT NULL,
+    "cancel_amount" NUMBER(12, 0) NOT NULL,
+    "cancel_reason" VARCHAR2(500 CHAR),
+    "canceled_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
 
 
 
