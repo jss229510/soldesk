@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-<<<<<<< Updated upstream
-=======
 import com.comcheck.comcheck.domain.estimate.dto.EstimateRequest;
->>>>>>> Stashed changes
+
 import com.comcheck.comcheck.domain.estimate.dto.EstimateResponse;
 import com.comcheck.comcheck.domain.estimate.entity.Estimate;
 import com.comcheck.comcheck.domain.estimate.repository.EstimateRepository;
@@ -49,10 +47,10 @@ public class EstimateService {
     private final EstimateRepository estimateRepository;
     private final UserRepository userRepository;
 
-<<<<<<< Updated upstream
-=======
+
+
     // 생성자 주입 : Spring이 Repository 객체를 자동으로 넣어준다.
->>>>>>> Stashed changes
+
     public EstimateService(
             EstimateRepository estimateRepository,
             UserRepository userRepository) {
@@ -60,7 +58,7 @@ public class EstimateService {
         this.userRepository = userRepository;
     }
 
-<<<<<<< Updated upstream
+
     // 견적조회
     public List<EstimateResponse> getEstimates(Long userId) {
         return estimateRepository.findByUser_UserIdOrderByCreatedAtDesc(userId)
@@ -70,7 +68,7 @@ public class EstimateService {
     }
 
 
-=======
+
     /*
      * ===== 생성 =====
      * 견적 생성
@@ -123,6 +121,6 @@ public class EstimateService {
     // 예산별 추천 견적 목록 (예산 이하, 예산에 가까운 순)
     // usageType은 선택값 : 보내면 해당 용도만, 안 보내면 전체 용도에서 찾는다.
     // 예산이 없거나 음수면 400
->>>>>>> Stashed changes
+
 
 }
