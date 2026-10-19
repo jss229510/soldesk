@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface EstimateRepository extends JpaRepository<Estimate, Long> {
 
   // 특정 회원의 견적 목록(최신순)
-  Estimate findByUser_UserIdOrderByCreatedAtDesc(Long userId);
+  List<Estimate> findByUser_UserIdOrderByCreatedAtDesc(Long userId);
 
   // 추천 견적 목록
   @EntityGraph(attributePaths = "user")
@@ -44,7 +44,6 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
       select e from Estimate e
       where e.isRecommend = :recommend
       and e.totalPrice <= :budget
-      and (:usageType is null or e.usageType = :usageType)
       order by e.totalPrice desc
       """)
 
@@ -52,7 +51,6 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
   Page<Estimate> findRecommendedWithinBudget(
       @Param("recommend") Boolean recommend,
       @Param("budget") Long budget,
-      @Param("usageType") String usageType,
       Pageable pageable);
 
   // 전력 검사에 필요한 스펙만 골라서 조회

@@ -5,7 +5,7 @@ package com.comcheck.comcheck.domain.estimate.dto;
 
 public record EstimatePowerCheckResponse(
 
-        Long estimatedId, // 견적번호
+        Long estimateId, // 견적번호
         Long cpuTdp, // CPU 소비전력 합계 //part_specs_all.csv에 tdp
         Long gpuTdp, // GPU 소비전력 합계
         Long totalPower, // CPU + GPU 소비전력 합계
