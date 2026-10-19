@@ -1,4 +1,8 @@
-import { Link, useLocation, useOutletContext, useParams } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import {
+  Link, useLocation, useNavigate, useOutletContext, useParams,
+} from 'react-router-dom';
+import { deleteBoard } from '../api/boards';
 import { Button, StateBox } from '../components/common';
 import { getBoardCategoryLabel } from '../constants/boardCategories';
 import { ROUTES } from '../constants/routes';
@@ -10,15 +14,46 @@ function formatDateTime(value) {
 
 export default function BoardDetailPage() {
   const { boardId } = useParams();
-  const { user, authChecking } = useOutletContext();
+  const { user, authChecking, openLogin } = useOutletContext();
   const location = useLocation();
+  const navigate = useNavigate();
   const { board, loading, error, reload } = useBoard(boardId);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+  const deletingRef = useRef(false);
   const listSearch = typeof location.state?.listSearch === 'string'
     ? location.state.listSearch : '';
   const listPath = `${ROUTES.boards}${listSearch ? `?${listSearch}` : ''}`;
   // This only controls the UI; the server must verify ownership again.
   const isOwner = !authChecking && user?.userId != null && board?.writerId != null
     && String(user.userId) === String(board.writerId);
+
+  const handleDelete = async () => {
+    if (!isOwner || deletingRef.current) return;
+    if (!window.confirm('이 게시글을 삭제하시겠습니까?')) return;
+
+    deletingRef.current = true;
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      await deleteBoard(board.boardId, user?.accessToken);
+      navigate(listPath, { replace: true });
+    } catch (requestError) {
+      if (requestError.status === 401) {
+        setDeleteError('로그인이 만료되었습니다. 다시 로그인해주세요.');
+        openLogin();
+      } else if (requestError.status === 403) {
+        setDeleteError('작성자만 게시글을 삭제할 수 있습니다.');
+      } else if (requestError.status === 404 || requestError.status === 410) {
+        setDeleteError('이미 삭제되었거나 존재하지 않는 게시글입니다.');
+      } else {
+        setDeleteError('삭제 결과를 확인하지 못했습니다. 다시 시도하기 전에 목록을 확인해주세요.');
+      }
+    } finally {
+      deletingRef.current = false;
+      setDeleting(false);
+    }
+  };
 
   return (
     <section className="container mx-auto px-4 py-8 text-gray-300">
@@ -48,14 +83,29 @@ export default function BoardDetailPage() {
             whitespace-pre-wrap [overflow-wrap:anywhere]">
             {board.content}
           </div>
+          {deleteError && (
+            <p role="alert" className="mt-4 text-sm text-red-500">
+              {deleteError}
+            </p>
+          )}
           {isOwner && (
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex flex-wrap justify-end gap-2">
               <Button
                 variant="outline"
-                to={ROUTES.boardEdit(board.boardId)}
-                state={{ listSearch }}
+                disabled={deleting}
+                onClick={() => navigate(ROUTES.boardEdit(board.boardId), {
+                  state: { listSearch },
+                })}
               >
                 수정
+              </Button>
+              <Button
+                variant="outline"
+                disabled={deleting}
+                onClick={handleDelete}
+                style={{ borderColor: '#ef4444', color: '#ef4444' }}
+              >
+                {deleting ? '삭제 중…' : '삭제'}
               </Button>
             </div>
           )}

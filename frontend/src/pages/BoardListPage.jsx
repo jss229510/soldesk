@@ -205,7 +205,7 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
             <caption className="sr-only">게시글 목록</caption>
             <thead className="border-b border-gray-700 text-gray-400">
               <tr>
-                <th scope="col" className="hidden w-16 py-3 sm:table-cell">번호</th>
+                <th scope="col" className="w-24 py-3 pr-2">번호</th>
                 <th scope="col" className="hidden w-28 py-3 sm:table-cell">게시판</th>
                 <th scope="col" className="py-3">제목</th>
                 <th scope="col" className="hidden w-24 py-3 sm:table-cell">작성자</th>
@@ -214,37 +214,58 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
               </tr>
             </thead>
             <tbody>
-              {result.boards.map((board) => (
-                <tr key={board.boardId} className="border-b border-gray-700 last:border-0">
-                  <td className="hidden py-4 sm:table-cell">{board.boardId}</td>
-                  <td className="hidden py-4 sm:table-cell">
-                    {getBoardCategoryLabel(board.category)}
-                  </td>
-                  <td className="py-4 pr-3 [overflow-wrap:anywhere]">
-                    <span className="mb-1 block text-xs text-cyan-400 sm:hidden">
+              {result.boards.map((board) => {
+                const isPinned = board.category === 'NOTICE'
+                  && board.pinned === true;
+
+                return (
+                  <tr
+                    key={board.boardId}
+                    className={`border-b border-gray-700 last:border-0 ${isPinned
+                      ? 'bg-cyan-500/10' : ''}`}
+                  >
+                    <td className="py-4 pr-2">
+                      {isPinned ? (
+                        <span
+                          className="inline-flex items-center gap-1 whitespace-nowrap
+                            rounded border border-cyan-500/40 bg-cyan-500/10
+                            px-1.5 py-0.5 text-xs font-semibold text-cyan-600
+                            dark:text-cyan-300"
+                        >
+                          <span aria-hidden="true">📌</span>
+                          고정 공지
+                        </span>
+                      ) : board.boardId}
+                    </td>
+                    <td className="hidden py-4 sm:table-cell">
                       {getBoardCategoryLabel(board.category)}
-                    </span>
-                    <Link
-                      to={ROUTES.boardDetail(board.boardId)}
-                      state={{ listSearch }}
-                      className="font-medium hover:text-cyan-400 hover:underline"
-                    >
-                      {board.title}
-                    </Link>
-                    <span className="mt-1 block text-xs text-gray-400 sm:hidden">
+                    </td>
+                    <td className="py-4 pr-3 [overflow-wrap:anywhere]">
+                      <span className="mb-1 block text-xs text-cyan-400 sm:hidden">
+                        {getBoardCategoryLabel(board.category)}
+                      </span>
+                      <Link
+                        to={ROUTES.boardDetail(board.boardId)}
+                        state={{ listSearch }}
+                        className="font-medium hover:text-cyan-400 hover:underline"
+                      >
+                        {board.title}
+                      </Link>
+                      <span className="mt-1 block text-xs text-gray-400 sm:hidden">
+                        {board.writerName || '알 수 없음'}
+                      </span>
+                    </td>
+                    <td className="hidden break-words py-4 sm:table-cell">
                       {board.writerName || '알 수 없음'}
-                    </span>
-                  </td>
-                  <td className="hidden break-words py-4 sm:table-cell">
-                    {board.writerName || '알 수 없음'}
-                  </td>
-                  <td className="hidden py-4 md:table-cell">{board.viewCount ?? 0}</td>
-                  <td className="hidden py-4 md:table-cell">
-                    {typeof board.createdAt === 'string'
-                      ? board.createdAt.slice(0, 10) : '-'}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="hidden py-4 md:table-cell">{board.viewCount ?? 0}</td>
+                    <td className="hidden py-4 md:table-cell">
+                      {typeof board.createdAt === 'string'
+                        ? board.createdAt.slice(0, 10) : '-'}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

@@ -80,7 +80,7 @@ public class Board {
         this.title = title;
         this.content = content;
         this.viewCount = 0;
-        this.isPinned = false;
+        this.isPinned = category == Category.NOTICE;
         this.isDeleted = false;
         this.isResolved = false;
         this.createdAt = LocalDateTime.now();
@@ -92,7 +92,7 @@ public class Board {
         this.title = title;
         this.content = content;
         // Keep category-specific flags consistent with database constraints.
-        if (category != Category.NOTICE) this.isPinned = false;
+        this.isPinned = category == Category.NOTICE;
         if (category != Category.QNA) this.isResolved = false;
         this.updatedAt = LocalDateTime.now();
     }
@@ -111,10 +111,13 @@ public class Board {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // 공지사항 상단 고정/해제
+    // Notices cannot be manually unpinned.
     public void changePinned(boolean pinned) {
         if (this.category != Category.NOTICE) {
             throw new IllegalStateException("공지사항만 고정할 수 있습니다.");
+        }
+        if (!pinned) {
+            throw new IllegalStateException("공지사항은 항상 상단 고정됩니다.");
         }
         this.isPinned = pinned;
         this.updatedAt = LocalDateTime.now();

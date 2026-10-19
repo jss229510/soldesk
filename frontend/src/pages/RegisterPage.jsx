@@ -104,6 +104,7 @@ const RegisterPage = () => {
   return (
     <div className="flex justify-center px-4 py-8">
       <form
+        onSubmit={onSubmit}
         className="w-full max-w-sm rounded-xl border p-5 shadow-lg"
         style={{
           backgroundColor: "var(--bg-surface)",

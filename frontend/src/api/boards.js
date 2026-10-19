@@ -90,3 +90,11 @@ export async function updateBoard(boardId, form, accessToken) {
     body: serializeBoard(form),
   });
 }
+
+// Delete a board using the authenticated user's token.
+export async function deleteBoard(boardId, accessToken) {
+  return request(getBoardPath(boardId), {
+    method: 'DELETE',
+    headers: getAuthHeaders(accessToken),
+  });
+}

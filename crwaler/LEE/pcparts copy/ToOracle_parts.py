@@ -1,19 +1,19 @@
-"""6개 부품의 통합 output CSV를 Oracle에 적재한다.
-
-DB_SAVE_ENABLED를 True로 바꾸기 전에는 연결과 INSERT를 수행하지 않는다.
-"""
+"""Load parts, specs, or recommendations only when database writes are explicitly enabled."""
 from pathlib import Path
+from decimal import Decimal, InvalidOperation
+import argparse
 import os
 import pandas as pd
-from DataProcessing_parts import TARGET_DATE
 
 
 DB_SAVE_ENABLED = False
 DB_SAVE_DISABLED_EXIT_CODE = 10
+TARGET_DATE = '20261006'
 BASE_DIR = Path(__file__).resolve().parent
 PARTS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'parts_all.csv'
 SPECS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'part_specs_all.csv'
-HISTORY_PATH = BASE_DIR / 'output' / TARGET_DATE / 'price_history_all.csv'
+ESTIMATES_PATH = BASE_DIR / 'output' / TARGET_DATE / 'recommended_estimates.csv'
+ITEMS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'recommended_estimate_items.csv'
 
 
 def empty_to_none(value):
@@ -55,28 +55,201 @@ def upsert_part(cursor, row):
     return part_id, True
 
 
-def main():
-    if not DB_SAVE_ENABLED:
-        print('DB_SAVE_ENABLED = False: Oracle 적재를 실행하지 않는다.')
+def csv_integer(value, field):
+    """Reject missing, fractional, negative, or non-finite numeric values."""
+    try:
+        number = Decimal(str(value))
+    except InvalidOperation as exc:
+        raise ValueError(f'Invalid numeric value: {field}') from exc
+    if not number.is_finite() or number < 0 or number != number.to_integral_value():
+        raise ValueError(f'Invalid nonnegative integer: {field}')
+    return int(number)
+
+
+def load_recommendations(config):
+    """Save shared recommendation snapshots, never replacing a personal estimate."""
+    import oracledb
+
+    if not ESTIMATES_PATH.is_file() or not ITEMS_PATH.is_file():
+        raise ValueError(f'Missing recommendation CSV files for {TARGET_DATE}.')
+    estimates = pd.read_csv(ESTIMATES_PATH, encoding='utf-8-sig', dtype=str, keep_default_na=False)
+    items = pd.read_csv(ITEMS_PATH, encoding='utf-8-sig', dtype=str, keep_default_na=False)
+    required_estimates = ('recommendation_key', 'usage_type', 'tier_code', 'title', 'total_price', 'is_recommend')
+    required_items = ('recommendation_key', 'category', 'product_url', 'quantity', 'unit_price')
+    for label, frame, columns in (
+        ('estimates', estimates, required_estimates),
+        ('items', items, required_items),
+    ):
+        if frame.empty or not set(columns).issubset(frame.columns):
+            raise ValueError(f'Empty CSV or missing required columns: {label}')
+        for column in columns:
+            frame[column] = frame[column].map(empty_to_none)
+            if frame[column].isna().any():
+                raise ValueError(f'Missing value: {label}.{column}')
+    if estimates.recommendation_key.duplicated().any():
+        raise ValueError('Duplicate recommendation keys.')
+    if items.duplicated(['recommendation_key', 'product_url']).any():
+        raise ValueError('Duplicate products within a recommendation.')
+
+    estimate_rows = estimates.to_dict('records')
+    items_by_key = {row['recommendation_key']: [] for row in estimate_rows}
+    for item in items.to_dict('records'):
+        key = item['recommendation_key']
+        if key not in items_by_key:
+            raise ValueError(f'Unknown recommendation key in items: {key}')
+        item['quantity'] = csv_integer(item['quantity'], f'{key}.quantity')
+        item['unit_price'] = csv_integer(item['unit_price'], f'{key}.unit_price')
+        if item['quantity'] == 0 or item['unit_price'] > 999999999999:
+            raise ValueError(f'Invalid item quantity or unit price: {key}')
+        items_by_key[key].append(item)
+    for row in estimate_rows:
+        key = row['recommendation_key']
+        if not key.startswith(f'{TARGET_DATE}_') or len(key) > 100:
+            raise ValueError(f'Invalid recommendation key for {TARGET_DATE}: {key}')
+        if row['is_recommend'] != 'Y':
+            raise ValueError(f'Only shared recommendations marked Y may be imported: {key}')
+        if row['usage_type'] not in ('OFFICE', 'GAMING', 'STREAMING', 'CREATOR', 'DEVELOPMENT'):
+            raise ValueError(f'Invalid usage type: {key}')
+        if len(row['tier_code']) > 40 or len(row['title']) > 150:
+            raise ValueError(f'Tier code or title exceeds database length: {key}')
+        row['total_price'] = csv_integer(row['total_price'], f'{key}.total_price')
+        bundle = items_by_key[key]
+        if not bundle or row['total_price'] > 999999999999:
+            raise ValueError(f'Empty recommendation or invalid total: {key}')
+        if sum(item['quantity'] * item['unit_price'] for item in bundle) != row['total_price']:
+            raise ValueError(f'Recommendation total does not match its items: {key}')
+
+    conn = oracledb.connect(**config)
+    cursor = conn.cursor()
+    inserted = updated = saved_items = 0
+    try:
+        # Resolve every product before changing estimates; CSV IDs are not DB IDs.
+        products = {}
+        for url in items.product_url.unique():
+            cursor.execute(
+                'SELECT "part_id", "category" FROM "PARTS" WHERE "product_url" = :url',
+                {'url': url},
+            )
+            matches = cursor.fetchmany(2)
+            if len(matches) != 1:
+                raise ValueError(f'Missing or duplicate product URL in PARTS: {url}')
+            products[url] = (int(matches[0][0]), matches[0][1])
+        for bundle in items_by_key.values():
+            for item in bundle:
+                part_id, category = products[item['product_url']]
+                if category != item['category']:
+                    raise ValueError(f'Product category mismatch: {item["product_url"]}')
+                item['part_id'] = part_id
+
+        for row in estimate_rows:
+            key = row['recommendation_key']
+            cursor.execute(
+                '''SELECT "estimated_id", "user_id", "is_recommend"
+                   FROM "ESTIMATES" WHERE "estimate_key" = :estimate_key FOR UPDATE''',
+                {'estimate_key': key},
+            )
+            matches = cursor.fetchmany(2)
+            if len(matches) > 1:
+                raise ValueError(f'Duplicate estimate key in DB: {key}')
+            params = {
+                'title': row['title'], 'usage_type': row['usage_type'],
+                'tier_code': row['tier_code'], 'total_price': row['total_price'],
+            }
+            if matches:
+                estimated_id, user_id, recommended = matches[0]
+                if user_id is not None or recommended != 'Y':
+                    raise ValueError(f'Refusing to overwrite a personal or non-recommended estimate: {key}')
+                params['estimated_id'] = int(estimated_id)
+                cursor.execute(
+                    '''UPDATE "ESTIMATES" SET "title" = :title, "usage_type" = :usage_type,
+                       "tier_code" = :tier_code, "total_price" = :total_price,
+                       "total_power" = NULL, "updated_at" = SYSDATE
+                       WHERE "estimated_id" = :estimated_id''', params,
+                )
+                cursor.execute(
+                    'DELETE FROM "ESTIMATE_ITEMS" WHERE "estimated_id" = :estimated_id',
+                    {'estimated_id': params['estimated_id']},
+                )
+                updated += 1
+            else:
+                cursor.execute('SELECT "SEQ_ESTIMATES".NEXTVAL FROM DUAL')
+                params['estimated_id'] = int(cursor.fetchone()[0])
+                params['estimate_key'] = key
+                cursor.execute(
+                    '''INSERT INTO "ESTIMATES"
+                       ("estimated_id", "user_id", "estimate_key", "title", "usage_type",
+                        "tier_code", "total_price", "is_recommend")
+                       VALUES (:estimated_id, NULL, :estimate_key, :title, :usage_type,
+                               :tier_code, :total_price, 'Y')''', params,
+                )
+                inserted += 1
+            for item in items_by_key[key]:
+                cursor.execute(
+                    '''INSERT INTO "ESTIMATE_ITEMS"
+                       ("item_id", "estimated_id", "part_id", "quantity", "unit_price")
+                       VALUES ("SEQ_ESTIMATE_ITEMS".NEXTVAL, :estimated_id, :part_id,
+                               :quantity, :unit_price)''',
+                    {'estimated_id': params['estimated_id'], 'part_id': item['part_id'],
+                     'quantity': item['quantity'], 'unit_price': item['unit_price']},
+                )
+                saved_items += 1
+        conn.commit()
+        print(f'Oracle recommendations: ESTIMATES inserted {inserted} / updated {updated} / '
+              f'ESTIMATE_ITEMS saved {saved_items}')
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def main(limit=None, execute=False, recommendations_only=False):
+    if not DB_SAVE_ENABLED and not execute:
+        print('Database writes are disabled. Pass --execute to enable loading.')
         raise SystemExit(DB_SAVE_DISABLED_EXIT_CODE)
 
-    import oracledb
-    paths = (PARTS_PATH, SPECS_PATH, HISTORY_PATH)
-    if any(not path.exists() for path in paths):
-        raise SystemExit('통합 output CSV가 없다. 먼저 DataProcessing_parts.py를 실행할 것.')
+    if limit is not None and limit < 1:
+        raise ValueError('limit must be a positive integer.')
+    if recommendations_only and limit is not None:
+        raise ValueError('--limit cannot be combined with --recommendations-only.')
 
-    config = {'user': os.environ['ORACLE_USER'], 'password': os.environ['ORACLE_PASSWORD'],
-              'dsn': os.environ['ORACLE_DSN']}
+    import oracledb
+    paths = (ESTIMATES_PATH, ITEMS_PATH) if recommendations_only else (PARTS_PATH, SPECS_PATH)
+    if any(not path.exists() for path in paths):
+        raise SystemExit(f'Missing input CSV files for {TARGET_DATE}.')
+
+    required_env = ('DB_URL', 'DB_USERNAME', 'DB_PASSWORD')
+    missing_env = [name for name in required_env if not os.environ.get(name)]
+    if missing_env:
+        raise ValueError(f'Missing environment variables: {", ".join(missing_env)}')
+    db_url = os.environ['DB_URL'].strip()
+    db_username = os.environ['DB_USERNAME'].strip()
+    jdbc_prefix = 'jdbc:oracle:thin:@'
+    if not db_url.startswith(jdbc_prefix) or not db_url[len(jdbc_prefix):].strip():
+        raise ValueError('DB_URL must contain an Oracle JDBC thin connection URL.')
+    if not db_username:
+        raise ValueError('DB_USERNAME must not be blank.')
+    config = {
+        'user': db_username,
+        'password': os.environ['DB_PASSWORD'],
+        'dsn': db_url[len(jdbc_prefix):],
+    }
+    if recommendations_only:
+        load_recommendations(config)
+        return
     parts = pd.read_csv(PARTS_PATH, encoding='utf-8-sig', dtype=str)
     specs = pd.read_csv(SPECS_PATH, encoding='utf-8-sig', dtype=str)
-    history = pd.read_csv(HISTORY_PATH, encoding='utf-8-sig', dtype=str)
     if (parts.part_id.duplicated().any()
-            or not specs.part_id.isin(parts.part_id).all()
-            or not history.part_id.isin(parts.part_id).all()):
-        raise ValueError('PARTS/PART_SPECS/PRICE_HISTORY ID 연결이 올바르지 않다.')
+            or not specs.part_id.isin(parts.part_id).all()):
+        raise ValueError('PARTS/PART_SPECS ID 연결이 올바르지 않다.')
     product_urls = parts.product_url.map(empty_to_none)
     if product_urls.isna().any() or product_urls.duplicated().any():
         raise ValueError('PARTS CSV product_url must be present and unique.')
+
+    if limit is not None:
+        parts = parts.head(limit)
+        specs = specs[specs.part_id.isin(parts.part_id)]
 
     conn = oracledb.connect(**config)
     cursor = conn.cursor()
@@ -101,28 +274,9 @@ def main():
                 'spec_value': empty_to_none(row.spec_value), 'spec_unit': empty_to_none(row.spec_unit),
             })
             spec_inserted_count += cursor.rowcount
-        for _, row in history.iterrows():
-            cursor.execute('''MERGE INTO "PRICE_HISTORY" h
-                              USING (
-                                  SELECT :part_id AS "part_id", :dateprice AS "dateprice",
-                                         :field AS "Field", :source AS "source"
-                                  FROM DUAL
-                              ) incoming
-                              ON (h."part_id" = incoming."part_id"
-                                  AND h."recorded_at" = TO_DATE(incoming."Field", 'FXYYYY-MM-DD'))
-                              WHEN MATCHED THEN
-                                  UPDATE SET h."dateprice" = incoming."dateprice",
-                                             h."source" = incoming."source"
-                              WHEN NOT MATCHED THEN
-                                  INSERT ("price_history_id","part_id","dateprice","Field","source")
-                                  VALUES ("SEQ_PRICE_HISTORY".NEXTVAL, incoming."part_id",
-                                          incoming."dateprice", incoming."Field", incoming."source")''', {
-                'part_id': part_id_map[row.part_id], 'dateprice': int(row.dateprice),
-                'field': empty_to_none(row.Field), 'source': empty_to_none(row.source),
-            })
         conn.commit()
         print(f'Oracle 적재 완료: PARTS 신규 {inserted_count} / 가격 갱신 {updated_count} / '
-              f'PART_SPECS 신규 {spec_inserted_count} / PRICE_HISTORY 추가·갱신 처리 {len(history)}')
+              f'PART_SPECS 신규 {spec_inserted_count}')
     except Exception:
         conn.rollback()
         raise
@@ -132,4 +286,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Load parts, specs, or recommendation CSVs into Oracle.')
+    parser.add_argument('--limit', type=int, help='Maximum products for a small test load.')
+    parser.add_argument('--execute', action='store_true', help='Explicitly enable database writes.')
+    parser.add_argument('--recommendations-only', action='store_true', help='Load recommendation CSVs using existing PARTS.')
+    args = parser.parse_args()
+    main(limit=args.limit, execute=args.execute, recommendations_only=args.recommendations_only)

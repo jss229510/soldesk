@@ -55,7 +55,10 @@ public class BoardService {
         }
 
         // 페이지 요청서 만들기
-        Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "boardId"));
+        Sort sort = Sort.by(
+                Sort.Order.desc("isPinned"),
+                Sort.Order.desc("boardId"));
+        Pageable pageable = PageRequest.of(safePage, safeSize, sort);
 
         // 글 목록 조회(작성자도 한번에 조회)
         Page<Board> result = boardRepository.search(category, safeKeyword, pageable);
