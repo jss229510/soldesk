@@ -22,7 +22,8 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
     });
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (event) => {
+    event.preventDefault();
     if (loading) return;
     setError("");
     // 이메일 빈칸 확인
@@ -69,92 +70,95 @@ const LoginPage = ({ onNavigate, onSuccess }) => {
   };
 
   return (
-    <div className="h-full">
-      <div
-        className="flex h-full w-full flex-col justify-center rounded-xl border p-4 shadow-md"
+    <form
+      className="flex w-full flex-col p-6 sm:p-7"
+      style={{
+        backgroundColor: "var(--bg-surface)",
+        color: "var(--text)",
+      }}
+      onSubmit={onSubmit}
+    >
+      <div className="mb-5 pr-8 text-center">
+        <h2 id="login-title" className="text-xl font-bold">
+            로그인
+        </h2>
+
+        <p
+          className="mt-1 text-sm"
+          style={{ color: "var(--text-2)" }}
+        >
+          PartZone에 로그인하세요
+        </p>
+      </div>
+
+      <input
+        ref={emailRef}
+        autoFocus
+        name="email"
+        type="email"
+        value={input.email}
+        onChange={onChange}
+        placeholder="이메일"
+        className="mb-3 w-full rounded-lg border px-3 py-3 text-sm outline-none"
         style={{
-          backgroundColor: "var(--bg-surface)",
+          backgroundColor: "var(--bg-surface-2)",
           borderColor: "var(--line)",
           color: "var(--text)",
         }}
+      />
+
+      <input
+        ref={passwordRef}
+        name="password"
+        type="password"
+        value={input.password}
+        onChange={onChange}
+        placeholder="비밀번호"
+        className="mb-4 w-full rounded-lg border px-3 py-3 text-sm outline-none"
+        style={{
+          backgroundColor: "var(--bg-surface-2)",
+          borderColor: "var(--line)",
+          color: "var(--text)",
+        }}
+      />
+
+      {error && <p role="alert" className="mb-3 text-sm text-red-500">{error}</p>}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-lg py-3 text-sm font-semibold"
+        style={{
+          border: "1px solid #ccc",
+          backgroundColor: "#fff",
+          color: "var(--text)",
+          boxShadow: "0 2px 4px rgba(15, 23, 42, 0.12)",
+        }}
       >
-        <div className="mb-4 text-center">
-          <h2 id="login-title" className="text-lg font-bold">
-            로그인
-          </h2>
+        {loading ? "로그인 중..." : "로그인"}
+      </button>
 
-          <p
-            className="mt-1 text-xs"
-            style={{ color: "var(--text-2)" }}
-          >
-            PartZone에 로그인하세요
-          </p>
-        </div>
-
-        <input
-          ref={emailRef}
-          autoFocus
-          name="email"
-          type="email"
-          value={input.email}
-          onChange={onChange}
-          placeholder="이메일"
-          className="mb-3 w-full rounded-lg border px-3 py-2 text-sm outline-none"
-          style={{
-            backgroundColor: "var(--bg-surface-2)",
-            borderColor: "var(--line)",
-            color: "var(--text)",
-          }}
-        />
-
-        <input
-          ref={passwordRef}
-          name="password"
-          type="password"
-          value={input.password}
-          onChange={onChange}
-          placeholder="비밀번호"
-          className="mb-4 w-full rounded-lg border px-3 py-2 text-sm outline-none"
-          style={{
-            backgroundColor: "var(--bg-surface-2)",
-            borderColor: "var(--line)",
-            color: "var(--text)",
-          }}
-        />
-
-        {error && <p role="alert" className="mb-3 text-sm text-red-500">{error}</p>}
+      <div className="mt-5 flex justify-center gap-4 text-sm">
+        <button
+          type="button"
+          onClick={onRegister}
+          style={{ color: "var(--text-2)" }}
+        >
+          회원가입
+        </button>
 
         <button
           type="button"
-          onClick={onSubmit}
-          disabled={loading}
-          className="w-full rounded-lg bg-cyan-500 py-2 text-sm font-semibold text-gray-950 hover:bg-cyan-400"
+          onClick={() => {
+            onNavigate?.();
+            navigate("/forgot-password");
+          }}
+          style={{ color: "var(--text-2)" }}
         >
-          {loading ? "로그인 중..." : "로그인"}
+          비밀번호 찾기
         </button>
-
-        <div className="mt-4 flex justify-center gap-3 text-xs">
-          <button
-            type="button"
-            onClick={onRegister}
-            style={{ color: "var(--text-2)" }}
-          >
-            회원가입
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              onNavigate?.();
-              navigate("/forgot-password");
-            }}
-            style={{ color: "var(--text-2)" }}
-          >
-            비밀번호 찾기
-          </button>
-        </div>
       </div>
-    </div>
+    </form>
   );
 };
 

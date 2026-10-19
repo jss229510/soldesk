@@ -10,7 +10,7 @@ export const Footer = () => (
       color: 'var(--text)',
     }}
   >
-    <div className="container mx-auto grid grid-cols-1 gap-8 px-4 py-12 md:grid-cols-2 lg:grid-cols-4">
+    <div className="container mx-auto grid grid-cols-1 gap-8 px-4 py-10 md:grid-cols-3">
       <div>
         <p
           className="mb-3 text-lg font-bold"
@@ -23,9 +23,9 @@ export const Footer = () => (
           className="text-sm leading-loose"
           style={{ color: 'var(--text-2)' }}
         >
-          최신 PC 부품 시세를 한눈에.
+          PC 부품 시세를 비교하고
           <br />
-          전문가가 큐레이션한 하드웨어 정보.
+          예산에 맞는 구성을 찾아보세요.
         </p>
       </div>
 
@@ -59,10 +59,8 @@ export const Footer = () => (
         color: 'var(--text-3)',
       }}
     >
-      <span>© 2026 PartZone. All rights reserved.</span>
-      <span>
-        사업자 123-45-67890 · 통신판매 제2026-서울강남-0001호
-      </span>
+      <span>© 2026 PartZone</span>
+      <span>PC 부품 시세 · 예산 추천 · PC 구성</span>
     </div>
   </footer>
 );

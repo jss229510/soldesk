@@ -96,6 +96,12 @@ public class Cart {
         this.updatedAt = LocalDateTime.now();
         // 장바구니 변경일 갱신
     }
+
+    // 수량 변경처럼 CartItem만 수정되는 경우에도 장바구니 변경 시간을 갱신한다.
+    public void touch() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     // ===== Getter =====
     // cartId, userId, createdAt, updatedAt, 품목 목록을 읽을 수 있게 제공
 

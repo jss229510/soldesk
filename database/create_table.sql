@@ -2,27 +2,27 @@
 -- ============================================================
 -- DROP TABLE "ESTIMATE_ITEMS" CASCADE CONSTRAINTS;
 -- DROP TABLE "PART_SPECS" CASCADE CONSTRAINTS;
--- DROP TABLE "PRICE_HISTORY" CASCADE CONSTRAINTS;
--- DROP TABLE "RESELL_POSTS" CASCADE CONSTRAINTS;
+-- DROP TABLE "CART_ITEMS" CASCADE CONSTRAINTS;
+-- DROP TABLE "CART_ESTIMATES" CASCADE CONSTRAINTS;
+-- DROP TABLE "BOARD_POSTS" CASCADE CONSTRAINTS;
+-- DROP TABLE "CARTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "ESTIMATES" CASCADE CONSTRAINTS;
 -- DROP TABLE "PARTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "USERS" CASCADE CONSTRAINTS;
--- DROP TABLE "PERFORMANCE_TIER" CASCADE CONSTRAINTS;
--- DROP TABLE "CARTS" CASCADE CONSTRAINTS;
--- DROP TABLE "CART_ITEMS" CASCADE CONSTRAINTS;
 
---데이터 삭제
---============================================================
+
+-- 데이터 삭제
+-- ============================================================
 -- DELETE FROM "ESTIMATE_ITEMS";
 -- DELETE FROM "PART_SPECS";
--- DELETE FROM "PRICE_HISTORY";
--- DELETE FROM "RESELL_POSTS";
+-- DELETE FROM "CART_ITEMS";
+-- DELETE FROM "CART_ESTIMATES";
+-- DELETE FROM "BOARD_POSTS";
+-- DELETE FROM "CARTS";
 -- DELETE FROM "ESTIMATES";
 -- DELETE FROM "PARTS";
 -- DELETE FROM "USERS";
--- DELETE FROM "PERFORMANCE_TIER";
--- DELETE FROM "CARTS";
--- DELETE FROM "CART_ITEMS";
+-- COMMIT;
 
 CREATE TABLE "USERS" (
     "user_id" NUMBER NOT NULL,
@@ -60,13 +60,15 @@ CREATE TABLE "PART_SPECS" (
 
 CREATE TABLE "ESTIMATES" (
     "estimated_id" NUMBER NOT NULL,
-    "user_id" NUMBER NOT NULL,
-    "source_recommended_id" NUMBER,
-    "title" VARCHAR2(100 CHAR) DEFAULT '내 견적' NOT NULL,
+    "user_id" NUMBER, -- 견적 소유자 / 공통 견적은 NULL, 개인 견적은 회원 번호
+    "estimate_key" VARCHAR2(100 CHAR) NOT NULL,
+    "title" VARCHAR2(150 CHAR) NOT NULL,
     "usage_type" VARCHAR2(30 CHAR),
-    "budget_max" NUMBER,
+    "tier_code" VARCHAR2(40 CHAR),
+    "budget_max" NUMBER(12, 0),
+    "total_price" NUMBER(12, 0) NOT NULL,
     "total_power" NUMBER,
-    "is_shared" CHAR(1) DEFAULT 'N' NOT NULL,
+    "is_recommend" CHAR(1) DEFAULT 'N' NOT NULL,
     "created_at" DATE DEFAULT SYSDATE NOT NULL,
     "updated_at" DATE DEFAULT SYSDATE NOT NULL
 );
@@ -80,70 +82,56 @@ CREATE TABLE "ESTIMATE_ITEMS" (
 );
 
 CREATE TABLE "CARTS" (
-    "cart_id"    NUMBER NOT NULL,
-    "user_id"    NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
     "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
 CREATE TABLE "CART_ITEMS" (
     "cart_item_id" NUMBER NOT NULL,
-    "cart_id"      NUMBER NOT NULL,
-    "part_id"      NUMBER NOT NULL,
-    "quantity"    NUMBER DEFAULT 1 NOT NULL,
-    "added_at"    TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
-);
-
-CREATE TABLE "PRICE_HISTORY" (
-    "price_history_id" NUMBER NOT NULL,
-    "part_id" NUMBER NOT NULL,
-    "dateprice" NUMBER(12, 0) NOT NULL,
-    "Field" VARCHAR2(10) NOT NULL,
-    "source" VARCHAR2(50) DEFAULT '다나와' NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "recorded_at" GENERATED ALWAYS AS (
-        TO_DATE("Field", 'FXYYYY-MM-DD')
-    ) VIRTUAL
-);
-
-CREATE TABLE "RESELL_POSTS" (
-    "post_id" NUMBER NOT NULL,
-    "seller_id" NUMBER NOT NULL,
-    "part_id" NUMBER,
-    "target_type" VARCHAR2(20),
-    "condition_grade" VARCHAR2(20),
-    "price" NUMBER,
-    "status" VARCHAR2(20),
-    "created_at" DATE
-);
-
-CREATE TABLE "RECOMMENDATIONS" (
-    "recommended_id" NUMBER NOT NULL,
-    "recommendation_key" VARCHAR2(100 CHAR) NOT NULL,
-    "purpose_code" VARCHAR2(30 CHAR) NOT NULL,
-    "tier_code" VARCHAR2(40 CHAR) NOT NULL,
-    "recommendation_name" VARCHAR2(150 CHAR) NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL
-);
-
-CREATE TABLE "RECOMMENDATION_PRODUCT" (
-    "recommended_id" NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
     "part_id" NUMBER NOT NULL,
     "quantity" NUMBER DEFAULT 1 NOT NULL,
-    "unit_price" NUMBER(12, 0) NOT NULL
+    "added_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+
+CREATE TABLE "CART_ESTIMATES" (
+    "cart_estimate_id" NUMBER NOT NULL,
+    "cart_id" NUMBER NOT NULL,
+    "estimated_id" NUMBER NOT NULL,
+    "quantity" NUMBER DEFAULT 1 NOT NULL,
+    "added_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
 CREATE TABLE "BOARD_POSTS" (
-    "post_id" NUMBER NOT NULL,
-    "user_id" NUMBER NOT NULL,
-    "board_type" VARCHAR2(20 CHAR) NOT NULL,
-    "estimated_id" NUMBER,
-    "title" VARCHAR2(200 CHAR) NOT NULL,
-    "content" CLOB NOT NULL,
-    "view_count" NUMBER DEFAULT 0 NOT NULL,
-    "created_at" DATE DEFAULT SYSDATE NOT NULL,
-    "updated_at" DATE DEFAULT SYSDATE NOT NULL
+    "post_id" NUMBER NOT NULL, -- 기본키
+    "user_id" NUMBER NOT NULL, -- 참조
+    "board_type" VARCHAR2(20 CHAR) NOT NULL, -- 게시판구분(FREE,QNA,NOTICE)
+    "title" VARCHAR2(200 CHAR) NOT NULL, -- 게시글 제목/최대 200 글자
+    "content" CLOB NOT NULL, -- 게시글 본문
+    "view_count" NUMBER DEFAULT 0 NOT NULL, -- 조회수/기본값은 0
+    "is_pinned" CHAR(1) DEFAULT 'N' NOT NULL, -- 상단고정 여부/Y는 고정 N은 고정아님/ 기본값은 N
+    "is_deleted" CHAR(1) DEFAULT 'N' NOT NULL, -- 삭제여부/Y는 삭제처리 N은 정상 게시글/ 기본값은 N
+    "is_resolved" CHAR(1) DEFAULT 'N' NOT NULL, -- QNA 해결여부/Y는 해결함 N은 미해결
+    "created_at" DATE DEFAULT SYSDATE NOT NULL, -- 작성 일시/ 저장할때 생략하면 DB의 현재 서버 일시가 들어감
+    "updated_at" DATE DEFAULT SYSDATE NOT NULL -- 마지막 수정 일시/ 최초저장시에는 기본값이 들어감/ 글을 수정하면 업데이트함
 );
+
+--CREATE TABLE "PRICE_HISTORY" (
+--    "price_history_id" NUMBER NOT NULL,
+--    "part_id" NUMBER NOT NULL,
+--    "dateprice" NUMBER(12, 0) NOT NULL,
+--    "Field" VARCHAR2(10) NOT NULL,
+--    "source" VARCHAR2(50) DEFAULT '다나와' NOT NULL,
+--    "created_at" DATE DEFAULT SYSDATE NOT NULL,
+--    "recorded_at" GENERATED ALWAYS AS (
+--        TO_DATE("Field", 'FXYYYY-MM-DD')
+--    ) VIRTUAL
+--);
+
+
+
     
     
     

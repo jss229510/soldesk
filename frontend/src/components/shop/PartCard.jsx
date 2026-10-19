@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Badge, Button, Chip, Sparkline, StarRating, Thumbnail } from '../common';
 import { useCart } from '../../context/CartContext';
 import { sparklineValues } from '../../mock/priceHistory';
@@ -10,7 +11,23 @@ import { discountRate, formatNumber, formatPrice } from '../../utils/format';
 export const PartCard = ({ part, onSelect }) => {
   // 부모 컴포넌트를 거쳐 콜백을 전달하지 않아도 카드에서 바로 장바구니에 담을 수 있다.
   const { addItem } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
   const off = discountRate(part.price, part.listPrice);
+
+  // 비동기 장바구니 API의 성공·실패를 카드 버튼에서 처리한다.
+  const handleAddToCart = async () => {
+    if (isAdding) return;
+
+    setIsAdding(true);
+    try {
+      await addItem(part);
+      alert('장바구니에 담았습니다.');
+    } catch (error) {
+      alert(error.message ?? '장바구니에 담지 못했습니다.');
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   return (
     <article className="flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 text-left hover:border-gray-500">
@@ -64,8 +81,8 @@ export const PartCard = ({ part, onSelect }) => {
           <Button variant="soft" block onClick={() => onSelect?.(part)}>
             부품 스펙 보기
           </Button>
-          <Button block onClick={() => addItem(part)}>
-            장바구니 담기
+          <Button block disabled={isAdding} onClick={() => void handleAddToCart()}>
+            {isAdding ? '담는 중...' : '장바구니 담기'}
           </Button>
         </div>
       </div>

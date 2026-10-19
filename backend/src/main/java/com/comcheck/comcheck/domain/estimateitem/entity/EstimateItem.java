@@ -68,7 +68,7 @@ public class EstimateItem {
         this.quantity = quantity;
     }
 
-    public long calculateItemPrice() {
+    public Long calculateItemPrice() {
         // 항목 금액 = 부품 현재 판매가 × 수량 (total_price 계산용)
         // 가격 정보가 없는 부품은 0원으로 계산
         Long price = part.getPrice();

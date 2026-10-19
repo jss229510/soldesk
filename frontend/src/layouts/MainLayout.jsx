@@ -5,6 +5,7 @@ import useToggle from '../hooks/useToggle';
 import Modal from '../components/common/Modal';
 import LoginPage from '../pages/LoginPage';
 import { fetchCurrentUser } from '../api/users';
+import { useCart } from '../context/CartContext';
 
 /** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
 export const MainLayout = () => {
@@ -15,6 +16,7 @@ export const MainLayout = () => {
   const [user, setUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
   const authVersion = useRef(0);
+  const { resetCart } = useCart();
 
   // Restore the existing session without overwriting a newer login or logout.
   useEffect(() => {
@@ -30,6 +32,7 @@ export const MainLayout = () => {
         const session = JSON.parse(saved);
         if (typeof session?.accessToken !== 'string' || !session.accessToken.trim()) {
           sessionStorage.removeItem('partzone-login');
+          resetCart();
           return;
         }
 
@@ -38,7 +41,10 @@ export const MainLayout = () => {
           setUser({ ...profile, accessToken: session.accessToken });
         }
       } catch {
-        if (isCurrent()) sessionStorage.removeItem('partzone-login');
+        if (isCurrent()) {
+          sessionStorage.removeItem('partzone-login');
+          resetCart();
+        }
       } finally {
         if (isCurrent()) setAuthChecking(false);
       }
@@ -46,7 +52,7 @@ export const MainLayout = () => {
 
     restoreUser();
     return () => { active = false; };
-  }, []);
+  }, [resetCart]);
 
   const onLoginSuccess = (profile) => {
     authVersion.current += 1;
@@ -58,6 +64,8 @@ export const MainLayout = () => {
 
   const onLogout = () => {
     authVersion.current += 1;
+    // Clear only client-side cart state; keep the stored server cart intact.
+    resetCart();
     sessionStorage.removeItem('partzone-login');
     setUser(null);
     setAuthChecking(false);
@@ -78,22 +86,13 @@ export const MainLayout = () => {
 
   return (
     <div className={`flex min-h-screen flex-col ${isDark ? 'dark' : ''}`}>
-      <button
-        type="button"
-        className="theme-toggle self-center whitespace-nowrap rounded-full px-3 py-1"
-        onClick={toggleDark}
-        aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
-        aria-pressed={isDark}
-        style={{
-          backgroundColor: 'var(--bg-surface-2)',
-          color: 'var(--text)',
-          boxShadow: 'inset 0 0 0 1px var(--line-strong)',
-        }}
-      >
-        {isDark ? '☀️ 라이트 모드' : '🌙 다크 모드'}
-      </button>
-
-      <Header onLogin={openLogin} user={user} onLogout={onLogout} />
+      <Header
+        onLogin={openLogin}
+        user={user}
+        onLogout={onLogout}
+        isDark={isDark}
+        onToggleDark={toggleDark}
+      />
 
       <Modal open={loginOpen || pathname === '/login'} onClose={closeLogin} labelledBy="login-title" compact>
         <LoginPage onNavigate={closeLogin} onSuccess={onLoginSuccess} />

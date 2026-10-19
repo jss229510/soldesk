@@ -1,146 +1,144 @@
 package com.comcheck.comcheck.domain.estimate.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.type.YesNoConverter;
 
-import jakarta.annotation.Generated;
+import com.comcheck.comcheck.domain.user.entity.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Entity 
-
-@Table(name = "ESTIMATES" )
-
-
+// ESTIMATES 테이블 한 행(견적 1개)과 연결되는 Entity
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "ESTIMATES")
 public class Estimate {
-    
-    @Id 
+
+    // 사용 용도로 허용되는 값 목록
+    // DB의 CK_ESTIMATE_USAGE 제약조건에 적힌 값과 정확히 같아야 한다.
+    // usage_type은 다른 테이블을 참조하지 않는 일반 문자열 컬럼이라, 허용 값은 여기 한 곳에서 관리한다.
+    // static final : 객체마다 따로 만들지 않고 클래스에 하나만 두는 상수
+    public static final List<String> USAGE_TYPES = List.of("OFFICE", "GAMING", "DEVELOPMENT", "CREATOR", "STREAMING");
+
+    @Id
     // estimated_id를 기본키(PK)로 지정
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ESTIMATES_GENERATOR")
-    @SequenceGenerator (name = "SEQ_ESTIMATES_GENERATOR", sequenceName = "SEQ_ESTIMATES", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATES_SEQ_GENERATOR")
+    @SequenceGenerator(name = "ESTIMATES_SEQ_GENERATOR", sequenceName = "SEQ_ESTIMATES", allocationSize = 1)
 
-    @Column (name = "\"estimated_id\"")
-    // Oracle의 실제 컬럼명 "estimated_id"와 연결
-    private Long estimateId;
-    
-    @Column(name = "\"user_id\"", nullable = false)
-    // 견적을 만든 회원 
-    private Long userId;
+    @Column(name = "\"estimated_id\"")
+    private Long estimatedId;
 
-    @Column(name = "\"source_recommended_id\"", updatable = false)
-    //이 견적이 어떤 추천 구성에서 시작됐는지
-    private Long sourceRecommendedId;
- 
-    @Column(name = "\"title\"")
+    @Column(name = "\"estimate_key\"", nullable = false, unique = true, updatable = false)
+    private String estimateKey;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "\"user_id\"", nullable = false, updatable = false)
+    private User user;
+
     // 견적 이름
+    @Column(name = "\"title\"", nullable = false)
     private String title;
- 
-    @Column(name = "\"total_price\"")
-    // 부품 총합 가격
-    private Integer totalPrice;
- 
-    @Column(name = "\"total_power\"")
-    // 예상 소비전력(W)
-    private Integer totalPower;
- 
-    @Convert(converter = YesNoConverter.class)
-    @Column(name = "\"is_shared\"")
-    // DB의 'Y'/'N'을 자바의 true/false로 자동 변환
-    private boolean shared;
- 
-    @Column(name = "\"created_at\"", updatable = false)
-    // 견적 생성일시
-    private LocalDateTime createdAt;
- 
+
+    // 사용 용도
     @Column(name = "\"usage_type\"")
-    // 용도 (예: 사무용, 편집용)
     private String usageType;
- 
+
+    // 성능 등급
+    @Column(name = "\"tier_code\"", updatable = false)
+    private String tierCode;
+
+    // 최대 예산
     @Column(name = "\"budget_max\"")
-    // 사용자 예산
     private Long budgetMax;
 
+    // 견적 총 금액
+    @Column(name = "\"total_price\"", nullable = false)
+    private Long totalPrice;
+
+    // 견적 총 소비전력 (W)
+    @Column(name = "\"total_power\"")
+    private Long totalPower;
+
+    // 추천 견적 여부
+    @Convert(converter = YesNoConverter.class)
+    @Column(name = "\"is_recommend\"", nullable = false)
+    private Boolean isRecommend;
+
+    // 생성 일시
+    @Column(name = "\"created_at\"", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    // 마지막 수정 일시
     @Column(name = "\"updated_at\"", nullable = false)
-    // 마지막 수정일시 
     private LocalDateTime updatedAt;
- 
-    
 
-    protected Estimate() {
-        // JPA가 DB 행에서 Entity를 다시 만들 때 필요한 기본 생성자
-    }
-
-    // 견적 생성
-    public Estimate(Long userId, String title, String usageType, Long budgetMax, boolean shared) {
-        // 사용자가 새 견적을 만들 때 입력한 필드만 초기화한다.
-        this.userId = userId;
+    // 새 견적 생성자
+    // 사용자가 입력할 수 있는 값만 받고, 나머지는 서버가 정한다.
+    public Estimate(User user, String title, String usageType, Long budgetMax) {
+        this.user = user;
         this.title = title;
         this.usageType = usageType;
         this.budgetMax = budgetMax;
-        this.shared = shared;
-        this.totalPower = 0;             // 부품을 담기 전이므로 0W
-        this.sourceRecommendedId = null; // 직접 만든 견적이므로 추천 출처 없음
+        this.totalPrice = 0L; // 부품이 아직 없으므로 0원
+        this.isRecommend = false; // 추천 여부는 관리자가 정하므로 기본값은 N
     }
 
-    @PrePersist 
-    // DB에 처음 저장되기 직전에 JPA가 자동으로 불러 주는 메서드
-    void onCreate(){
+    // DB에 처음 저장되기 직전에 자동 실행
+    @PrePersist
+    protected void onCreate() {
+        // 외부 공개용 키 발급
+        if (this.estimateKey == null) {
+            this.estimateKey = UUID.randomUUID().toString();
+        }
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
         this.updatedAt = now;
     }
 
-    // 견적 수정
-    public void update(String title, String usageType, Integer budgetMax, Boolean shared){
-        
+    // 이미 저장된 견적이 수정되기 직전에 자동 실행
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-
-    // 담긴 부품이 바뀌었을 때 총 가격/소비전력 갱신
-
-     public Long getEstimateId() {
-        return estimateId;
-    }
- 
-    public Long getUserId() {
-        return userId;
-    }
- 
-    public String getTitle() {
-        return title;
-    }
- 
-    public Integer getTotalPrice() {
-        return totalPrice;
-    }
- 
-    public Integer getTotalPower() {
-        return totalPower;
-    }
- 
-    public boolean isShared() {
-        return shared;
-    }
- 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
- 
-    public String getUsageType() {
-        return usageType;
-    }
- 
-    public Long getBudgetMax() {
-        return budgetMax;
+    // 견적 기본 정보 수정
+    public void update(String title, String usageType, Long budgetMax) {
+        this.title = title;
+        this.usageType = usageType;
+        this.budgetMax = budgetMax;
     }
 
+    // 총 금액/총 전력 갱신
+    public void changeTotals(Long totalPrice, Long totalPower) {
+        this.totalPrice = (totalPrice == null) ? 0L : totalPrice;
+        this.totalPower = totalPower;
+    }
 
+    // 총 소비전력만 갱신
+    public void changeTotalPower(Long totalPower) {
+        this.totalPower = totalPower;
+    }
+
+    // 이 견적이 해당 회원의 것인지 확인
+    public boolean isOwnedBy(Long userId) {
+        return userId != null && userId.equals(this.user.getUserId());
+    }
 }
