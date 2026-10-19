@@ -1,4 +1,5 @@
-package com.comcheck.comcheck.domain.board.service;
+package com.comcheck.comcheck.domain.Board.service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,57 +11,54 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.comcheck.comcheck.domain.board.dto.BoardDetailResponse;
-import com.comcheck.comcheck.domain.board.dto.BoardListResponse;
-import com.comcheck.comcheck.domain.board.dto.BoardPageResponse;
-import com.comcheck.comcheck.domain.board.dto.BoardRequest;
-import com.comcheck.comcheck.domain.board.entity.Board;
-import com.comcheck.comcheck.domain.board.entity.Category;
-import com.comcheck.comcheck.domain.board.repository.BoardRepository;
+import com.comcheck.comcheck.domain.Board.dto.BoardDetailResponse;
+import com.comcheck.comcheck.domain.Board.dto.BoardListResponse;
+//import BoardPageResponse
+import com.comcheck.comcheck.domain.Board.dto.BoardRequest;
+import com.comcheck.comcheck.domain.Board.entity.Board;
+import com.comcheck.comcheck.domain.Board.entity.Category;
 import com.comcheck.comcheck.domain.user.entity.User;
+import com.comcheck.comcheck.domain.Board.entity.ViewLog;
+import com.comcheck.comcheck.domain.Board.exception.ForbiddenException;
+import com.comcheck.comcheck.domain.Board.exception.NotFoundException;
+//import com.gyul.backend.exception.UnauthorizedException;
+import com.comcheck.comcheck.domain.Board.repository.BoardRepository;
 import com.comcheck.comcheck.domain.user.repository.UserRepository;
-import com.comcheck.comcheck.global.exception.DeletedBoardException;
-import com.comcheck.comcheck.global.exception.ForbiddenException;
-import com.comcheck.comcheck.global.exception.NotFoundException;
-import com.comcheck.comcheck.global.exception.UnauthorizedException;
+//import ViewLogRepository
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-
 public class BoardService {
-    
 
-    // 한쪽에 최대 몇 개까지 허용할건지 결정
     private static final int MAX_PAGE_SIZE = 50;
-
-    // 글 DB
     private final BoardRepository boardRepository;
 
-    // 회원 DB
-    private final UserRepository userRepository;
+    private final UserRepository memberRepository;
 
-    // 글 목록
+    private final ViewLogRepository viewLogRepository;
+
     public BoardPageResponse getBoards(int page, int size, Category category, String keyword) {
+
         // 이상한 값 막기
         int safePage = Math.max(page, 0);
         int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
-
-        // 검색어 정리: 공백뿐인게 있으면 제외
+        // 검색어 정리
         String safeKeyword = null;
         if (keyword != null && !keyword.isBlank()) {
             safeKeyword = keyword.trim();
         }
-
         // 페이지 요청서 만들기
         Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "boardId"));
+        // 조회(11/50)
 
-        // 글 목록 조회(작성자도 한번에 조회)
+        //
+
+        // 글 목록 조회
         Page<Board> result = boardRepository.search(category, safeKeyword, pageable);
 
-        // 가져왔으니까 dto 목록으로 하나씩 옮겨 담기
         List<BoardListResponse> boards = new ArrayList<>();
         for (Board board : result.getContent()) {
             boards.add(new BoardListResponse(board));
@@ -71,29 +69,27 @@ public class BoardService {
     // 글 상세
     public BoardDetailResponse getBoard(Long boardId) {
         Board board = findBoard(boardId);
+        return new BoardDetailResponse(board); // 여기서 작성자 정보를 꺼낸다 (트랜잭션 안이라 OK)
+    }
 
-        if(board.isDeleted()){
-            throw new DeletedBoardException("삭제된 게시물입니다.");
+    // 글번호 찾기
+    private Board findBoard(Long boardId) {
+        return boardRepository.findById(boardId)
+                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
+    }
+
+    private void checkWriter(Board board, Long loginMemberId) {
+        if (!board.isWrittenBy(loginMemberId)) {
+            throw new ForbiddenException("작성자만 수정하거나 삭제할 수 있습니다.");
         }
-        return new BoardDetailResponse(board);
     }
 
-    // 조회수 증가
-    // @Transactional: Spring Boot에서 데이터베이스 작업을 하나의 트랜잭션(Transaction)으로 묶어서 관리하는 어노테이션,
-    // DB작업이 모두 성공하면 저장, 못하면 이전 상태로 되돌리기
     @Transactional
-    public void increaseView(Long boardId) {
+    public BoardDetailResponse createBoard(BoardRequest request, Long loginMemberId) {
 
-        Board board = findBoard(boardId);
-        board.increaseViewCount();
-    }
-
-    // 글 작성
-    @Transactional
-    public BoardDetailResponse createBoard(BoardRequest request, Long loginUserId) {
-        // 1. 작성자(로그인 회원) 찾기 : 세션에는 번호만 있으므로 DB에서 회원을 꺼낸다
-        User writer = userRepository.findById(loginUserId)
-                .orElseThrow(() -> new UnauthorizedException("회원 정보를 찾을 수 없습니다."));
+        // 1) 작성자(로그인 회원) 찾기 : 세션에는 번호만 있으므로 DB에서 회원을 꺼낸다
+        User writer = UserRepository.findById(userId)
+                .orElseThrow(() -> new UnauthorizedException("회원 정보를 찾을 수 없습니다. 다시 로그인해 주세요."));
 
         // 2) 새 글 만들기 (제목은 앞뒤 공백 제거, 내용은 줄바꿈·띄어쓰기를 그대로 보존)
         Board board = new Board(writer, request.getCategory(), request.getTitle().trim(), request.getContent());
@@ -104,37 +100,32 @@ public class BoardService {
         return new BoardDetailResponse(saved);
     }
 
-    // 글 수정
-    @Transactional 
-    public BoardDetailResponse updateBoard(Long boardId, BoardRequest request, Long loginUserId){
-        Board board = findBoard(boardId);
-        checkWritter(board, loginUserId);
+    @Transactional
+    public BoardDetailResponse updateBoard(Long boardId, BoardRequest request, Long loginMemberId) {
 
-        // 값 바꾸기
+        Board board = findBoard(boardId); // 1) 글 찾기 (없으면 404)
+        checkWriter(board, loginMemberId); // 2) 작성자 확인 (다르면 403)
+
+        // 3) 값 바꾸기 → 트랜잭션 끝에 UPDATE 자동 실행
         board.update(request.getCategory(), request.getTitle().trim(), request.getContent());
 
-        return new BoardDetailResponse(board);
+        return new BoardDetailResponse(board); // 바뀐 값으로 응답
     }
 
-    // 글삭제
     @Transactional
-    public void deleteBoard(Long boardId, Long loginUserId) {
+    public void deleteBoard(Long boardId, Long memberId) {
         Board board = findBoard(boardId);
-        checkWritter(board, loginUserId);
-
-        board.delete();
+        checkWriter(board, memberId);
+        boardRepository.delete(board);
     }
 
-    // 글삭제 안내문구
-    private Board findBoard(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
-    }
+    @Transactional
+    public void increaseView(Long boardId, Long loginMemberId) {
 
-    // 작성자 본인이 아니면 권한 불충분 - 403 예외 처리
-    private void checkWritter(Board board, Long loginUserId) {
-        if (!board.isWritterBy(loginUserId)) {
-            throw new ForbiddenException("작성자만 수정하거나 삭제할 수 있습니다.");
-        }
+        Board board = findBoard(boardId); // 1) 글 찾기 (없으면 404)
+        board.increaseViewCount(); // 2) 조회수 +1 (변경 감지로 UPDATE)
+
+        // 3) 방명록에 한 줄 쓰기 (INSERT) - 날씨·기온은 06챕터에서 추가
+        viewLogRepository.save(new ViewLog(board.getBoardId(), loginMemberId, board.getCategory()));
     }
 }
