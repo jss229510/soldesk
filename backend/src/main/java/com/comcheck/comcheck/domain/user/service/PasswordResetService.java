@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,6 +27,7 @@ import java.util.HexFormat;
 
 @Service
 public class PasswordResetService {
+    private static final Logger log = LoggerFactory.getLogger(PasswordResetService.class);
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final ObjectProvider<JavaMailSender> mailSender;
@@ -54,6 +57,7 @@ public class PasswordResetService {
         }
         JavaMailSender sender = mailSender.getIfAvailable();
         if (sender == null || from.isBlank()) {
+            log.warn("메일 발송 설정 누락: MAIL_NOT_CONFIGURED");
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "메일 설정이 필요합니다.");
         }
 
@@ -90,6 +94,10 @@ public class PasswordResetService {
         try {
             sender.send(message);
         } catch (MailException exception) {
+            // 비밀번호와 메일 본문 없이 오류 종류만 기록
+            log.warn("메일 발송 실패: 종류={}, 원인={}",
+                    exception.getClass().getSimpleName(),
+                    exception.getMostSpecificCause().getClass().getSimpleName());
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "메일 발송에 실패했습니다.");
         }
     }
@@ -113,8 +121,10 @@ public class PasswordResetService {
             throw invalidLink();
         }
         // 새 비밀번호는 BCrypt 해시로 저장
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        int updated = userRepository.updatePasswordForReset(user.getUserId(), passwordEncoder.encode(newPassword));
+        if (updated != 1) {
+            throw invalidLink();
+        }
     }
 
     private ResponseStatusException invalidLink() {

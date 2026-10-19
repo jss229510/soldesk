@@ -86,6 +86,7 @@ class PasswordResetServiceTest {
         assertThrows(ResponseStatusException.class, () -> service.resetPassword(token, "short"));
         assertThrows(ResponseStatusException.class, () -> service.resetPassword(token, "가".repeat(25)));
         verify(users, never()).save(any());
+        verify(users, never()).updatePasswordForReset(anyLong(), anyString());
     }
 
     @Test
@@ -94,18 +95,19 @@ class PasswordResetServiceTest {
         when(tokens.consume(eq(1L), anyString(), any())).thenReturn(0);
         assertThrows(ResponseStatusException.class, () -> service.resetPassword(token, "new-pass123"));
         verify(users, never()).save(any());
+        verify(users, never()).updatePasswordForReset(anyLong(), anyString());
     }
 
     @Test
     void savesHashedPasswordAndRejectsReuse() {
         when(tokens.findByTokenHash(anyString())).thenReturn(Optional.of(new PasswordResetToken(1L, "hash", LocalDateTime.now())));
         when(tokens.consume(eq(1L), anyString(), any())).thenReturn(1, 0);
+        when(users.updatePasswordForReset(eq(1L), anyString())).thenReturn(1);
         service.resetPassword(token, "new-pass123");
         ArgumentCaptor<String> password = ArgumentCaptor.forClass(String.class);
-        verify(user).setPassword(password.capture());
+        verify(users).updatePasswordForReset(eq(1L), password.capture());
         assertTrue(new BCryptPasswordEncoder().matches("new-pass123", password.getValue()));
-        verify(users).save(user);
         assertThrows(ResponseStatusException.class, () -> service.resetPassword(token, "other-pass123"));
-        verify(users, times(1)).save(user);
+        verify(users, times(1)).updatePasswordForReset(eq(1L), anyString());
     }
 }

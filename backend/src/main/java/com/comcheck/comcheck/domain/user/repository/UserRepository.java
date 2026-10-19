@@ -4,6 +4,7 @@ import com.comcheck.comcheck.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import jakarta.persistence.LockModeType;
 
@@ -14,6 +15,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select u from User u where u.userId = :userId")
     Optional<User> findForPasswordReset(@Param("userId") Long userId);
+
+    // 재설정한 비밀번호 해시만 변경
+    @Modifying
+    @Query("update User u set u.password = :password where u.userId = :userId")
+    int updatePasswordForReset(@Param("userId") Long userId, @Param("password") String password);
 
     // 이메일로 사용자 조회
     Optional<User> findByEmail(String email);

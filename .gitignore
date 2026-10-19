@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 tmp/
+backend/.local/
 node_modules/
 HELP.md
 .gradle

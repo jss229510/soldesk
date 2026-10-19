@@ -1,6 +1,8 @@
 // 제품 페이지에서 확인한 모델별 사진. CPU는 칩의 모델명도 확인했다.
 // 이름이 정확히 일치하는 제품만 연결한다.
 export const PART_IMAGES = {
+  // 원래 사진 주소가 삭제되어 동일 제품의 현재 사진으로 연결
+  '마이크로닉스 Classic II 750W 80PLUS골드 풀모듈러 ATX3.1 화이트': 'https://img.danuri.io/catalog-image/609/314/054/e6ba8efd6d84443f8987fc6c8813dfc6.jpeg?shrink=500:500',
   '맥스엘리트 MAXWELL DUKE 1000W 80PLUS PLATINUM 풀모듈러 ATX 3.1 (PCIE5)': 'https://img.danuri.io/catalog-image/949/285/031/769b56c38a8e45b287576d6b0154c89f.jpg?shrink=500:500',
   '인텔 코어i9-10세대 10900K (코멧레이크S)': 'https://img.danuri.io/catalog-image/233/305/011/48f92bb753c8477aa34d3486ecf477d9.jpg?shrink=500:500',
   '인텔 코어i3-10세대 10100F (코멧레이크S)': 'https://img.danuri.io/catalog-image/700/544/012/f1ab7230bf904849b9ea55f0727a24b5.jpg?shrink=500:500',
