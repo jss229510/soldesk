@@ -2,11 +2,19 @@ import { Button, Chip, Thumbnail } from '../common';
 import { getCategory } from '../../constants/categories';
 import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
+import {usePartSpecs} from '../../hooks/usePartSpecs';
 
 /** 견적 목록의 한 줄 */
 export const BuildPartRow = ({ item }) => {
   const category = getCategory(item.category);
   const { part } = item;
+  const {specs, loading, error} = usePartSpecs (part.id);
+  // 기존 상세 스펙 화면과 동일하게 내장 그래픽 판정값과 CPU 추천 등급은 제외한다.
+  const displaySpecs = specs.filter(
+    (spec) =>
+      spec.specKey !== 'has_igpu' &&
+      spec.specKey !== 'cpu_level'
+  );
 
   return (
     <div className="flex items-center gap-4 border-b border-gray-700 px-5 py-4">
