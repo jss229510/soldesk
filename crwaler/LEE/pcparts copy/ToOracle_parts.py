@@ -4,6 +4,7 @@ from decimal import Decimal, InvalidOperation
 import argparse
 import os
 import pandas as pd
+from insertCoolerAndCase import cooler_end_case
 
 
 DB_SAVE_ENABLED = False
@@ -26,7 +27,7 @@ def upsert_part(cursor, row):
     """Reuse a product ID by URL, updating its price or inserting a new product."""
     product_url = empty_to_none(row.product_url)
     if product_url is None:
-        raise ValueError(f'Missing product_url: CSV part_id={row.part_id}')
+        raise ValueError(f'상품 주소가 없습니다: {row.get("part_id","이름 없음")}')
     price = int(row.price) if empty_to_none(row.price) else None
     cursor.execute(
         'SELECT "part_id" FROM "PARTS" WHERE "product_url" = :product_url',
@@ -203,6 +204,66 @@ def load_recommendations(config):
         cursor.close()
         conn.close()
 
+def insert_manual_parts(cursor):
+    inserted_count = updated_count = spec_count = 0
+    
+    for item in cooler_end_case():
+        
+        #parts 테이블 저장
+        part = pd.Series(item["part"])
+ 
+        part_id, inserted = upsert_part(cursor, part)
+        
+        if inserted:
+            inserted_count += 1
+        else:
+            updated_count += 1
+        
+        #part_specs 테이블 저장
+        for spec in item["specs"]:
+            
+            values = spec["spec_value"]
+            
+            if not isinstance(values, list):
+                values = [values]
+            
+            for value in values:
+                print(
+                    "스펙:",
+                    spec["spec_key"],
+                    "값:",
+                    repr(value),
+                    "타입:",
+                    type(value)
+                )
+                cursor.execute("""
+                            INSERT INTO "PART_SPECS"
+                            ("spec_id","part_id","spec_key","spec_value","spec_unit")
+                            
+                            SELECT
+                            "SEQ_PART_SPECS".NEXTVAL,
+                            :part_id,
+                            :spec_key,
+                            :spec_value,
+                            :spec_unit
+                            FROM DUAL
+                            
+                            WHERE NOT EXISTS (
+                                SELECT 1
+                                FROM "PART_SPECS"
+                                WHERE "part_id" = :part_id
+                                AND "spec_key" = :spec_key
+                                AND "spec_value" = :spec_value
+                            )
+                            """, {
+                                "part_id": part_id,
+                                "spec_key": spec["spec_key"],
+                                "spec_value": value,
+                                "spec_unit": spec.get("spec_unit"),
+                            })
+                spec_count += cursor.rowcount
+            
+    return inserted_count, updated_count, spec_count
 
 def main(limit=None, execute=False, recommendations_only=False):
     if not DB_SAVE_ENABLED and not execute:
@@ -261,6 +322,14 @@ def main(limit=None, execute=False, recommendations_only=False):
             part_id_map[row.part_id] = db_part_id
             inserted_count += int(inserted)
             updated_count += int(not inserted)
+            
+        #직접 작성한 케이스/cpu 쿨러 저장
+        manual_inserted, manual_updated, manual_specs = insert_manual_parts(cursor)
+            
+        inserted_count += manual_inserted
+        updated_count += manual_updated
+        spec_inserted_count += manual_specs
+            
         for _, row in specs.iterrows():
             cursor.execute('''INSERT INTO "PART_SPECS" ("spec_id","part_id","spec_key","spec_value","spec_unit")
                               SELECT "SEQ_PART_SPECS".NEXTVAL,:part_id,:spec_key,:spec_value,:spec_unit
