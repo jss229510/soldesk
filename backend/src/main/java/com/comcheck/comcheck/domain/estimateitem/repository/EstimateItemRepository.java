@@ -8,6 +8,6 @@ import com.comcheck.comcheck.domain.estimateitem.entity.EstimateItem;
 
 public interface EstimateItemRepository
         extends JpaRepository<EstimateItem, Long> {
-    List<EstimateItem> findByEstimate_EstimateId(Long estimateId);
+    List<EstimateItem> findByEstimate_EstimatedId(Long estimateId);
 
 }

@@ -17,7 +17,7 @@ public record EstimateItemResponse(
 
         return new EstimateItemResponse(
                 item.getItemId(),
-                item.getEstimate().getEstimateId(),
+                item.getEstimate().getEstimatedId(),
                 part.getPartId(),
                 part.getPartName(),
                 item.getQuantity(),

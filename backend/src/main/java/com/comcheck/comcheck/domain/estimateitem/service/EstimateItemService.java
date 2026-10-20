@@ -74,7 +74,7 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
         // 견적 소유자 확인
-        if (!userId.equals(estimate.getUserId())) {
+        if (!estimate.isOwnedBy(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적을 수정할 권한이 없습니다.");
         }
 
@@ -114,12 +114,12 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
         // 견적 소유자 확인
-        if (!userId.equals(estimate.getUserId())) {
+        if (!estimate.isOwnedBy(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적의 항목을 조회할 권한이 없습니다.");
         }
 
         // 견적에 담긴 항목 목록 조회
-        List<EstimateItem> items = estimateItemRepository.findByEstimate_EstimateId(estimateId);
+        List<EstimateItem> items = estimateItemRepository.findByEstimate_EstimatedId(estimateId);
 
         // 응답 DTO를 담을 목록 생성
         List<EstimateItemResponse> responses = new ArrayList<>();
@@ -166,7 +166,7 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
         // 견적 소유자 확인
-        if (!userId.equals(estimate.getUserId())) {
+        if (!estimate.isOwnedBy(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적을 수정할 권한이 없습니다.");
         }
 
@@ -175,7 +175,7 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적 항목을 찾을 수 없습니다."));
 
         // 해당 견적에 속한 항목인지 확인
-        if (!estimateId.equals(item.getEstimate().getEstimateId())) {
+        if (!estimateId.equals(item.getEstimate().getEstimatedId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 견적에 속한 항목이 아닙니다.");
         }
 
@@ -214,7 +214,7 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
         // 견적 소유자 확인
-        if (!userId.equals(estimate.getUserId())) {
+        if (!estimate.isOwnedBy(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적을 수정할 권한이 없습니다.");
         }
 
@@ -223,7 +223,7 @@ public class EstimateItemService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적 항목을 찾을 수 없습니다."));
 
         // 해당 견적에 속한 항목인지 확인
-        if (!estimateId.equals(item.getEstimate().getEstimateId())) {
+        if (!estimateId.equals(item.getEstimate().getEstimatedId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 견적에 속한 항목이 아닙니다.");
         }
 
