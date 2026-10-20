@@ -2,7 +2,15 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { BuildProvider } from './context/BuildContext';
 import { CartProvider } from './context/CartContext';
 import { MainLayout } from './layouts';
-import { BudgetPage, BuildPage, CartPage, HomePage, NotFoundPage, ShopPage } from './pages';
+import {
+  BudgetPage,
+  BuildPage,
+  CartPage,
+  HomePage,
+  KakaoPaymentResultPage,
+  NotFoundPage,
+  ShopPage,
+} from './pages';
 import { DEFAULT_CATEGORY } from './constants/categories';
 import { ROUTES } from './constants/routes';
 import RegisterPage from './pages/RegisterPage';
@@ -39,6 +47,18 @@ const App = () => (
           <Route path={ROUTES.budget} element={<BudgetPage />} />
           <Route path={ROUTES.build} element={<BuildPage />} />
           <Route path={ROUTES.cart} element={<CartPage />} />
+          <Route
+            path={ROUTES.paymentApprove}
+            element={<KakaoPaymentResultPage resultType="approve" />}
+          />
+          <Route
+            path={ROUTES.paymentCancel}
+            element={<KakaoPaymentResultPage resultType="cancel" />}
+          />
+          <Route
+            path={ROUTES.paymentFail}
+            element={<KakaoPaymentResultPage resultType="fail" />}
+          />
           <Route path={ROUTES.boards} element={<BoardListPage />} />
           <Route path={ROUTES.boardWrite} element={<BoardWritePage />} />
           <Route path={`${ROUTES.boards}/:boardId`} element={<BoardDetailPage />} />

@@ -4,9 +4,15 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 // 여러 Controller와 Service에서 발생한 예외를 한곳에서 JSON 응답으로 바꾸는 전역 처리기다.
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    // 예상하지 못한 서버 오류의 실제 원인은 응답에 노출하지 않고 서버 로그에만 남긴다.
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // @Valid DTO의 필드 규칙을 어긴 경우에도 프로젝트 공통 오류 JSON을 반환한다.
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -63,6 +72,71 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
+    // /api/payments/abc처럼 Long 자리에 문자가 들어온 경우 발생한다.
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiErrorResponse> handleTypeMismatch(
+            MethodArgumentTypeMismatchException exception) {
+        Map<String, String> errors = Map.of(
+                exception.getName(),
+                "요청값의 형식이 올바르지 않습니다.");
+
+        return errorResponse(
+                HttpStatus.BAD_REQUEST,
+                "URL 또는 요청 파라미터의 형식을 다시 확인해주세요.",
+                errors);
+    }
+
+    // @RequestParam으로 선언한 pg_token 같은 필수 파라미터가 없는 경우 발생한다.
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiErrorResponse> handleMissingRequestParameter(
+            MissingServletRequestParameterException exception) {
+        Map<String, String> errors = Map.of(
+                exception.getParameterName(),
+                "필수 요청값입니다.");
+
+        return errorResponse(
+                HttpStatus.BAD_REQUEST,
+                "필수 요청값이 누락되었습니다.",
+                errors);
+    }
+
+    // JSON 문법이 틀렸거나 필드 타입과 다른 값이 들어온 경우 발생한다.
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleUnreadableMessage(
+            HttpMessageNotReadableException exception) {
+        return errorResponse(
+                HttpStatus.BAD_REQUEST,
+                "요청 본문의 JSON 형식이 올바르지 않습니다.");
+    }
+
+    // 생성자나 도메인 객체가 잘못된 값 자체를 거부한 경우 400으로 변환한다.
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalArgument(
+            IllegalArgumentException exception) {
+        return errorResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage());
+    }
+
+    // 결제 준비 상태가 아닌데 승인하는 경우처럼 현재 상태에서 허용되지 않는 요청을 처리한다.
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiErrorResponse> handleIllegalState(
+            IllegalStateException exception) {
+        return errorResponse(
+                HttpStatus.CONFLICT,
+                exception.getMessage());
+    }
+
+    // UNIQUE, NOT NULL, FK 같은 DB 제약조건 위반은 내부 SQL을 숨기고 공통 메시지만 반환한다.
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolation(
+            DataIntegrityViolationException exception) {
+        log.warn("데이터 무결성 제약조건 위반", exception);
+        return errorResponse(
+                HttpStatus.CONFLICT,
+                "이미 처리된 데이터이거나 현재 상태에서 저장할 수 없습니다.");
+    }
+
     // 410 삭제된 게시물입니다.
     @ExceptionHandler(DeletedBoardException.class)
     public ResponseEntity<ApiErrorResponse> handleDeletedBoard(DeletedBoardException e){
@@ -89,16 +163,32 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ApiErrorResponse> errorResponse(HttpStatus status, String message){
+        return errorResponse(status, message, Map.of());
+    }
+
+    // 필드별 오류가 필요한 예외도 동일한 ApiErrorResponse 구조로 만들기 위한 공통 메서드다.
+    private ResponseEntity<ApiErrorResponse> errorResponse(
+            HttpStatus status,
+            String message,
+            Map<String, String> errors) {
         ApiErrorResponse response = new ApiErrorResponse(
             status.value(),
             status.name(),
             message,
             LocalDateTime.now(),
-            Map.of()
+            errors
         );
-        return ResponseEntity.status(status).body(response); 
+        return ResponseEntity.status(status).body(response);
     }
 
-    
+    // 위에서 구체적으로 분류하지 못한 오류의 세부 내용은 사용자에게 노출하지 않는다.
+    // 반드시 가장 아래에 두어 구체적인 예외 처리기가 먼저 선택되게 한다.
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleUnexpectedException(Exception exception) {
+        log.error("처리되지 않은 서버 예외", exception);
+        return errorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "서버 처리 중 오류가 발생했습니다.");
+    }
 
 }

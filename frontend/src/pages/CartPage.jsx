@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
+import { preparePayment } from '../api/payments';
+import { getStoredAccessToken, savePendingPayment } from '../constants/payment';
+import PaymentHistoryModal from '../components/payment/PaymentHistoryModal';
 
 export const CartPage = () => {
   const {
@@ -19,6 +22,8 @@ export const CartPage = () => {
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
+  const [paymentHistoryOpen, setPaymentHistoryOpen] = useState(false);
 
   // 페이지에 진입할 때 DB에 저장된 장바구니를 불러온다.
   useEffect(() => {
@@ -63,10 +68,48 @@ export const CartPage = () => {
     }
   };
 
+  // 선택된 cartItemId만 서버에 보내 결제를 준비하고 카카오 결제창으로 이동한다.
+  const handlePayment = async () => {
+    if (selectedIds.length === 0 || isPaying) return;
+
+    setActionError('');
+    setIsPaying(true);
+
+    try {
+      const accessToken = getStoredAccessToken();
+      const response = await preparePayment(accessToken, selectedIds);
+
+      if (!response?.orderKey || !response?.redirectUrl) {
+        throw new Error('결제 준비 응답이 올바르지 않습니다.');
+      }
+
+      // 외부 결제 페이지를 다녀오면 React state가 사라지므로 주문번호를 먼저 저장한다.
+      savePendingPayment(response.orderKey);
+      window.location.assign(response.redirectUrl);
+    } catch (error) {
+      setActionError(error.message ?? '결제를 준비하지 못했습니다.');
+      setIsPaying(false);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold">장바구니</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-2xl font-bold">장바구니</h1>
+        <button
+          type="button"
+          onClick={() => setPaymentHistoryOpen(true)}
+          className="rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-sm font-semibold hover:border-cyan-500 hover:text-cyan-400"
+        >
+          결제 내역
+        </button>
+      </div>
       <p className="mt-2 text-sm text-gray-400">선택한 부품을 확인하고 주문 예상 금액을 계산할 수 있습니다.</p>
+
+      <PaymentHistoryModal
+        open={paymentHistoryOpen}
+        onClose={() => setPaymentHistoryOpen(false)}
+      />
 
       {isLoading ? (
         <div className="mt-6 rounded-lg border border-gray-700 bg-gray-900 px-6 py-16 text-center text-gray-400">
@@ -167,9 +210,17 @@ export const CartPage = () => {
                     {formatPrice(selectedTotalPrice)}
                   </strong>
                 </div>
-                {/* 주문 기능은 별도 주문 API가 생기기 전까지 비활성화한다. */}
-                <button type="button" disabled className="mt-5 w-full cursor-not-allowed rounded-md bg-gray-700 py-3 font-semibold text-gray-400">
-                  로그인 후 주문 가능
+                <button
+                  type="button"
+                  disabled={isUpdating || isPaying || selectedIds.length === 0}
+                  onClick={() => void handlePayment()}
+                  className="mt-5 w-full rounded-md bg-cyan-500 py-3 font-semibold text-slate-950 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-400"
+                >
+                  {isPaying
+                    ? '결제 준비 중...'
+                    : selectedIds.length === 0
+                      ? '결제할 상품을 선택하세요'
+                      : '선택 상품 결제하기'}
                 </button>
               </aside>
             </div>

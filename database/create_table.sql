@@ -149,15 +149,21 @@ CREATE TABLE "PAYMENTS" (
     "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
 );
 
+-- 결제 시점의 부품명·가격·수량을 보존하는 주문 품목 스냅샷이다.
+-- PARTS 데이터가 나중에 변경되어도 과거 결제 내역은 이 값으로 표시한다.
 CREATE TABLE "PAYMENT_ITEMS" (
     "payment_item_id" NUMBER NOT NULL,
     "payment_id" NUMBER NOT NULL,
+    -- 승인 완료 후 실제 결제한 장바구니 행만 삭제하기 위해 원본 PK를 보관한다.
+    -- CartItem은 결제 후 삭제되므로 의도적으로 FK를 걸지 않는다.
+    "source_cart_item_id" NUMBER NOT NULL,
     "part_id" NUMBER NOT NULL,
     "part_name" VARCHAR2(150 CHAR) NOT NULL,
     "unit_price" NUMBER(12, 0) NOT NULL,
     "quantity" NUMBER NOT NULL
 );
 
+-- 한 결제에서 여러 번 발생할 수 있는 부분·전체 취소를 건별로 기록한다.
 CREATE TABLE "PAYMENT_CANCELLATIONS" (
     "payment_cancel_id" NUMBER NOT NULL,
     "payment_id" NUMBER NOT NULL,

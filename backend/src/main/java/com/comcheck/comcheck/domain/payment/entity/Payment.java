@@ -108,6 +108,12 @@ public class Payment {
         if (kakaoTid == null || kakaoTid.isBlank()) {
             throw new IllegalArgumentException("카카오 결제 거래 ID가 필요합니다.");
         }
+        if (status != Status.READY) {
+            throw new IllegalStateException("결제 준비 상태에서만 거래 ID를 등록할 수 있습니다.");
+        }
+        if (this.kakaoTid != null) {
+            throw new IllegalStateException("카카오 결제 거래 ID가 이미 등록되었습니다.");
+        }
         this.kakaoTid = kakaoTid;
     }
 
@@ -117,8 +123,35 @@ public class Payment {
         if (kakaoTid == null) {
             throw new IllegalStateException("카카오 결제 거래 ID가 등록되지 않았습니다.");
         }
+        if (status != Status.READY) {
+            throw new IllegalStateException("결제 준비 상태에서만 승인할 수 있습니다.");
+        }
         this.status = Status.APPROVED;
         this.approvedAt = LocalDateTime.now();
+    }
+
+    // 카카오 부분 취소가 성공한 뒤에만 호출한다.
+    public void partiallyCancel() {
+        if (status != Status.APPROVED && status != Status.PARTIALLY_CANCELED) {
+            throw new IllegalStateException("승인된 결제만 부분 취소할 수 있습니다.");
+        }
+        this.status = Status.PARTIALLY_CANCELED;
+    }
+
+    // 누적 취소 금액이 결제 총액과 같아진 경우 호출한다.
+    public void cancel() {
+        if (status != Status.APPROVED && status != Status.PARTIALLY_CANCELED) {
+            throw new IllegalStateException("승인된 결제만 취소할 수 있습니다.");
+        }
+        this.status = Status.CANCELED;
+    }
+
+    // 결제 준비 후 카카오 인증이 실패하거나 사용자가 결제를 중단했을 때 사용한다.
+    public void fail() {
+        if (status != Status.READY) {
+            throw new IllegalStateException("결제 준비 상태에서만 실패 처리할 수 있습니다.");
+        }
+        this.status = Status.FAILED;
     }
 
     public Long getPaymentId() { return paymentId; }
