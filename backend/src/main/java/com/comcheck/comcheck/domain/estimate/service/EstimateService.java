@@ -74,7 +74,7 @@ public class EstimateService {
      */
 
     @Transactional
-    public EstimateResponse createEstimate(
+    public EstimateResponse create(
             EstimateRequest request, Long loginUserId) {
         // 작성 회원 찾기
         User user = userRepository.findById(loginUserId)
