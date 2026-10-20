@@ -15,82 +15,64 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-
 @Table(name = "ESTIMATE_ITEMS")
-
 public class EstimateItem {
 
     @Id
-    // item_id를 기본키(PK)로 지정
-
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ESTIMATE_ITEMS_GENERATOR")
-    @SequenceGenerator(name = "SEQ_ESTIMATE_ITEMS_GENERATOR", sequenceName = "SEQ_ESTIMATE_ITEMS", allocationSize = 1)
-    // Oracle 시퀀스로 PK 자동 생성
-    // PK 값을 직접 넣지 않고, DB 시퀀스에서 번호를 받아와 자동으로 채움
-    // CREATE SEQUENCE ESTIMATE_ITEMS_SEQ START WITH 1 INCREMENT BY 1; => 오라클 시퀀스 필요
-
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estimate_item_seq")
+    @SequenceGenerator(name = "estimate_item_seq", sequenceName = "SEQ_ESTIMATE_ITEMS", allocationSize = 1)
     @Column(name = "\"item_id\"")
-    // Oracle의 실제 컬럼명 "item_id"와 연결
     private Long itemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    // 이 필드는 다른 테이블의 데이터 하나를 가리키는데, 그 데이터는 실제로 쓸 때 DB에서 가져와라 라는 뜻
-    @JoinColumn(name = "\"part_id\"", nullable = false)
-    // 견적에 들어간 부품
-    private Part part;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    // 이 필드는 다른 테이블의 데이터 하나를 가리키는데, 그 데이터는 실제로 쓸 때 DB에서 가져와라 라는 뜻
     @JoinColumn(name = "\"estimated_id\"", nullable = false)
-    // 이 품목이 속한 견적
     private Estimate estimate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "\"part_id\"", nullable = false)
+    private Part part;
+
     @Column(name = "\"quantity\"", nullable = false)
-    // 부품 수량
     private Long quantity;
 
+    protected EstimateItem() {
+    }
+
     public EstimateItem(Estimate estimate, Part part, Long quantity) {
-        // 견적 품목 생성 (수량 미입력 시 1개)
         this.estimate = estimate;
         this.part = part;
-        // 담을 부품 저장
-        this.quantity = (quantity == null) ? 1 : quantity;
-        // 부품 개수가 비었으면 1개 아니면 설정한 개수대로
+        changeQuantity(quantity == null ? 1L : quantity);
     }
 
     public void changeQuantity(Long quantity) {
-        // 부품 수량 변경
-        if (quantity < 1) {
-            throw new IllegalArgumentException("부품 수량은 1개 이상이어야 합니다.");
-            //throw = 여기서 에러를 일부러 발생시키고(1개가 안될시), 이 메서드를 그 자리에서 멈춰라
-            // IllegalArgumentException : 잘못된 인수 
+        if (quantity == null || quantity < 1) {
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
         }
         this.quantity = quantity;
     }
 
-    public Long calculateItemPrice() {
-        // 항목 금액 = 부품 현재 판매가 × 수량 (total_price 계산용)
-        // 가격 정보가 없는 부품은 0원으로 계산
+    public long calculateItemPrice(){
         Long price = part.getPrice();
-        if (price == null) {
+
+        if (price == null){
             return 0L;
         }
         return price * quantity;
     }
 
-    public Long getItemId() {
+    public Long getItemId(){
         return itemId;
     }
-
-    public Part getPart() {
+    
+    public Estimate getEstimate(){
+        return estimate;
+    }
+    
+    public Part getPart(){
         return part;
     }
 
-    public Estimate getEstimate() {
-        return estimate;
-    }
-
-    public Long getQuantity() {
+    public Long getQuantity(){
         return quantity;
     }
 
