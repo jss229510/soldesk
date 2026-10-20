@@ -1,23 +1,28 @@
 package com.comcheck.comcheck.domain.estimate.service;
 
 import java.util.List;
+import java.util.Locale;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.comcheck.comcheck.domain.estimate.dto.EstimatePageResponse;
+import com.comcheck.comcheck.domain.estimate.dto.EstimatePartSpecRow;
+import com.comcheck.comcheck.domain.estimate.dto.EstimatePowerCheckResponse;
 import com.comcheck.comcheck.domain.estimate.dto.EstimateRequest;
 
 import com.comcheck.comcheck.domain.estimate.dto.EstimateResponse;
 import com.comcheck.comcheck.domain.estimate.entity.Estimate;
 import com.comcheck.comcheck.domain.estimate.exception.EstimateAccessDeniedException;
 import com.comcheck.comcheck.domain.estimate.exception.EstimateNotFoundException;
+import com.comcheck.comcheck.domain.estimate.exception.InvalidBudgetException;
+import com.comcheck.comcheck.domain.estimate.exception.InvalidUsageTypeException;
 import com.comcheck.comcheck.domain.estimate.repository.EstimateRepository;
-import com.comcheck.comcheck.domain.estimateitem.entity.EstimateItem;
-import com.comcheck.comcheck.domain.estimateitem.service.EstimateItemService;
 import com.comcheck.comcheck.domain.user.entity.User;
 import com.comcheck.comcheck.domain.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -70,8 +75,7 @@ public class EstimateService {
 
     @Transactional
     public EstimateResponse createEstimate(
-            Long loginUserId,
-            EstimateRequest request) {
+            EstimateRequest request, Long loginUserId) {
         // 작성 회원 찾기
         User user = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -94,16 +98,20 @@ public class EstimateService {
 
     // 조회
     // 견적 하나 조회
-    @Transactional
     public EstimateResponse getEstimate(Long estimateId, Long loginUserId) {
-        Estimate estimate = findEstimate(estimateId); // findEstimate = 조회를 위한 메서드로 밑에서 로직으로 수행
+        Estimate estimate = findEstimate(estimateId); //
         // 추천 견적은 누구나 볼 수 있고, 일반 견적은 작성자 본인만 볼 수 있다.
         // loginUserId는 로그인하지 않은 경우 null일 수 있다.
-
+        if (!Boolean.TRUE.equals(estimate.getIsRecommend())
+                && !estimate.isOwnedBy(loginUserId)) {
+            // 추천견적이 아니고 로그인한 유저가 아니면
+            throw new EstimateAccessDeniedException(estimateId);
+        } // 에러
+        return EstimateResponse.from(estimate);
     }
 
     // 로그인 회원 본인의 견적 목록 (최신순)
-    public List<EstimateResponse> getEstimates(Long loginUserId) {
+    public List<EstimateResponse> getMyEstimates(Long loginUserId) {
         return estimateRepository.findByUser_UserIdOrderByCreatedAtDesc(loginUserId)
                 .stream()
                 .map(EstimateResponse::from)
@@ -114,48 +122,166 @@ public class EstimateService {
     // usageType, tierCode는 둘 다 선택값 : 보내면 그 조건으로 거르고, 안 보내면 전체를 보여준다.
     // 예) usageType=GAMING → 게임용 추천 전체 / usageType=GAMING&tierCode=FOUR_K_HIGH → 게임용
     // 4K·고성능형만
+    public EstimatePageResponse getRecommendedEstimates(String usageType, String tierCode, int page, int size) {
 
+        // 음수 페이지, 0 이하 또는 너무 큰 size 같은 이상한 값을 안전한 범위로 보정
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
 
-    // 음수 페이지, 0 이하 또는 너무 큰 size 같은 이상한 값을 안전한 범위로 보정
+        // 등급 코드는 크롤러 데이터 값과 정확히 같아야 하므로 대소문자는 바꾸지 않고 앞뒤 공백만 정리한다.
+        String safeTierCode = null;
+        if (tierCode != null && !tierCode.isBlank()) {
+            safeTierCode = tierCode.trim();
+        }
+        Pageable pageable = PageRequest.of(safePage, safeSize);
+        Page<Estimate> result = estimateRepository.findRecommended(
+                true, normalizeUsageType(usageType), safeTierCode, pageable);
 
-
-    // 등급 코드는 크롤러 데이터 값과 정확히 같아야 하므로 대소문자는 바꾸지 않고 앞뒤 공백만 정리한다.
-
+        return EstimatePageResponse.from(result);
+    }
 
     // 예산별 추천 견적 목록 (예산 이하, 예산에 가까운 순)
-    // usageType은 선택값 : 보내면 해당 용도만, 안 보내면 전체 용도에서 찾는다.
+    // 예산별 추천은 용도를 받지 않는다 : 모든 용도의 추천 견적 중에서 예산 안에 드는 것을 찾는다.
     // 예산이 없거나 음수면 400
+    public EstimatePageResponse getRecommendedEstimatesByBudget(Long budget, int page, int size) {
+        if (budget == null || budget < 0) {
+            throw new InvalidBudgetException(budget);
+        }
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
+        Page<Estimate> result = estimateRepository.findRecommendedWithinBudget(
+                true, budget, PageRequest.of(safePage, safeSize));
+        return EstimatePageResponse.from(result);
+
+    }
 
     // ===== 전력 호환성 =====
     // 전력 호환성 검사 (조회만 하고 DB는 바꾸지 않는다)
     // 볼 수 있는 권한은 견적 단건 조회와 같다 : 추천 견적은 누구나, 일반 견적은 작성자만
+    public EstimatePowerCheckResponse checkPower(Long estimateId, Long loginUserId) {
+
+        Estimate estimate = findEstimate(estimateId);
+
+        if (!Boolean.TRUE.equals(estimate.getIsRecommend())
+                && !estimate.isOwnedBy(loginUserId)) {
+            throw new EstimateAccessDeniedException(estimateId);
+        }
+        return calculatePower(estimateId);
+    }
 
     // 총 소비전력(total_power) 다시 계산해서 저장
     // 견적 품목이 추가·삭제·수량변경된 뒤 EstimateItemService에서 호출하는 용도
+    @Transactional
+    public EstimatePowerCheckResponse updateTotalPower(Long estimateId) {
 
+        Estimate estimate = findEstimate(estimateId);
+        EstimatePowerCheckResponse result = calculatePower(estimateId);
+        // 변경 감지로 UPDATE가 자동 실행된다.
+        estimate.changeTotalPower(result.totalPower());
+        return result;
+    }
+    
     // 실제 전력 계산
     // 판정 규칙 (크롤러와 같은 기준)
     // 1) 파워가 없으면 NO_PSU
     // 2) GPU가 있으면 : GPU 권장 파워(recommended_psu_watt)가 필요 출력
-    //    권장 값이 없으면 (CPU + GPU 소비전력) × 1.3 으로 대신 계산
+    // 권장 값이 없으면 (CPU + GPU 소비전력) × 1.3 으로 대신 계산
     // 3) GPU가 없으면 : 400W 이상이면 충분
     // 4) 파워 정격출력 ≥ 필요 출력 이면 OK, 아니면 INSUFFICIENT
 
-    // 숫자로 바꿀 수 없는 값은 계산에서 뺀다.
+    private EstimatePowerCheckResponse calculatePower(Long estimateId) {
+        List<EstimatePartSpecRow> rows = estimateRepository.findPowerSpecs(estimateId, POWER_SPEC_KEYS);
 
-    // GPU가 여러 개면 가장 큰 권장 값을 기준으로 삼는다.
+        long cpuTdp = 0;
+        long gpuTdp = 0;
+        boolean hasGpu = false;
+        Long psuWattage = null;
+        Long gpuRecommended = null;
 
-    // 파워가 여러 개 담겨도 실제로는 하나만 쓰므로 가장 큰 출력을 기준으로 삼는다.
+        for (EstimatePartSpecRow row : rows) {
+            Long value = toWatt(row.specValue());
+            if (value == null) {
+                continue; // 숫자로 바꿀 수 없는 값은 계산에서 뺀다.
+            }
+            long quantity = (row.quantity() == null) ? 1 : row.quantity();
+            String category = (row.category() == null) ? "" : row.category().toUpperCase(Locale.ROOT);
 
-    // 메인보드, 램, SSD 등은 전력 스펙을 계산에 쓰지 않는다
+            switch (category) {
+                case "CPU" -> {
+                    if (SPEC_TDP.equals(row.specKey())) {
+                        cpuTdp += value * quantity;
+                    }
+                }
+                case "GPU" -> {
+                    hasGpu = true;
+                    if (SPEC_TDP.equals(row.specKey())) {
+                        gpuTdp += value * quantity;
+                    } else if (SPEC_GPU_RECOMMENDED.equals(row.specKey())) {
+                        // GPU가 여러 개면 가장 큰 권장 값을 기준으로 삼는다.
+                        gpuRecommended = (gpuRecommended == null) ? value : Math.max(gpuRecommended, value);
+                    }
+                }
+                case "PSU" -> {
+                    if (SPEC_PSU_WATTAGE.equals(row.specKey())) {
+                        // 파워가 여러 개 담겨도 실제로는 하나만 쓰므로 가장 큰 출력을 기준으로 삼는다.
+                        psuWattage = (psuWattage == null) ? value : Math.max(psuWattage, value);
+                    }
+                }
+                default -> {
+                    // 메인보드, 램, SSD 등은 전력 스펙을 계산에 쓰지 않는다.
+                }
+            }
+        }
 
-    // 필요한 파워 출력 정하기
+        long totalPower = cpuTdp + gpuTdp;
 
-    // GPU는 있는데 전력 데이터가 하나도 없음
+        // 필요한 파워 출력 정하기
+        Long requiredWattage;
+        if (!hasGpu) {
+            requiredWattage = NO_GPU_MIN_PSU_WATT;
+        } else if (gpuRecommended != null) {
+            requiredWattage = gpuRecommended;
+        } else if (totalPower > 0) {
+            requiredWattage = Math.round(totalPower * POWER_MARGIN);
+        } else {
+            requiredWattage = null; // GPU는 있는데 전력 데이터가 하나도 없음
+        }
 
+        // 판정
+        String status;
+        String message;
+        if (psuWattage == null) {
+            status = EstimatePowerCheckResponse.NO_PSU;
+            message = "견적에 파워가 없습니다. 파워를 추가해주세요.";
+        } else if (requiredWattage == null) {
+            status = EstimatePowerCheckResponse.UNKNOWN;
+            message = "그래픽카드의 전력 정보가 없어 호환성을 판단할 수 없습니다.";
+        } else if (psuWattage >= requiredWattage) {
+            status = EstimatePowerCheckResponse.OK;
+            message = "파워 출력이 충분합니다. (" + psuWattage + "W ≥ " + requiredWattage + "W)";
+        } else {
+            status = EstimatePowerCheckResponse.INSUFFICIENT;
+            message = "파워 출력이 부족합니다. " + requiredWattage + "W 이상의 파워가 필요합니다. (현재 " + psuWattage + "W)";
+        }
+
+        return new EstimatePowerCheckResponse(
+                estimateId, cpuTdp, gpuTdp, totalPower, psuWattage, requiredWattage,
+                status, EstimatePowerCheckResponse.OK.equals(status), message);
+    }
 
     // 스펙 문자열("650", "650.0", " 650 ")을 숫자(W)로 변환
     // 바꿀 수 없거나 0 이하면 null (크롤러의 number() 함수와 같은 규칙)
+    private Long toWatt(String specValue) {
+        if (specValue == null || specValue.isBlank()) {
+            return null;
+        }
+        try {
+            double value = Double.parseDouble(specValue.trim());
+            return (value > 0) ? Math.round(value) : null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
 
     // ===== 수정 =====
     // 견적 기본 정보 수정 (작성자 본인만)
@@ -189,7 +315,7 @@ public class EstimateService {
         return findEstimate(estimateId);
     }
 
-    // ===== 내부 도우미 메서드 =====
+    // ===== 내부 도우미 메서드 ===== //(위에서난 에러들 여기서 처리)
     // 번호로 견적을 찾고, 없으면 404 예외
     private Estimate findEstimate(Long estimateId) {
         return estimateRepository.findById(estimateId)
@@ -206,10 +332,16 @@ public class EstimateService {
     // 사용 용도 문자열 정리 + 허용 값 검사
     // 비어 있으면 null(용도 미지정), 소문자로 와도 대문자로 맞춰서 비교한다.(toUpperCase)
     // 허용 목록에 없으면 DB 제약조건 오류(500)가 나기 전에 400 예외로 막는다.
-    // 에러들은 여기서 처리예정
-    private String normalizeUsageType(String usageType){
-        if (usageType == null){
+
+    private String normalizeUsageType(String usageType) {
+        if (usageType == null || usageType.isBlank()) {
             return null;
         }
+        String normalized = usageType.trim().toUpperCase(Locale.ROOT);
+
+        if (!Estimate.USAGE_TYPES.contains(normalized)) {
+            throw new InvalidUsageTypeException(usageType);
+        }
+        return normalized;
     }
 }
