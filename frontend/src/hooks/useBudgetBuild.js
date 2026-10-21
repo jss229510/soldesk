@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getBudgetEstimateDetails, getBudgetRecommendedEstimates } from '../api/estimates';
-import { toBudgetBuild } from '../utils/budget';
+import { replaceBudgetPart, toBudgetBuild } from '../utils/budget';
 
 /** 실제 예산 견적 목록 → 견적 선택 → 부품·스펙·전력 결과 조회 */
 export const useBudgetBuild = (budget, {
@@ -10,6 +10,7 @@ export const useBudgetBuild = (budget, {
   const [detailsResult, setDetailsResult] = useState(null);
   const [selection, setSelection] = useState(null);
   const [revision, setRevision] = useState(0);
+  const [draft, setDraft] = useState(null);
   const selectionKey = `${budget}:${page}:${size}`;
   const listKey = `${selectionKey}:${revision}`;
   const enabled = Number.isFinite(budget) && budget >= 0;
@@ -53,6 +54,8 @@ export const useBudgetBuild = (budget, {
 
   const currentDetails = !authChecking && detailsResult?.key === detailsKey
     && detailsResult.accessToken === accessToken ? detailsResult : null;
+  // 다른 견적·예산·조회 결과의 교체 내용이 새 구성에 섞이지 않게 한다.
+  const currentItems = draft?.source === currentDetails ? draft.items : currentDetails?.data?.items;
 
   return {
     estimates,
@@ -60,7 +63,15 @@ export const useBudgetBuild = (budget, {
     selectEstimate: (id) => setSelection({ key: selectionKey, id }),
     pageInfo: currentList?.data ?? null,
     build: selectedEstimate && currentDetails?.data
-      ? toBudgetBuild(selectedEstimate, currentDetails.data, budget) : null,
+      ? toBudgetBuild(selectedEstimate, currentDetails.data, budget, currentItems) : null,
+    replacePart: (itemId, part, specs) => {
+      if (!currentDetails?.data) return;
+      setDraft({
+        source: currentDetails,
+        items: replaceBudgetPart(currentItems, itemId, part, specs),
+      });
+    },
+    resetReplacements: () => setDraft(null),
     loading: enabled && !currentList,
     error: currentList?.error ?? null,
     detailsLoading: Boolean(selectedEstimate) && !currentDetails,

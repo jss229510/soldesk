@@ -28,14 +28,48 @@ export const toPowerCompatibility = (powerCheck, powerError) => {
   };
 };
 
-// 총액은 서버의 totalPrice를 사용한다. 항목 가격에는 이미 수량이 반영돼 있다.
-export const toBudgetBuild = (estimate, details, budget) => ({
-  estimateId: estimate.estimatedId,
-  title: estimate.title,
-  items: details.items,
-  total: estimate.totalPrice,
-  budget,
-  remaining: budget - estimate.totalPrice,
-  usageRate: budget > 0 ? Math.round((estimate.totalPrice / budget) * 100) : null,
-  compatibility: toPowerCompatibility(details.powerCheck, details.powerError),
-});
+// 기존 항목의 수량을 유지하며 같은 종류의 부품 한 개만 교체한다.
+export const replaceBudgetPart = (items, itemId, part, specs) => {
+  const target = items.find((item) => item.itemId === itemId);
+  if (!target || target.category !== part.category) {
+    throw new Error('교체할 부품의 종류가 현재 구성과 일치하지 않습니다.');
+  }
+  if (part.discontinued || !Number.isSafeInteger(part.price) || part.price < 0) {
+    throw new Error('현재 가격을 확인할 수 있는 판매 중인 부품을 선택해 주세요.');
+  }
+  const itemPrice = part.price * target.quantity;
+  if (!Number.isSafeInteger(itemPrice)) throw new Error('부품 금액을 확인해 주세요.');
+  if (part.id === target.part.id) return items;
+  return items.map((item) => item.itemId === itemId ? {
+    ...item,
+    unitPrice: part.price,
+    itemPrice,
+    specsError: null,
+    part: { ...part, specs },
+  } : item);
+};
+
+// 원본은 서버 총액을, 교체한 구성은 각 항목의 수량을 반영한 합계를 사용한다.
+export const toBudgetBuild = (estimate, details, budget, items = details.items) => {
+  const modified = items !== details.items;
+  const total = modified ? items.reduce((sum, item) => sum + item.itemPrice, 0) : estimate.totalPrice;
+  return {
+    estimateId: estimate.estimatedId,
+    title: estimate.title,
+    items,
+    total,
+    budget,
+    remaining: budget - total,
+    usageRate: budget > 0 ? Math.round((total / budget) * 100) : null,
+    modified,
+    // 서버의 전력 검사 결과는 원본 견적에 대한 것이므로 교체 후에는 재사용하지 않는다.
+    compatibility: modified ? {
+      kind: 'power',
+      title: '부품을 교체한 구성입니다.',
+      ok: false,
+      hasError: false,
+      estimatedWatt: null,
+      issues: [{ message: '교체 후의 전력과 부품 호환성을 다시 확인해 주세요.' }],
+    } : toPowerCompatibility(details.powerCheck, details.powerError),
+  };
+};

@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { Button, StateBox } from '../components/common';
 import {
   BudgetSelector,
+  BudgetPartReplacementModal,
   BuildPartRow,
   BuildSummary,
   CompatibilityNotice,
@@ -11,23 +12,33 @@ import { DEFAULT_BUDGET } from '../constants/budgets';
 import { formatPrice } from '../utils/format';
 import { useBudgetBuild } from '../hooks/useBudgetBuild';
 import { useBuild } from '../context/BuildContext';
+import { PartSpecModal } from '../components/shop';
 
 /** 예산 이하로 등록된 실제 추천 견적을 조회한다. 용도 선택 화면과는 별개다. */
 export const BudgetPage = () => {
   const [{ budget, page }, setQuery] = useState({ budget: DEFAULT_BUDGET, page: 0 });
-  const [appliedKey, setAppliedKey] = useState(null);
+  const [appliedBuild, setAppliedBuild] = useState(null);
+  const [replacementTarget, setReplacementTarget] = useState(null);
+  const [partPreview, setPartPreview] = useState(null);
   const { user, authChecking, openLogin } = useOutletContext() ?? {};
   const {
     estimates, selectedEstimate, selectEstimate, pageInfo, build,
     loading, error, detailsLoading, detailsError, refetch,
+    replacePart, resetReplacements,
   } = useBudgetBuild(budget, { page, accessToken: user?.accessToken, authChecking });
   const { setBuild } = useBuild();
-  const buildKey = build ? `${budget}:${build.estimateId}` : null;
+  const isApplied = Boolean(build && appliedBuild?.items === build.items
+    && appliedBuild.budget === budget && appliedBuild.estimateId === build.estimateId);
+  // 견적이나 예산이 바뀌면 이전 구성의 모달을 계속 표시하지 않는다.
+  const replacementItem = build && replacementTarget?.source === build.items
+    && replacementTarget.budget === budget
+    ? build.items.find((item) => item.itemId === replacementTarget.itemId) : null;
+  const selectedPart = build && partPreview?.source === build.items ? partPreview.item : null;
 
   const applyBuild = () => {
     if (!build?.items.length) return;
     setBuild(build.items, budget, build.compatibility);
-    setAppliedKey(buildKey);
+    setAppliedBuild({ items: build.items, budget, estimateId: build.estimateId });
   };
 
   return (
@@ -95,27 +106,49 @@ export const BudgetPage = () => {
       {build && (
         <>
           <CompatibilityNotice compatibility={build.compatibility} />
+          {build.modified && (
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-gray-400">교체한 구성을 현재 견적으로 선택할 수 있습니다.</p>
+              <Button size="sm" variant="outline" onClick={resetReplacements}>원래 구성으로 되돌리기</Button>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
             <div className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900 lg:col-span-2">
               {build.items.length === 0
                 ? <StateBox status="empty" title="이 견적에 등록된 부품이 없습니다" />
-                : build.items.map((item) => <BuildPartRow key={item.itemId} item={item} />)}
+                : build.items.map((item) => (
+                  <BuildPartRow key={item.itemId} item={item}
+                    onReplace={(_categoryId, target) => setReplacementTarget({
+                      itemId: target.itemId, source: build.items, budget,
+                    })}
+                    onSelect={(target) => setPartPreview({ item: target, source: build.items })} />
+                ))}
             </div>
 
             <BuildSummary
               build={build}
-              actionLabel={appliedKey === buildKey ? '선택한 견적입니다' : '이 견적 선택'}
+              actionLabel={isApplied ? '선택한 견적입니다' : '이 견적 선택'}
               onAction={applyBuild}
-              actionDisabled={build.items.length === 0 || appliedKey === buildKey}
+              actionDisabled={build.items.length === 0 || isApplied}
               note="선택한 견적은 새로고침 전까지 유지됩니다."
             />
           </div>
-          {appliedKey === buildKey && (
+          {isApplied && (
             <p role="status" className="mt-4 text-center text-green-400">현재 견적으로 선택했습니다.</p>
           )}
         </>
       )}
+
+      {replacementItem && (
+        <BudgetPartReplacementModal key={`${build.estimateId}:${replacementItem.itemId}`}
+          item={replacementItem} build={build}
+          onReplace={(part, specs) => replacePart(replacementItem.itemId, part, specs)}
+          onClose={() => setReplacementTarget(null)} />
+      )}
+      <PartSpecModal key={selectedPart?.part.id ?? 'closed'} part={selectedPart?.part}
+        specs={selectedPart?.part.specs} specsError={selectedPart?.specsError}
+        open={Boolean(selectedPart)} onClose={() => setPartPreview(null)} />
     </div>
   );
 };

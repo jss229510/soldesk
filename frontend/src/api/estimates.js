@@ -24,6 +24,22 @@ export function getEstimateItems(estimateId, accessToken, { signal } = {}) {
   });
 }
 
+// 예산 견적의 교체 후보도 실제 DB에서 조회한다.
+export function getBudgetReplacementParts(category, { signal } = {}) {
+  const params = new URLSearchParams({ category, sort: 'price' });
+  return request(`/parts?${params}`, { signal });
+}
+
+// 적용 직전에 최신 부품 정보와 상세 스펙을 함께 확인한다.
+export async function getBudgetReplacementPart(partId, { signal } = {}) {
+  const [part, specs] = await Promise.all([
+    request(`/parts/${partId}`, { signal }),
+    request(`/parts/${partId}/specs`, { signal }),
+  ]);
+  if (!Array.isArray(specs)) throw new Error('부품 사양 응답 형식이 올바르지 않습니다.');
+  return { part, specs };
+}
+
 // 예산 화면은 부품·스펙도 목업 설정을 거치지 않고 실제 API로 조회한다.
 export async function getBudgetEstimateDetails(estimateId, accessToken, { signal } = {}) {
   const loadItems = async () => {

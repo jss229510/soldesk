@@ -1,10 +1,9 @@
 import { Button, Chip, Thumbnail } from '../common';
 import { getCategory } from '../../constants/categories';
-import { ROUTES } from '../../constants/routes';
 import { formatPrice } from '../../utils/format';
 
 /** 견적 목록의 한 줄 */
-export const BuildPartRow = ({ item }) => {
+export const BuildPartRow = ({ item, onReplace, onSelect }) => {
   const category = getCategory(item.category);
   const { part } = item;
   // 예산 API 연결 단계에서 실제로 조회한 스펙을 사용한다.
@@ -27,7 +26,10 @@ export const BuildPartRow = ({ item }) => {
 
       <div className="flex-1">
         <p className="font-mono text-xs text-cyan-400">{part.brand}</p>
-        <p className="font-semibold">{part.name}</p>
+        <button type="button" disabled={!onSelect} onClick={() => onSelect?.(item)}
+          className="text-left font-semibold hover:underline disabled:cursor-default">
+          {part.name}
+        </button>
         {item.specsError ? (
           <p className="mt-1.5 text-xs text-red-400">사양 조회 실패: {item.specsError}</p>
         ) : displaySpecs.length > 0 ? (
@@ -54,7 +56,8 @@ export const BuildPartRow = ({ item }) => {
           </span>
         )}
         <Button
-          to={ROUTES.shopCategory(category.id)}
+          onClick={() => onReplace?.(category.id, item)}
+          disabled={!onReplace}
           variant="ghost"
           size="sm"
           className="ml-3"
