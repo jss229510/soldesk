@@ -54,6 +54,10 @@ public class SecurityConfig {
                                                 .requestMatchers("/error").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/login")
                                                 .permitAll()
+                                                .requestMatchers(HttpMethod.POST,
+                                                                "/api/users/forgot-password",
+                                                                "/api/users/reset-password")
+                                                .permitAll()
                                                 .requestMatchers(HttpMethod.GET, "/api/users/check-email",
                                                                 "/api/users/check-nickname")
                                                 .permitAll()

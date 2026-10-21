@@ -99,7 +99,7 @@ export const CartPage = () => {
         <button
           type="button"
           onClick={() => setPaymentHistoryOpen(true)}
-          className="rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-sm font-semibold hover:border-cyan-500 hover:text-cyan-400"
+          className="mt-2 rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-sm font-semibold hover:border-cyan-500 hover:text-cyan-400"
         >
           결제 내역
         </button>
@@ -144,8 +144,16 @@ export const CartPage = () => {
                       onChange={() => toggleSelectedItem(item.id)}
                       aria-label={`${item.name} 선택`}
                     />
-                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-md bg-gray-800 text-xs text-cyan-400">
-                      {item.category}
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-800">
+                    {item.imageUrl ? (
+                    <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="h-full w-full object-contain"
+                    />
+                    ) : (
+                    <span className="text-xs text-cyan-400">{item.category}</span>
+                    )}
                     </div>
 
                     <div className="min-w-0 flex-1">
@@ -214,7 +222,8 @@ export const CartPage = () => {
                   type="button"
                   disabled={isUpdating || isPaying || selectedIds.length === 0}
                   onClick={() => void handlePayment()}
-                  className="mt-5 w-full rounded-md bg-cyan-500 py-3 font-semibold text-slate-950 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-400"
+                  className="mt-5 w-full rounded-md bg-cyan-500 py-3 font-semibold text-slate-950 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:bg-transparent disabled:text-gray-400 disabled:opacity-100"
+                  style={{ border: '1px solid var(--line-strong)' }}
                 >
                   {isPaying
                     ? '결제 준비 중...'
