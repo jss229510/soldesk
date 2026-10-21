@@ -4,11 +4,12 @@ import { UsageTierPanel } from '../components/build/UsageTierPanel'
 import { PC_BUILD_PROFILES } from '../constants/usages';
 import { getRecommendEstimates } from '../api/estimates';
 import { UsagePartRow } from '../components/build/UsagePartRow';
+import {PartSpecModal} from '../components/shop';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
   { key: "gpu", label: "그래픽카드(GPU)" },
-  { key: "motherboard", label: "메인보드" },
+  { key: "mainboard", label: "메인보드" },
   { key: "ram", label: "메모리(RAM)" },
   { key: "ssd", label: "저장장치(SSD)" },
   { key: "psu", label: "파워(PSU)" },
@@ -26,10 +27,11 @@ export const BuildPage = () => {
   const [selectedParts, setSelectedParts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedPart, setSelectedPart] = useState(null);
 
   useEffect(() => {
     // 용도와 등급을 모두 골랐을 때만 조회
-    if (!usageId || !selectedTier) return;
+    if (!usageId || !selectedTierCode) return;
 
     let ignore = false;
 
@@ -88,7 +90,7 @@ export const BuildPage = () => {
 
   // 세부 등급 선택
   const handleTierSelect = (tierCode) => {
-    if (tierCode === setSelectedTierCode) return;
+    if (tierCode === selectedTierCode) return;
 
     setSelectedTierCode(tierCode);
     setSelectedParts([]),
@@ -163,26 +165,32 @@ export const BuildPage = () => {
               </p>
 
               {loading ? (
-                <p className='mt-6 text-slate-500'>
+                <p className='mt-6 text-slate-500' role="status">
                   추천 견적을 불러오는 중입니다.
+                </p>
+              ) : error ? (
+                <p className="mt-6 text-red-600" role="alert">
+                  {error}
                 </p>
               ) : (
                 <div className='mt-6'>
-                  {selectedParts.length === 0 && (
-                    <p className='mb-4 text-xm text-slate-500'>
+                  {selectedParts.length === 0 ? (
+                    <p className='text-sm text-slate-500'>
                       아직 등록된 구성 부품이 없습니다.
                     </p>
-                  )}
-                  {PART_SLOTS.map((slot) => (
+                  ) : (
+                  PART_SLOTS.map((slot) => (
                     <UsagePartRow
                       key={slot.key}
                       categoryId={slot.key}
                       label={slot.label}
                       item={selectedParts.find((item) => item.category === slot.key)}
+                      onSelect={setSelectedPart}
                     />
-                  ))}
+                   ))
+                  )}
                 </div>
-              )}
+                )}
 
             </>
           ) : (
@@ -193,6 +201,13 @@ export const BuildPage = () => {
 
         </aside>
       </div>
+
+      <PartSpecModal
+        key={selectedPart?.id ?? 'closed'}
+        part={selectedPart}
+        open={Boolean(selectedPart)}
+        onClose={() => setSelectedPart(null)}
+      />
     </div>
   );
 };

@@ -35,12 +35,25 @@ public class EstimateItem {
     @Column(name = "\"quantity\"", nullable = false)
     private Long quantity;
 
+    @Column(name = "\"unit_price\"", nullable = false)
+    private Long unitPrice;
+
     protected EstimateItem() {
     }
 
     public EstimateItem(Estimate estimate, Part part, Long quantity) {
+        if (estimate == null || part == null){
+            throw new IllegalArgumentException("Estimate and part are required");
+        }
+
+        Long price = part.getPrice();
+
+        if (price == null || price < 0){
+            throw new IllegalArgumentException("A valid part price is required.");
+        }
         this.estimate = estimate;
         this.part = part;
+        this.unitPrice = price;
         changeQuantity(quantity == null ? 1L : quantity);
     }
 
@@ -52,12 +65,7 @@ public class EstimateItem {
     }
 
     public long calculateItemPrice(){
-        Long price = part.getPrice();
-
-        if (price == null){
-            return 0L;
-        }
-        return price * quantity;
+       return Math.multiplyExact(unitPrice, quantity);
     }
 
     public Long getItemId(){
@@ -74,6 +82,10 @@ public class EstimateItem {
 
     public Long getQuantity(){
         return quantity;
+    }
+
+    public Long getUnitPrice(){
+        return unitPrice;
     }
 
 }

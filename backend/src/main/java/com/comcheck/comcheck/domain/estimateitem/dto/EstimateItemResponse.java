@@ -8,6 +8,9 @@ public record EstimateItemResponse(
         Long estimateId,
         Long partId,
         String partName,
+        String category,
+        String imageUrl,
+        String productUrl,  
         Long quantity,
         Long unitPrice,
         long itemPrice) {
@@ -20,8 +23,11 @@ public record EstimateItemResponse(
                 item.getEstimate().getEstimatedId(),
                 part.getPartId(),
                 part.getPartName(),
+                part.getCategory(),
+                part.getImageUrl(),
+                part.getProductUrl(),
                 item.getQuantity(),
-                part.getPrice(),
+                item.getUnitPrice(),
                 item.calculateItemPrice());
     }
 }

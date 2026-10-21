@@ -99,11 +99,7 @@ public class EstimateItemService {
     public List<EstimateItemResponse> getItems(
             Long userId,
             Long estimateId) {
-        // 로그인 여부 확인
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
+       
         // 견적 번호 검사
         if (estimateId == null || estimateId < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바른 견적 번호가 필요합니다.");
@@ -113,11 +109,19 @@ public class EstimateItemService {
         Estimate estimate = estimateRepository.findById(estimateId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
+        if(!Boolean.TRUE.equals(estimate.getIsRecommend())) {
+            if (userId == null) {
+                throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "로그인이 필요합니다."
+                );
+            }
+        
         // 견적 소유자 확인
         if (!estimate.isOwnedBy(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적의 항목을 조회할 권한이 없습니다.");
+            }
         }
-
         // 견적에 담긴 항목 목록 조회
         List<EstimateItem> items = estimateItemRepository.findByEstimate_EstimatedId(estimateId);
 

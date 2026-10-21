@@ -50,7 +50,7 @@ public class Estimate {
     private String estimateKey;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "\"user_id\"", nullable = false, updatable = false)
+    @JoinColumn(name = "\"user_id\"", updatable = false)
     private User user;
 
     // 견적 이름
@@ -139,6 +139,8 @@ public class Estimate {
 
     // 이 견적이 해당 회원의 것인지 확인
     public boolean isOwnedBy(Long userId) {
-        return userId != null && userId.equals(this.user.getUserId());
+        return userId != null 
+        && this.user !=null
+        && userId.equals(this.user.getUserId());
     }
 }
