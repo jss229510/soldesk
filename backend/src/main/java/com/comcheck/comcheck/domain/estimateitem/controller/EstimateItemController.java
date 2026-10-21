@@ -51,7 +51,7 @@ public class EstimateItemController {
 
     /**
      * GET /api/estimates/{estimateId}/items
-     * Service에서 본인 견적의 항목 목록을 받아 200 OK로 응답한다.
+     * 추천 견적은 공개 조회하고, 개인 견적은 Service에서 소유자를 확인한다.
      */
     @GetMapping
     public ResponseEntity<List<EstimateItemResponse>> getItems(

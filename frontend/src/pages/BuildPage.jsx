@@ -4,7 +4,11 @@ import { UsageTierPanel } from '../components/build/UsageTierPanel'
 import { PC_BUILD_PROFILES } from '../constants/usages';
 import { getRecommendEstimates } from '../api/estimates';
 import { UsagePartRow } from '../components/build/UsagePartRow';
-import {PartSpecModal} from '../components/shop';
+import { BuildSummary } from '../components/budget';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants/routes';
+import { useBuild } from '../context/BuildContext';
+import { PartSpecModal } from '../components/shop';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
@@ -28,6 +32,17 @@ export const BuildPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedPart, setSelectedPart] = useState(null);
+  const { setBuild } = useBuild();
+  const navigate = useNavigate();
+
+  // 선택한 부품 총 가격
+  const total = selectedParts.reduce((sum, item) => sum + (Number(item.part?.price || 0) * (item.quantity ?? 1)), 0);
+
+  const applyCart = () => {
+    if (!build) return;
+    setBuild(build.items);
+    navigate(ROUTES.cart);
+  }
 
   useEffect(() => {
     // 용도와 등급을 모두 골랐을 때만 조회
@@ -98,6 +113,15 @@ export const BuildPage = () => {
     setLoading(true);
   };
 
+  // BuildSummary에 전달할 데이터 (selectedParts 로 되이 있기 때문.)
+  const build = {
+    items: selectedParts,
+    total,
+    budget: null,
+    remaining: null,
+    usageRate: 0,
+  }
+
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-8">
 
@@ -117,7 +141,7 @@ export const BuildPage = () => {
       </header>
 
       {/* 왼쪽 + 오른쪽 */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[420px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[350px_minmax(0,1fr)_280px]">
 
         {/* 왼쪽: 용도 선택 */}
         <section className="min-w-0">
@@ -152,20 +176,20 @@ export const BuildPage = () => {
         </section>
 
         {/* 오른쪽: 부품 구성 */}
-        <aside className="min-w-0 self-start rounded-2xl bg-white p-6 shadow-sm">
+        <aside className="min-w-0 self-start rounded-2xl bg-[var(--bg-surface)] p-6 shadow-sm">
 
-          <h2 className="text-2xl font-bold text-slate-900">
+          <h2 className="text-2xl font-bold text-[var(--text)]">
             부품 구성
           </h2>
           <span className='block h-4' />
           {selectedTier ? (
             <>
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm text-gray-500">
                 {selectedUsage.title} · {selectedTier.label}
               </p>
 
               {loading ? (
-                <p className='mt-6 text-slate-500' role="status">
+                <p className='mt-6 text-gray-500' role="status">
                   추천 견적을 불러오는 중입니다.
                 </p>
               ) : error ? (
@@ -175,30 +199,40 @@ export const BuildPage = () => {
               ) : (
                 <div className='mt-6'>
                   {selectedParts.length === 0 ? (
-                    <p className='text-sm text-slate-500'>
+                    <p className='text-sm text-gray-500'>
                       아직 등록된 구성 부품이 없습니다.
                     </p>
                   ) : (
-                  PART_SLOTS.map((slot) => (
-                    <UsagePartRow
-                      key={slot.key}
-                      categoryId={slot.key}
-                      label={slot.label}
-                      item={selectedParts.find((item) => item.category === slot.key)}
-                      onSelect={setSelectedPart}
-                    />
-                   ))
+                    PART_SLOTS.map((slot) => (
+                      <UsagePartRow
+                        key={slot.key}
+                        categoryId={slot.key}
+                        label={slot.label}
+                        item={selectedParts.find((item) => item.category === slot.key)}
+                        onSelect={setSelectedPart}
+                      />
+                    ))
                   )}
                 </div>
-                )}
+              )}
 
             </>
           ) : (
-            <p className="mt-6 text-slate-500">
+            <p className="mt-6 text-gray-500">
               왼쪽에서 용도와 세부 등급을 선택해주세요.
             </p>
           )}
 
+        </aside>
+        <aside>
+          <div>
+            <BuildSummary
+              build={build}
+              actionLabel='장바구니 담기'
+              onAction={applyCart}
+              note='담기는 로그인 후에 가능합니다.'
+            />
+          </div>
         </aside>
       </div>
 
@@ -208,6 +242,7 @@ export const BuildPage = () => {
         open={Boolean(selectedPart)}
         onClose={() => setSelectedPart(null)}
       />
+
     </div>
   );
 };

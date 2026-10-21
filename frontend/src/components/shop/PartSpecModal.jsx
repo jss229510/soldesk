@@ -54,9 +54,14 @@ const formatSpecKey = (specKey) => (
 );
 
 /** 선택한 부품의 실제 DB 스펙을 보여 주는 모달 */
-export const PartSpecModal = ({ part, open, onClose }) => {
+export const PartSpecModal = ({ part, open, onClose, specs: providedSpecs, specsError = null }) => {
   // 모달이 열렸고 부품이 선택된 경우에만 스펙 API를 요청한다.
-    const { specs, loading, error } = usePartSpecs(open ? part?.id : null);
+    // 예산 화면에서 이미 조회한 실제 스펙이 있으면 그 데이터를 그대로 사용한다.
+    const hasProvidedSpecs = Array.isArray(providedSpecs);
+    const fetched = usePartSpecs(open && !hasProvidedSpecs ? part?.id : null);
+    const specs = hasProvidedSpecs ? providedSpecs : fetched.specs;
+    const loading = !hasProvidedSpecs && fetched.loading;
+    const error = hasProvidedSpecs ? specsError : fetched.error;
     const displaySpecs = specs.filter((spec) => !HIDDEN_SPEC_KEYS.has(spec.specKey));
 
   // 선택한 부품이 없으면 모달 자체를 만들지 않는다.

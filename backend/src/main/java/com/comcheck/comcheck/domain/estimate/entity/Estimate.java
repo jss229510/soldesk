@@ -49,8 +49,9 @@ public class Estimate {
     @Column(name = "\"estimate_key\"", nullable = false, unique = true, updatable = false)
     private String estimateKey;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "\"user_id\"", updatable = false)
+    // 공용 추천 견적은 소유 회원이 없으므로 NULL을 허용한다.
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "\"user_id\"", nullable = true, updatable = false)
     private User user;
 
     // 견적 이름
@@ -139,8 +140,6 @@ public class Estimate {
 
     // 이 견적이 해당 회원의 것인지 확인
     public boolean isOwnedBy(Long userId) {
-        return userId != null 
-        && this.user !=null
-        && userId.equals(this.user.getUserId());
+        return userId != null && this.user != null && userId.equals(this.user.getUserId());
     }
 }

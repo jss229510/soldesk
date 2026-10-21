@@ -35,25 +35,20 @@ public class EstimateItem {
     @Column(name = "\"quantity\"", nullable = false)
     private Long quantity;
 
-    @Column(name = "\"unit_price\"", nullable = false)
+    // 견적에 담을 당시의 단가를 사용해 이후 시세 변경과 견적 금액을 분리한다.
+    @Column(name = "\"unit_price\"", nullable = false, updatable = false, precision = 12, scale = 0)
     private Long unitPrice;
 
     protected EstimateItem() {
     }
 
     public EstimateItem(Estimate estimate, Part part, Long quantity) {
-        if (estimate == null || part == null){
-            throw new IllegalArgumentException("Estimate and part are required");
-        }
-
-        Long price = part.getPrice();
-
-        if (price == null || price < 0){
-            throw new IllegalArgumentException("A valid part price is required.");
+        if (estimate == null || part == null || part.getPrice() == null || part.getPrice() < 0) {
+            throw new IllegalArgumentException("견적과 가격이 있는 부품 정보가 필요합니다.");
         }
         this.estimate = estimate;
         this.part = part;
-        this.unitPrice = price;
+        this.unitPrice = part.getPrice();
         changeQuantity(quantity == null ? 1L : quantity);
     }
 
@@ -64,27 +59,27 @@ public class EstimateItem {
         this.quantity = quantity;
     }
 
-    public long calculateItemPrice(){
-       return Math.multiplyExact(unitPrice, quantity);
+    public long calculateItemPrice() {
+        return Math.multiplyExact(unitPrice, quantity);
     }
 
-    public Long getItemId(){
+    public Long getItemId() {
         return itemId;
     }
-    
-    public Estimate getEstimate(){
+
+    public Estimate getEstimate() {
         return estimate;
     }
-    
-    public Part getPart(){
+
+    public Part getPart() {
         return part;
     }
 
-    public Long getQuantity(){
+    public Long getQuantity() {
         return quantity;
     }
 
-    public Long getUnitPrice(){
+    public Long getUnitPrice() {
         return unitPrice;
     }
 

@@ -2,7 +2,6 @@ package com.comcheck.comcheck.domain.estimate.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,13 +18,18 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
   List<Estimate> findByUser_UserIdOrderByCreatedAtDesc(Long userId);
 
   // 추천 견적 목록
-  @EntityGraph(attributePaths = "user")
-  @Query("""
-      select e from Estimate e
+  // 회원이 없는 공용 견적도 목록에 남도록 LEFT JOIN으로 조회한다.
+  @Query(value = """
+      select e from Estimate e left join fetch e.user
       where e.isRecommend = :recommend
         and (:usageType is null or e.usageType = :usageType)
         and (:tierCode is null or e.tierCode = :tierCode)
       order by e.totalPrice asc
+      """, countQuery = """
+      select count(e) from Estimate e
+      where e.isRecommend = :recommend
+        and (:usageType is null or e.usageType = :usageType)
+        and (:tierCode is null or e.tierCode = :tierCode)
       """)
   Page<Estimate> findRecommended(
       @Param("recommend") Boolean recommend,
@@ -39,12 +43,15 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
 
   // 예산별 추천
   // 추천 견적 + 총 금액이 예산 이하
-  @EntityGraph(attributePaths = "user") // 목록의 각 견적마다 회원을 따로 조회하는 N+1 문제를 막기 위해 user를 함께 조인해서 가져온다
-  @Query("""
-      select e from Estimate e
+  @Query(value = """
+      select e from Estimate e left join fetch e.user
       where e.isRecommend = :recommend
       and e.totalPrice <= :budget
       order by e.totalPrice desc
+      """, countQuery = """
+      select count(e) from Estimate e
+      where e.isRecommend = :recommend
+        and e.totalPrice <= :budget
       """)
 
   // Page : 목록 + 전체 개수 + 전체 페이지 수 정보를 함께 담는다.
