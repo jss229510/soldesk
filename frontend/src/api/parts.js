@@ -1,5 +1,5 @@
 import { CATEGORIES } from '../constants/categories';
-import { PARTS, PARTS_BY_ID, PRICE_HISTORY } from '../mock';
+import { PARTS, PARTS_BY_ID} from '../mock';
 import { mockResponse, request, USE_MOCK, ApiError } from './client';
 
 const sorters = {
@@ -13,11 +13,11 @@ const sorters = {
 /** 카테고리 목록 + 각 카테고리의 제품 수/가격 범위 (홈 카드에서 사용) */
 export const fetchCategorySummaries = async () => {
   // 백엔드에 /categories API가 없으므로 PARTS 전체 목록을 받아 홈 카드에서 계산한다.
-  if (!USE_MOCK) {
-    const { items = [], total = 0 } = await request('/parts');
+  const data = USE_MOCK ?  
+    { items : PARTS, total: PARTS.length  } : await request('/parts');
 
     const categories = CATEGORIES.map((category) => {
-      const categoryItems = items.filter(
+      const categoryItems = data.items.filter(
         (item) => item.category === category.id,
       );
 
@@ -35,12 +35,11 @@ export const fetchCategorySummaries = async () => {
 
     return {
       categories,
-      totalCount: total,
+      totalCount: data.total,
     };
-  }
+  };
 
-  return mockResponse({ categories: summaries, totalCount: PARTS.length });
-};
+ 
 
 /** 카테고리·검색어·정렬 조건에 맞는 부품 목록을 조회한다. */
 export const fetchParts = async ({ category, sort = 'default', keyword = '' } = {}) => {
@@ -114,14 +113,6 @@ export const fetchPartSpecs = async (partId) => {
   );
 };
 
-/** 최근 12개월 시세 */
-export const fetchPriceHistory = async (partId) => {
-  if (!USE_MOCK) return request(`/parts/${partId}/price-history`);
-
-  const history = PRICE_HISTORY[partId];
-  if (!history) throw new ApiError('시세 기록이 없습니다.', 404);
-  return mockResponse(history, 180);
-};
 
 /** 헤더 검색창용 */
 export const searchParts = async (keyword) => {

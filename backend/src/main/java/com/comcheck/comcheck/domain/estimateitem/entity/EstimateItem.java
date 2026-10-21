@@ -59,23 +59,23 @@ public class EstimateItem {
         this.quantity = quantity;
     }
 
-    public long calculateItemPrice(){
+    public long calculateItemPrice() {
         return Math.multiplyExact(unitPrice, quantity);
     }
 
-    public Long getItemId(){
+    public Long getItemId() {
         return itemId;
     }
-    
-    public Estimate getEstimate(){
+
+    public Estimate getEstimate() {
         return estimate;
     }
-    
-    public Part getPart(){
+
+    public Part getPart() {
         return part;
     }
 
-    public Long getQuantity(){
+    public Long getQuantity() {
         return quantity;
     }
 
