@@ -8,11 +8,11 @@ export const CompatibilityNotice = ({ compatibility }) => {
     : hasError
       ? 'border-red-500 bg-red-950 text-red-200'
       : 'border-yellow-500 bg-yellow-950 text-yellow-300';
-  const title = ok
+  const title = compatibility.title ?? (ok
     ? '모든 부품이 호환됩니다.'
     : hasError
       ? '호환되지 않는 부품이 있습니다.'
-      : '확인이 필요한 항목이 있습니다.';
+      : '확인이 필요한 항목이 있습니다.');
 
   return (
     <div

@@ -21,7 +21,7 @@ public record EstimateItemResponse(
                 part.getPartId(),
                 part.getPartName(),
                 item.getQuantity(),
-                part.getPrice(),
+                item.getUnitPrice(),
                 item.calculateItemPrice());
     }
 }

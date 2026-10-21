@@ -27,8 +27,8 @@ public record EstimateResponse(
         return new EstimateResponse(
                 estimate.getEstimatedId(),
                 estimate.getEstimateKey(),
-                estimate.getUser().getUserId(),
-                estimate.getUser().getNickname(),
+                estimate.getUser() == null ? null : estimate.getUser().getUserId(),
+                estimate.getUser() == null ? null : estimate.getUser().getNickname(),
                 estimate.getTitle(),
                 estimate.getUsageType(),
                 estimate.getTierCode(),

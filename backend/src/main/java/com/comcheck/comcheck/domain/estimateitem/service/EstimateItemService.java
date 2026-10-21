@@ -20,7 +20,7 @@ import com.comcheck.comcheck.domain.part.repository.PartRepository;
 
 /**
  * 견적에 담긴 항목의 추가, 목록 조회, 수량 변경, 삭제를 처리한다.
- * 로그인 사용자 번호를 받아 본인 견적의 항목만 다룰 수 있도록 검사한다.
+ * 추천 견적의 항목은 공개 조회하고, 개인 견적은 로그인과 소유자를 검사한다.
  */
 @Service
 @Transactional(readOnly = true)
@@ -93,17 +93,12 @@ public class EstimateItemService {
     }
 
     /**
-     * 본인 견적에 담긴 항목들을 조회하고 응답 DTO 목록으로 반환한다.
+     * 추천 견적은 누구나, 개인 견적은 소유자만 항목 목록을 조회한다.
      * 견적은 존재하지만 담긴 항목이 없다면 빈 목록을 반환한다.
      */
     public List<EstimateItemResponse> getItems(
             Long userId,
             Long estimateId) {
-        // 로그인 여부 확인
-        if (userId == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
         // 견적 번호 검사
         if (estimateId == null || estimateId < 1) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바른 견적 번호가 필요합니다.");
@@ -113,9 +108,14 @@ public class EstimateItemService {
         Estimate estimate = estimateRepository.findById(estimateId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "견적을 찾을 수 없습니다."));
 
-        // 견적 소유자 확인
-        if (!estimate.isOwnedBy(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적의 항목을 조회할 권한이 없습니다.");
+        // 공개 조회는 추천 견적에만 허용한다. 개인 견적의 접근 제한은 유지한다.
+        if (!Boolean.TRUE.equals(estimate.getIsRecommend())) {
+            if (userId == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+            }
+            if (!estimate.isOwnedBy(userId)) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "해당 견적의 항목을 조회할 권한이 없습니다.");
+            }
         }
 
         // 견적에 담긴 항목 목록 조회
@@ -230,4 +230,5 @@ public class EstimateItemService {
         // 항목 삭제
         estimateItemRepository.delete(item);
     }
+
 }

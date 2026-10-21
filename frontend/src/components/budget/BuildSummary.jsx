@@ -6,7 +6,7 @@ import { formatPrice } from '../../utils/format';
  * 오른쪽 고정 요약 카드.
  * @param {{ build: object, actionLabel: string, onAction?: () => void, note?: string }} props
  */
-export const BuildSummary = ({ build, actionLabel, onAction, note }) => {
+export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = false, note }) => {
   if (!build) return null;
   const { items, total, budget, remaining, usageRate } = build;
   const over = remaining != null && remaining < 0;
@@ -43,18 +43,20 @@ export const BuildSummary = ({ build, actionLabel, onAction, note }) => {
         {items.map((item) => {
           const category = getCategory(item.category);
           return (
-            <li key={item.category} className="flex items-center justify-between gap-3 text-sm">
+            <li key={item.itemId ?? item.category} className="flex items-center justify-between gap-3 text-sm">
               <span className="flex items-center gap-2 text-gray-400">
                 <span style={{ color: category.accent }} aria-hidden="true">{category.icon}</span>
-                {category.label}
+                {category.label}{item.quantity > 1 ? ` × ${item.quantity}` : ''}
               </span>
-              <span className="font-mono text-gray-300">{formatPrice(item.part.price)}</span>
+              <span className="font-mono text-gray-300">
+                {formatPrice(item.itemPrice ?? item.part.price * (item.quantity ?? 1))}
+              </span>
             </li>
           );
         })}
       </ul>
 
-      <Button variant="soft" block onClick={onAction}>{actionLabel}</Button>
+      <Button variant="soft" block onClick={onAction} disabled={actionDisabled}>{actionLabel}</Button>
       {note && (
         <p className="mt-3 text-center font-mono text-xs text-gray-500">
           {note}

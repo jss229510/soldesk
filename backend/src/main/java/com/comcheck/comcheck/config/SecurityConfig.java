@@ -54,6 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/parts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/boards", "/api/boards/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/estimates/recommended", "/api/estimates/recommended/budget", "/api/estimates/*", "/api/estimates/*/power-check").permitAll()
+                        // 항목 조회는 서비스에서 추천 견적 여부와 개인 견적의 소유자를 검사한다.
+                        .requestMatchers(HttpMethod.GET, "/api/estimates/*/items").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
