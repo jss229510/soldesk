@@ -104,7 +104,7 @@ export const UsagePartRow = ({
             <button
                 type="button"
                 disabled={!onReplace}
-                onClick={() => onReplace?.(categoryId, item)}
+                onClick={onReplace}
                 className={
                     "shrink-0 rounded-lg border px-3 py-2 " +
                     "text-sm disabled:cursor-not-allowed " +

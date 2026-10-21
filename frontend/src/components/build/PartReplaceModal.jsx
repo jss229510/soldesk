@@ -27,18 +27,45 @@ export const PartReplaceModal = ({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="text-2xl text-slate-500"
+                        className="p-3 text-2xl text-slate-500"
                         aria-label="닫기"
                     >
-                        x
+                        닫기
                     </button>
                 </div>
 
                 {/* 교체 가능한 부품 목록 */}
-                <div>
-                    
+                <div className="max-h-[60vh] space-y-3 overflow-y-auto">
+                    {parts.length === 0 ? (
+                        <p className="py-8 text-center text-slate-500">
+                            교체 가능한 부품이 없습니다.
+                        </p>
+                    ) : (
+                        parts.map((part) => (
+                            <div
+                                key={part.partId}
+                                className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 p-4"
+                            >
+                                <div className="min-w-0">
+                                    <p className="font-semibold text-slate-900">
+                                        {part.name}
+                                    </p>
+                                    <p className="mt-1 text-sm text-slate-500">
+                                        {Number(part.price).toLocaleString()}원
+                                    </p>
+                                </div>
+
+                                <button type="button" onClick={() => onSelect(part)}
+                                    className="shrink-0 rounded-lg bg-cyan-500 px-4 py-2 text-white hover:bg-cyan-600"
+                                >
+                                    선택
+                                </button>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>
     )
 }
+export default PartReplaceModal;
