@@ -1,4 +1,4 @@
-package com.comcheck.comcheck.domain.build;
+package com.comcheck.comcheck.domain.build.controller;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.comcheck.comcheck.domain.build.ReplacementCandidateService;
 import com.comcheck.comcheck.domain.build.dto.ReplacementCandidateResponse;
 import com.comcheck.comcheck.domain.build.dto.ReplacementRequest;
 
