@@ -1,0 +1,207 @@
+/* =========================================================
+   챗봇 위젯 스타일 (main.jsx 에서 import)
+   색은 tokens.css 변수를 써서 다크 모드에서도 자연스럽게 바뀐다
+   position: fixed → 스크롤해도 화면의 같은 자리에 붙어 있다
+   ========================================================= */
+
+/* 오른쪽 아래 동그란 버튼 */
+.chat-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 40; /* 로그인 모달(Modal)보다는 아래 */
+  min-width: 64px;
+  height: 64px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(8, 145, 178, 0.35);
+}
+.chat-fab:hover {
+  background: var(--brand-strong);
+}
+
+/* 대화창 */
+.chat-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 100px; /* 버튼 위에 */
+  z-index: 40;
+  width: 360px;
+  height: 540px;
+  max-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column; /* 머리 / 대화 / 입력 을 세로로 */
+  background: var(--bg-surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+/* 휴대폰처럼 좁은 화면 : 좌우 꽉 채움 */
+@media (max-width: 480px) {
+  .chat-panel {
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+  .chat-fab {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+/* 머리 */
+.chat-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--brand-soft);
+  border-bottom: 1px solid var(--line);
+}
+.chat-head b {
+  color: var(--brand);
+  margin-right: 6px;
+}
+.chat-sub {
+  font-size: 0.75rem;
+  color: var(--text-2);
+}
+.chat-head-btns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.chat-icon-btn {
+  border: 1px solid var(--line);
+  background: var(--bg-surface);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+/* 대화 목록 : 남는 높이를 모두 차지하고, 넘치면 이 안에서만 스크롤 */
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-surface-2);
+}
+
+/* 말풍선 */
+.chat-bubble {
+  max-width: 85%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre-wrap; /* 챗봇 답변의 줄바꿈을 그대로 */
+  word-break: break-word;
+}
+.chat-bubble.bot {
+  align-self: flex-start;
+  background: var(--bg-surface);
+  border: 1px solid var(--line);
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble.me {
+  align-self: flex-end;
+  background: var(--brand);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-typing {
+  color: var(--text-2);
+}
+
+/* 질문 · 선택지 버튼 */
+.chat-suggest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.chat-suggest button {
+  border: 1px solid var(--brand);
+  background: var(--bg-surface);
+  color: var(--brand);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.chat-suggest button:hover {
+  background: var(--brand-soft);
+}
+
+/* 로그인 안내 */
+.chat-guest {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-2);
+}
+.chat-login-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 오류 문구 */
+.chat-error {
+  margin: 0;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  color: var(--danger);
+  background: var(--danger-surface);
+}
+
+/* 입력창 */
+.chat-form {
+  display: flex;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-surface);
+}
+.chat-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 0.9rem;
+  background: var(--bg-surface);
+  color: var(--text);
+}
+.chat-form button {
+  border: 0;
+  border-radius: 8px;
+  padding: 0 14px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chat-form button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
