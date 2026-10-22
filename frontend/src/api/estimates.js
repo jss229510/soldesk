@@ -2,7 +2,6 @@
 import { PC_BUILD_PROFILES } from '../constants/usages';
 import { request } from './client';
 import { toBudgetItem } from '../utils/budget';
-import { MOCK_ITEMS } from '../mock/recommendedEstimates';
 
 // 예산별 추천 견적 목록 조회. 용도와 등급은 조건으로 보내지 않는다.
 export async function getBudgetRecommendedEstimates(budget, page = 0, size = 10, { signal } = {}) {
@@ -81,13 +80,6 @@ export async function getBudgetEstimateDetails(estimateId, accessToken, { signal
 export async function getRecommendEstimates(usageType, tierCode, page = 0, size = 10) {
   if (!usageType || !tierCode) {
     throw new Error('용도와 등급을 선택해주세요.');
-  }
-
-    // 임시 더미 데이터 테스트
-  if (import.meta.env.DEV) {
-    return {
-      items: MOCK_ITEMS,
-    };
   }
 
   const params = new URLSearchParams({

@@ -15,7 +15,12 @@ public interface PartSpecRepository extends JpaRepository<PartSpec, Long> {
 
     // 특정 부품(partId)의 스펙 목록을 spec_id 순서대로 조회
     // 메서드 이름만으로 Spring Data JPA가 아래 쿼리를 만들어 줌
-    List<PartSpec> findByPartIdOrderBySpecIdAsc(Long partId);
+    List<PartSpec> findByPartIdOrderBySpecIdAsc(
+        Long partId);
+
+    List<PartSpec> findByPartIdInOrderByPartIdAscSpecIdAsc(
+        List<Long> partIds);
+                    
 
      // 스펙 하나를 조회하되, 해당 부품에 속한 스펙인지까지 함께 확인
     Optional<PartSpec> findBySpecIdAndPartId(Long specId, Long partId);
