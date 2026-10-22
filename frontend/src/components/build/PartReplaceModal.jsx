@@ -13,7 +13,7 @@ export const PartReplaceModal = ({
             onClick={onClose}
         >
             <div
-                className="w-full max-w-3xl rounded-2xl bg-white shadow-xl"
+                className="w-full max-w-3xl rounded-2xl bg-[var(--bg-surface)] shadow-xl"
                 onClick={(e) => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
@@ -21,7 +21,7 @@ export const PartReplaceModal = ({
             >
                 {/* 제목 */}
                 <div className="mb-5 flex items-center justify-center justify-between">
-                    <h2 className="text-xl font-bold text-slate-900">
+                    <h2 className="text-xl font-bold text-[var(--text)]">
                         {categoryId?.toUpperCase()}
                     </h2>
                     <button
@@ -42,10 +42,40 @@ export const PartReplaceModal = ({
                         </p>
                     ) : (
                         parts.map((part) => (
+                            // 이미지 + 제품 이름, 가격
                             <div
                                 key={part.partId}
                                 className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 p-4"
                             >
+                                <div className={"relative h-16 w-16 shrink-0" +
+                                    "overflow-hidden rounded-lg" +
+                                    "bg-[var(--bg-surface)]"}
+                                >
+                                    <span
+                                        aria-hidden="true"
+                                        className={
+                                            "absolute inset-0 flex items-center" +
+                                            "justity-center text-xs text-gray-400"
+                                        }>
+                                        이미지 없음
+                                    </span>
+
+                                    {part.imageUrl && (
+                                        <img
+                                            key={part.imageUrl}
+                                            src={part.imageUrl}
+                                            alt={part.name}
+                                            loading="lazy"
+                                            className={
+                                                "relative h-full w-full" +
+                                                "bg-[var(--bg-surface)] object-contain"
+                                            }
+                                            onError={(event) => {
+                                                event.currentTarget.hidden = true;
+                                            }}
+                                        />
+                                    )}
+                                </div>
                                 <div className="min-w-0">
                                     <p className="font-semibold text-slate-900">
                                         {part.name}

@@ -70,7 +70,8 @@ public class SecurityConfig {
                                                 .permitAll()
                                                 // 항목 조회는 서비스에서 추천 견적 여부와 개인 견적의 소유자를 검사한다.
                                                 .requestMatchers(HttpMethod.GET, "/api/estimates/*/items").permitAll()
-                                                // 이 POST는 전달받은 구성의 계산만 수행하며 DB를 변경하지 않는다.
+                                                .requestMatchers(HttpMethod.POST, "/api/build/replacements")
+                                                .permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/estimates/power-check").permitAll()
                                                 .anyRequest().authenticated())
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
