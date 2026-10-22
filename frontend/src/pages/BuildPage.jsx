@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { UsageGrid } from '../components/build';
 import { UsageTierPanel } from '../components/build/UsageTierPanel'
 import { PC_BUILD_PROFILES } from '../constants/usages';
-import { getRecommendEstimates } from '../api/estimates';
+import {
+  getRecommendEstimates,
+  getEstimateItems,
+} from '../api/estimates';
 import { UsagePartRow } from '../components/build/UsagePartRow';
 import { BuildSummary } from '../components/budget';
 import { useNavigate } from 'react-router-dom';
@@ -56,11 +59,46 @@ export const BuildPage = () => {
 
       try {
         const data = await getRecommendEstimates(
-          usageId, selectedTierCode
+          usageId, selectedTierCode, 0, 1
         );
-        if (!ignore) {
-          setSelectedParts(data.items ?? []);
+        if (ignore) return;
+
+        if (!Array.isArray(data?.estimates)) {
+          throw new Error("추천 응답 형식이 올바르지 않습니다.");
         }
+
+        const estimate = data.estimates[0];
+        if (!estimate) {
+          throw new Error("해당 조건의 추천 견적이 없습니다.");
+        }
+        if (data.totalElements > 1) {
+          throw new Error("추천 견적이 여러 건입니다. 선택 기준을 확인해주세요.");
+        }
+
+        const items = await getEstimateItems(estimate.estimatedId);
+        if (ignore) return;
+
+        if (!Array.isArray(items)) {
+          throw new Error("품목 응답 형식이 올바르지 않습니다.");
+        }
+
+        const nextParts = items.map((item) => ({
+          itemId: item.itemId,
+          category: item.category?.toLowerCase(),
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          itemPrice: item.itemPrice,
+          part: {
+            id: item.partId,
+            name: item.partName,
+            category: item.category?.toLowerCase(),
+            price: item.unitPrice,
+            imageUrl: item.imageUrl,
+            productUrl: item.productUrl,
+          },
+        }));
+
+        setSelectedParts(nextParts);
       } catch (err) {
         if (!ignore) {
           setSelectedParts([]);
