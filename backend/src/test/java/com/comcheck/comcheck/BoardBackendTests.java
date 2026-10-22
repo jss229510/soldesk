@@ -22,7 +22,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -290,7 +290,7 @@ class BoardBackendTests {
                 .addFilters(context.getBean("springSecurityFilterChain", Filter.class)).build();
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @TestConfiguration(proxyBeanMethods = false)
     @EnableWebMvc
     static class TestWebConfig {
         @Bean BoardController controller() { return new BoardController(new Store().service); }
