@@ -30,16 +30,17 @@ export const PartCard = ({ part, onSelect }) => {
   };
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 text-left hover:border-gray-500">
+    <article className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 text-left hover:border-gray-500">
       <div className="px-2 pt-2">
         <Thumbnail
           part={part}
+          imageClassName="object-contain"
           topLeft={part.badge && <Badge label={part.badge} />}
           topRight={off > 0 && <Badge label={`-${off}%`} variant="discount" />}
         />
       </div>
 
-      <div className="flex flex-col gap-3 p-4">
+      <div className="flex flex-1 flex-col gap-3 p-4">
         <p className="font-mono text-xs text-cyan-400">{part.brand}</p>
         <h3 className="text-lg font-bold">{part.name}</h3>
 
@@ -63,7 +64,7 @@ export const PartCard = ({ part, onSelect }) => {
         />
         )}
 
-        <div className="flex items-end justify-between gap-3">
+        <div className="mt-auto flex items-end justify-between gap-3">
           <div>
             <strong className="text-2xl font-extrabold">{formatPrice(part.price)}</strong>
             {part.listPrice && <span className="block text-sm text-gray-500 line-through">{formatPrice(part.listPrice)}</span>}
@@ -78,7 +79,7 @@ export const PartCard = ({ part, onSelect }) => {
 
         {/* 상세 스펙 조회와 장바구니 담기를 서로 독립된 동작으로 유지한다. */}
         <div className="grid grid-cols-2 gap-2">
-          <Button variant="soft" block onClick={() => onSelect?.(part)}>
+          <Button variant="soft" block className="whitespace-nowrap px-2 text-xs" onClick={() => onSelect?.(part)}>
             부품 스펙 보기
           </Button>
           <Button block disabled={isAdding} onClick={() => void handleAddToCart()}>

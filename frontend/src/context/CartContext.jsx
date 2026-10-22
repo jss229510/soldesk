@@ -31,12 +31,14 @@ export const CartProvider = ({ children }) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   // 서버가 반환한 장바구니 목록으로 화면 상태와 선택 상태를 함께 갱신한다.
-  const applyCart = useCallback((cart) => {
+  const applyCart = useCallback((cart, selectAll = false) => {
     const nextItems = cart.items ?? [];
 
     setItems(nextItems);
     setSelectedIds((currentIds) => (
-      currentIds.filter((id) => nextItems.some((item) => item.id === id))
+      selectAll
+        ? nextItems.map((item) => item.id)
+        : currentIds.filter((id) => nextItems.some((item) => item.id === id))
     ));
 
     return cart;
@@ -47,7 +49,7 @@ export const CartProvider = ({ children }) => {
     const accessToken = getAccessToken();
     const cart = await fetchCart(accessToken);
 
-    return applyCart(cart);
+    return applyCart(cart, true);
   }, [applyCart]);
 
   // 선택한 부품을 DB 장바구니에 추가하고, 서버가 돌려준 목록으로 상태를 갱신한다.

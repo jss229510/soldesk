@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { useBuild } from '../context/BuildContext';
 import { PartSpecModal } from '../components/shop';
+import PartReplaceModal from '../components/build/PartReplaceModal';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
@@ -37,6 +38,8 @@ export const BuildPage = () => {
   const [selectedPart, setSelectedPart] = useState(null);
   const { setBuild } = useBuild();
   const navigate = useNavigate();
+  const [replaceCategory, setReplaceCategory] = useState(null);
+  const [replacedParts, setReplaceParts] = useState([]);
 
   // 선택한 부품 총 가격
   const total = selectedParts.reduce((sum, item) => sum + (Number(item.part?.price || 0) * (item.quantity ?? 1)), 0);
@@ -151,6 +154,25 @@ export const BuildPage = () => {
     setLoading(true);
   };
 
+  // 교체 버튼 클릭
+  const handleReplaceClick = (categoryId) => {
+    console.log("교체 버튼 클릭:", categoryId)
+    setReplaceCategory(categoryId);
+  };
+
+  // 교체할 부품 선택
+  const handleReplaceSelect = (part) => {
+    setSelectedParts((prev) =>
+      prev.map((item) =>
+        item.category === replaceCategory
+          ? { ...item, part }
+          : item
+      )
+    );
+
+    setReplaceCategory(null);
+  };
+
   // BuildSummary에 전달할 데이터 (selectedParts 로 되이 있기 때문.)
   const build = {
     items: selectedParts,
@@ -248,6 +270,7 @@ export const BuildPage = () => {
                         label={slot.label}
                         item={selectedParts.find((item) => item.category === slot.key)}
                         onSelect={setSelectedPart}
+                        onReplace={() => handleReplaceClick(slot.key)}
                       />
                     ))
                   )}
@@ -281,7 +304,15 @@ export const BuildPage = () => {
         onClose={() => setSelectedPart(null)}
       />
 
+      <PartReplaceModal
+        isOpen={replaceCategory !== null}
+        categoryId={replaceCategory}
+        parts={replacedParts}
+        onClose={() => setReplaceCategory(null)}
+        onSelect={handleReplaceSelect}
+      />
     </div>
+
   );
 };
 

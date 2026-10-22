@@ -55,7 +55,7 @@ export const Header = ({ onLogin, user, onLogout, isDark, onToggleDark }) => {
         <button
           type="button"
           onClick={onToggleDark}
-          className="inline-flex h-9 items-center rounded-md px-3 text-sm font-medium"
+          className="mr-3 inline-flex h-9 items-center rounded-md px-3 text-sm font-medium"
           aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
           aria-pressed={isDark}
           style={{

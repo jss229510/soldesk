@@ -135,7 +135,7 @@ export const PaymentHistoryModal = ({ open, onClose }) => {
               const items = itemsByPaymentId[payment.paymentId];
 
               return (
-                <article key={payment.paymentId} className="overflow-hidden rounded-lg border border-gray-700 bg-gray-800/60">
+                <article key={payment.paymentId} className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
                   <button
                     type="button"
                     onClick={() => void togglePayment(payment.paymentId)}
