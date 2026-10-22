@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getBudgetEstimateDetails, getBudgetRecommendedEstimates } from '../api/estimates';
+import { checkBudgetDraftPower, getBudgetEstimateDetails, getBudgetRecommendedEstimates } from '../api/estimates';
 import { replaceBudgetPart, toBudgetBuild } from '../utils/budget';
 
 /** 실제 예산 견적 목록 → 견적 선택 → 부품·스펙·전력 결과 조회 */
@@ -11,6 +11,8 @@ export const useBudgetBuild = (budget, {
   const [selection, setSelection] = useState(null);
   const [revision, setRevision] = useState(0);
   const [draft, setDraft] = useState(null);
+  const [draftPower, setDraftPower] = useState(null);
+  const [powerRevision, setPowerRevision] = useState(0);
   const selectionKey = `${budget}:${page}:${size}`;
   const listKey = `${selectionKey}:${revision}`;
   const enabled = Number.isFinite(budget) && budget >= 0;
@@ -56,6 +58,28 @@ export const useBudgetBuild = (budget, {
     && detailsResult.accessToken === accessToken ? detailsResult : null;
   // 다른 견적·예산·조회 결과의 교체 내용이 새 구성에 섞이지 않게 한다.
   const currentItems = draft?.source === currentDetails ? draft.items : currentDetails?.data?.items;
+  const modified = Boolean(currentDetails?.data && currentItems !== currentDetails.data.items);
+
+  useEffect(() => {
+    if (!modified) return;
+    const controller = new AbortController();
+    checkBudgetDraftPower(currentItems, { signal: controller.signal })
+      .then((data) => {
+        if (!controller.signal.aborted) {
+          setDraftPower({ source: currentDetails, items: currentItems, revision: powerRevision, data, error: null });
+        }
+      })
+      .catch((error) => {
+        if (!controller.signal.aborted) {
+          setDraftPower({ source: currentDetails, items: currentItems, revision: powerRevision, data: null, error });
+        }
+      });
+    // 연속 교체·견적 변경·원복 시 이전 검사의 응답을 반영하지 않는다.
+    return () => controller.abort();
+  }, [modified, currentItems, currentDetails, powerRevision]);
+
+  const currentPower = draftPower?.source === currentDetails && draftPower?.items === currentItems
+    && draftPower?.revision === powerRevision ? draftPower : null;
 
   return {
     estimates,
@@ -63,7 +87,7 @@ export const useBudgetBuild = (budget, {
     selectEstimate: (id) => setSelection({ key: selectionKey, id }),
     pageInfo: currentList?.data ?? null,
     build: selectedEstimate && currentDetails?.data
-      ? toBudgetBuild(selectedEstimate, currentDetails.data, budget, currentItems) : null,
+      ? toBudgetBuild(selectedEstimate, currentDetails.data, budget, currentItems, currentPower) : null,
     replacePart: (itemId, part, specs) => {
       if (!currentDetails?.data) return;
       setDraft({
@@ -72,6 +96,7 @@ export const useBudgetBuild = (budget, {
       });
     },
     resetReplacements: () => setDraft(null),
+    retryPowerCheck: () => setPowerRevision((value) => value + 1),
     loading: enabled && !currentList,
     error: currentList?.error ?? null,
     detailsLoading: Boolean(selectedEstimate) && !currentDetails,

@@ -2,6 +2,8 @@ package com.comcheck.comcheck.domain.estimate.service;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.comcheck.comcheck.domain.estimate.dto.EstimatePageResponse;
 import com.comcheck.comcheck.domain.estimate.dto.EstimatePartSpecRow;
 import com.comcheck.comcheck.domain.estimate.dto.EstimatePowerCheckResponse;
+import com.comcheck.comcheck.domain.estimate.dto.EstimatePowerCheckRequest;
 import com.comcheck.comcheck.domain.estimate.dto.EstimateRequest;
 
 import com.comcheck.comcheck.domain.estimate.dto.EstimateResponse;
@@ -169,6 +172,57 @@ public class EstimateService {
         return calculatePower(estimateId);
     }
 
+    // 예산 화면의 교체한 구성만 계산한다. 견적/항목을 생성하거나 수정하지 않는다.
+    public EstimatePowerCheckResponse checkDraftPower(EstimatePowerCheckRequest request) {
+        if (request == null || request.items() == null || request.items().isEmpty()
+                || request.items().size() > 16) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "검사할 부품을 1~16개 전달해주세요.");
+        }
+        Map<Long, Long> quantities = new LinkedHashMap<>();
+        for (EstimatePowerCheckRequest.Item item : request.items()) {
+            if (item == null || item.partId() == null || item.partId() < 1
+                    || item.quantity() == null || item.quantity() < 1 || item.quantity() > 100) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "부품 번호와 수량을 확인해주세요.");
+            }
+            if (quantities.putIfAbsent(item.partId(), item.quantity()) != null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "같은 부품은 수량으로 합쳐 전달해주세요.");
+            }
+        }
+
+        List<EstimatePartSpecRow> rows = estimateRepository
+                .findPowerSpecsByPartIds(List.copyOf(quantities.keySet()), POWER_SPEC_KEYS);
+        long foundCount = rows.stream().map(EstimatePartSpecRow::partId).distinct().count();
+        if (foundCount != quantities.size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 부품이 포함되어 있습니다.");
+        }
+        List<EstimatePartSpecRow> selectedRows = rows.stream()
+                .map(row -> new EstimatePartSpecRow(row.partId(), row.category(), row.specKey(),
+                        row.specValue(), quantities.get(row.partId())))
+                .toList();
+        EstimatePowerCheckResponse result = calculatePower(null, selectedRows);
+
+        // 기존 저장 견적 API의 판정은 유지하고, 새 API는 누락된 스펙을 '충분'으로 간주하지 않는다.
+        boolean hasPsu = rows.stream().anyMatch(row -> "PSU".equalsIgnoreCase(row.category()));
+        boolean hasGpu = rows.stream().anyMatch(row -> "GPU".equalsIgnoreCase(row.category()));
+        boolean hasGpuRecommendation = rows.stream().anyMatch(row ->
+                "GPU".equalsIgnoreCase(row.category()) && hasPowerValue(row, SPEC_GPU_RECOMMENDED));
+        boolean missingTdp = rows.stream()
+                .filter(row -> "CPU".equalsIgnoreCase(row.category()) || "GPU".equalsIgnoreCase(row.category()))
+                .map(EstimatePartSpecRow::partId).distinct()
+                .anyMatch(id -> rows.stream().noneMatch(row -> row.partId().equals(id) && hasPowerValue(row, SPEC_TDP)));
+        if (hasPsu && (result.psuWattage() == null || (hasGpu && !hasGpuRecommendation && missingTdp))) {
+            return new EstimatePowerCheckResponse(null, result.cpuTdp(), result.gpuTdp(), result.totalPower(),
+                    result.psuWattage(), null, EstimatePowerCheckResponse.UNKNOWN, false,
+                    "선택한 부품의 전력 정보가 부족해 파워 출력의 충분 여부를 판단할 수 없습니다.");
+        }
+        return result;
+    }
+
+    private boolean hasPowerValue(EstimatePartSpecRow row, String specKey) {
+        Long value = toWatt(row.specValue());
+        return specKey.equals(row.specKey()) && value != null && value > 0;
+    }
+
     // 총 소비전력(total_power) 다시 계산해서 저장
     // 견적 품목이 추가·삭제·수량변경된 뒤 EstimateItemService에서 호출하는 용도
     @Transactional
@@ -191,7 +245,11 @@ public class EstimateService {
 
     private EstimatePowerCheckResponse calculatePower(Long estimateId) {
         List<EstimatePartSpecRow> rows = estimateRepository.findPowerSpecs(estimateId, POWER_SPEC_KEYS);
+        return calculatePower(estimateId, rows);
+    }
 
+    // 저장된 견적과 화면의 임시 구성이 같은 전력 계산식을 사용한다.
+    private EstimatePowerCheckResponse calculatePower(Long estimateId, List<EstimatePartSpecRow> rows) {
         long cpuTdp = 0;
         long gpuTdp = 0;
         boolean hasGpu = false;

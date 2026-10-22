@@ -44,3 +44,8 @@ out/
 
 # 환경변수
 backend/.env
+
+# soldesk/.gitignore 에 추가
+chatbot/.env
+chatbot/venv/
+__pycache__/

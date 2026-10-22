@@ -4,9 +4,9 @@ import { formatPrice } from '../../utils/format';
 
 /**
  * 오른쪽 고정 요약 카드.
- * @param {{ build: object, actionLabel: string, onAction?: () => void, note?: string }} props
+ * children으로 예산견적의 장바구니 버튼과 처리 결과를 요약 카드 아래에 표시한다.
  */
-export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = false, note }) => {
+export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = false, note, children }) => {
   if (!build) return null;
   const { items, total, budget, remaining, usageRate } = build;
   const over = remaining != null && remaining < 0;
@@ -62,6 +62,7 @@ export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = fa
           {note}
         </p>
       )}
+      {children}
     </aside>
   );
 };

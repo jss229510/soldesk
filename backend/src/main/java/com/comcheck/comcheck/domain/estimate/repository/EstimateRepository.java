@@ -73,4 +73,16 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
   List<EstimatePartSpecRow> findPowerSpecs(
       @Param("estimateId") Long estimateId,
       @Param("specKeys") List<String> specKeys);
+
+  // 스펙이 없는 부품도 남겨, GPU/PSU가 없는 경우와 정보가 없는 경우를 구분한다.
+  @Query("""
+      select new com.comcheck.comcheck.domain.estimate.dto.EstimatePartSpecRow(
+          p.partId, p.category, ps.specKey, ps.specValue, 1L)
+      from Part p
+      left join PartSpec ps on ps.partId = p.partId and ps.specKey in :specKeys
+      where p.partId in :partIds
+      """)
+  List<EstimatePartSpecRow> findPowerSpecsByPartIds(
+      @Param("partIds") List<Long> partIds,
+      @Param("specKeys") List<String> specKeys);
 }

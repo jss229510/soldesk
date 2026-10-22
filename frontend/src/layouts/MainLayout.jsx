@@ -6,6 +6,7 @@ import Modal from '../components/common/Modal';
 import LoginPage from '../pages/LoginPage';
 import { fetchCurrentUser } from '../api/users';
 import { useCart } from '../context/CartContext';
+import ChatWidget from '../components/chat/ChatWidget'; // [챗봇] 추가
 
 /** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
 export const MainLayout = () => {
@@ -103,6 +104,9 @@ export const MainLayout = () => {
       </main>
 
       <Footer />
+
+      {/* [챗봇] 추가 : 로그인 회원이 바뀌면 key 가 바뀌어 이전 대화가 지워진다 */}
+      <ChatWidget key={user?.userId ?? 'guest'} user={user} onLogin={openLogin} />
     </div>
   );
 };

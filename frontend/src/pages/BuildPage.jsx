@@ -13,6 +13,7 @@ import { ROUTES } from '../constants/routes';
 import { useBuild } from '../context/BuildContext';
 import { PartSpecModal } from '../components/shop';
 import PartReplaceModal from '../components/build/PartReplaceModal';
+import { useCart } from '../context/CartContext';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
@@ -40,14 +41,42 @@ export const BuildPage = () => {
   const navigate = useNavigate();
   const [replaceCategory, setReplaceCategory] = useState(null);
   const [replacedParts, setReplaceParts] = useState([]);
+  const { addItem } = useCart();
+  const [isAddCart, setIsAddCart] = useState(false);
+
 
   // 선택한 부품 총 가격
   const total = selectedParts.reduce((sum, item) => sum + (Number(item.part?.price || 0) * (item.quantity ?? 1)), 0);
 
-  const applyCart = () => {
-    if (!build) return;
-    setBuild(build.items);
-    navigate(ROUTES.cart);
+  const applyCart = async () => {
+    if (isAddCart || build.items.length === 0) return;
+
+    setIsAddCart(true);
+
+    try {
+      for (const item of build.items) {
+        if (!item.part?.id) {
+          throw new Error("부품 id가 없습니다.")
+        }
+        const quantity = item.quantity ?? 1;
+        if (!Number.isInteger(quantity) || quantity < 1) {
+          throw new Error("부품 갯수가 맞지 않습니다.")
+        }
+      }
+
+      for (const item of build.items) {
+        for (let count = 0; count < (item.quantity ?? 1); count += 1) {
+          await addItem(item.part);
+        }
+      }
+      navigate(ROUTES.cart);
+
+    } catch (error) {
+      window.alert(error.message || "장바구니 담기에 실패했습니다.");
+
+    } finally {
+      setIsAddCart(false);
+    }
   }
 
   useEffect(() => {
@@ -286,7 +315,7 @@ export const BuildPage = () => {
 
         </aside>
         <aside>
-          <div>
+          <div >
             <BuildSummary
               build={build}
               actionLabel='장바구니 담기'

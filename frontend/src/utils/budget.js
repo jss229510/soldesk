@@ -50,8 +50,9 @@ export const replaceBudgetPart = (items, itemId, part, specs) => {
 };
 
 // 원본은 서버 총액을, 교체한 구성은 각 항목의 수량을 반영한 합계를 사용한다.
-export const toBudgetBuild = (estimate, details, budget, items = details.items) => {
+export const toBudgetBuild = (estimate, details, budget, items = details.items, powerResult = null) => {
   const modified = items !== details.items;
+  const powerChecking = modified && powerResult == null;
   const total = modified ? items.reduce((sum, item) => sum + item.itemPrice, 0) : estimate.totalPrice;
   return {
     estimateId: estimate.estimatedId,
@@ -62,14 +63,18 @@ export const toBudgetBuild = (estimate, details, budget, items = details.items) 
     remaining: budget - total,
     usageRate: budget > 0 ? Math.round((total / budget) * 100) : null,
     modified,
+    powerChecking,
+    powerError: modified ? powerResult?.error ?? null : null,
     // 서버의 전력 검사 결과는 원본 견적에 대한 것이므로 교체 후에는 재사용하지 않는다.
-    compatibility: modified ? {
+    compatibility: powerChecking ? {
       kind: 'power',
-      title: '부품을 교체한 구성입니다.',
+      title: '교체한 구성의 전력을 검사하고 있습니다.',
       ok: false,
       hasError: false,
       estimatedWatt: null,
-      issues: [{ message: '교체 후의 전력과 부품 호환성을 다시 확인해 주세요.' }],
-    } : toPowerCompatibility(details.powerCheck, details.powerError),
+      issues: [{ message: '현재 선택한 부품을 기준으로 필요한 파워 출력을 확인합니다.' }],
+    } : modified
+      ? toPowerCompatibility(powerResult.data, powerResult.error?.message)
+      : toPowerCompatibility(details.powerCheck, details.powerError),
   };
 };

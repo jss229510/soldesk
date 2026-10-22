@@ -72,6 +72,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.GET, "/api/estimates/*/items").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/build/replacements")
                                                 .permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/estimates/power-check").permitAll()
                                                 .anyRequest().authenticated())
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .build();
