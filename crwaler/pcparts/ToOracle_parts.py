@@ -11,6 +11,7 @@ DB_SAVE_ENABLED = False
 DB_SAVE_DISABLED_EXIT_CODE = 10
 TARGET_DATE = '20261006'
 BASE_DIR = Path(__file__).resolve().parent
+ENV_PATH = BASE_DIR.parents[1] / 'backend' / '.env'
 PARTS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'parts_all.csv'
 SPECS_PATH = BASE_DIR / 'output' / TARGET_DATE / 'part_specs_all.csv'
 ESTIMATES_PATH = BASE_DIR / 'output' / TARGET_DATE / 'recommended_estimates.csv'
@@ -279,6 +280,11 @@ def main(limit=None, execute=False, recommendations_only=False):
     paths = (ESTIMATES_PATH, ITEMS_PATH) if recommendations_only else (PARTS_PATH, SPECS_PATH)
     if any(not path.exists() for path in paths):
         raise SystemExit(f'Missing input CSV files for {TARGET_DATE}.')
+
+    # Share the backend configuration while preserving explicit shell overrides.
+    if ENV_PATH.is_file():
+        from dotenv import load_dotenv
+        load_dotenv(ENV_PATH, override=False)
 
     required_env = ('DB_URL', 'DB_USERNAME', 'DB_PASSWORD')
     missing_env = [name for name in required_env if not os.environ.get(name)]
