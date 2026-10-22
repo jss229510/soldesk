@@ -41,6 +41,21 @@ export async function getBudgetReplacementPart(partId, { signal } = {}) {
   return { part, specs };
 }
 
+// 교체한 구성의 ID와 수량만 전송한다. 가격과 전력 스펙은 서버가 DB에서 조회한다.
+export async function checkBudgetDraftPower(items, { signal } = {}) {
+  const result = await request('/estimates/power-check', {
+    method: 'POST',
+    signal,
+    body: JSON.stringify({
+      items: items.map((item) => ({ partId: item.part.id, quantity: item.quantity })),
+    }),
+  });
+  if (!['OK', 'INSUFFICIENT', 'NO_PSU', 'UNKNOWN'].includes(result?.status)) {
+    throw new Error('전력 검사 응답 형식이 올바르지 않습니다.');
+  }
+  return result;
+}
+
 // 예산 화면은 부품·스펙도 목업 설정을 거치지 않고 실제 API로 조회한다.
 export async function getBudgetEstimateDetails(estimateId, accessToken, { signal } = {}) {
   const loadItems = async () => {

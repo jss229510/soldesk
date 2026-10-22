@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.comcheck.comcheck.domain.estimate.dto.EstimatePageResponse;
 import com.comcheck.comcheck.domain.estimate.dto.EstimatePowerCheckResponse;
+import com.comcheck.comcheck.domain.estimate.dto.EstimatePowerCheckRequest;
 import com.comcheck.comcheck.domain.estimate.dto.EstimateRequest;
 import com.comcheck.comcheck.domain.estimate.dto.EstimateResponse;
 import com.comcheck.comcheck.domain.estimate.service.EstimateService;
@@ -85,6 +86,13 @@ public class EstimateController {
             @PathVariable Long estimateId,
             Authentication authentication) {
         return ResponseEntity.ok(estimateService.checkPower(estimateId, getLoginUserIdOrNull(authentication)));
+    }
+
+    // 전달받은 임시 구성의 전력 검사. DB에 저장된 공용 견적은 변경하지 않는다.
+    @PostMapping("/estimates/power-check")
+    public ResponseEntity<EstimatePowerCheckResponse> checkDraftPower(
+            @Valid @RequestBody EstimatePowerCheckRequest request) {
+        return ResponseEntity.ok(estimateService.checkDraftPower(request));
     }
 
     // 견적 하나 조회
