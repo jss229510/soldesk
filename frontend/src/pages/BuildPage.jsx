@@ -5,7 +5,6 @@ import { PC_BUILD_PROFILES } from '../constants/usages';
 import {
   getRecommendEstimates,
   getEstimateItems,
-  getReplacementCandidates,
 } from '../api/estimates';
 import { UsagePartRow } from '../components/build/UsagePartRow';
 import { BuildSummary } from '../components/budget';
@@ -15,6 +14,7 @@ import { PartSpecModal } from '../components/shop';
 import PartReplaceModal from '../components/build/PartReplaceModal';
 import { useBudgetCart } from '../hooks/useBudgetCart';
 import { BudgetCartConfirmModal } from '../components/budget/BudgetCartConfirmModal';
+import { getReplacementCandidates } from '../api/replacements';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
@@ -132,54 +132,6 @@ export const BuildPage = () => {
     }
   }, [usageId, selectedTierCode, estimateAttempt]);
 
-  useEffect(() => {
-    if (!replaceCategory || !usageId || !selectedTierCode) return;
-
-    const controller = new AbortController();
-
-    getReplacementCandidates({
-      usageType: usageId,
-      tierCode: selectedTierCode,
-      category: replaceCategory.toUpperCase(),
-      items: selectedParts,
-    }, { signal: controller.signal })
-      .then((candidates) => {
-        if (controller.signal.aborted) return;
-
-        const parts = candidates.map((candidate) => {
-          const part = candidate.part;
-
-          if (!Number.isSafeInteger(part?.id) || part.id < 1
-            || !Number.isSafeInteger(part.price) || part.price <= 0
-            || part.discontinued
-            || part.category?.toLowerCase() !== replaceCategory) {
-            throw new Error('교체 후보의 제품 정보를 확인할 수 없습니다.');
-          }
-
-          return {
-            ...part,
-            partId: part.id,
-            category: part.category.toLowerCase(),
-            unitPriceDifference: candidate.unitPriceDifference,
-            reason: candidate.reason,
-          };
-        });
-
-        setReplaceParts(parts);
-      })
-      .catch((err) => {
-        if (!controller.signal.aborted) {
-          setReplaceParts([]);
-          setReplaceError(err.message || '교체 후보 조회에 실패했습니다.');
-        }
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setReplaceLoading(false);
-      });
-
-    return () => controller.abort();
-  }, [replaceCategory, usageId, selectedTierCode, selectedParts, replaceAttempt]);
-
   const handleReplaceClose = () => {
     setReplaceCategory(null);
     setReplaceParts([]);
@@ -224,13 +176,26 @@ export const BuildPage = () => {
     setLoading(true);
   };
 
-  // 교체 버튼 클릭
+  // Open replacement candidates for the current component.
   const handleReplaceClick = (categoryId) => {
-    if (loading || isAddCart
-      || !selectedParts.some((item) => item.category === categoryId)) return;
+    if (loading || isAddCart) return;
+
+    const supported = [
+      "cpu", "gpu", "ram", "ssd", "mainboard", "psu", "case", "cooler",
+    ];
+    if (!supported.includes(categoryId)) {
+      window.alert("아직 지원하지 않는 부품입니다.")
+      return;
+    }
+    const currentItem = selectedParts.find((item) => item.category === categoryId);
+
+    if (!currentItem?.part?.id) {
+      window.alert("현재 구성에 포함된 부품만 교체 할 수 있습니다.")
+      return;
+    }
 
     setReplaceParts([]);
-    setReplaceError('');
+    setReplaceError("");
     setReplaceLoading(true);
     setReplaceCategory(categoryId);
   };
@@ -282,6 +247,65 @@ export const BuildPage = () => {
     remaining: null,
     usageRate: 0,
   }
+
+  useEffect(() => {
+    if (!replaceCategory || !usageId || !selectedTierCode) return;
+
+    const controller = new AbortController();
+
+    async function loadCandidate() {
+      setReplaceLoading(true);
+      setReplaceError("");
+      setReplaceParts([]);
+
+      try {
+        const candidates = await getReplacementCandidates(
+          {
+            usageType: usageId,
+            tierCode: selectedTierCode,
+            category: replaceCategory.toUpperCase(),
+            items: selectedParts,
+          },
+          { signal: controller.signal },
+        );
+
+        if (controller.signal.aborted) return;
+
+        setReplaceParts(
+          candidates.map((candidate) => {
+            const part = candidate.part;
+            if (!Number.isSafeInteger(part?.id) || part.id < 1
+              || !Number.isSafeInteger(part.price) || part.price <= 0
+              || part.discontinued
+              || part.category?.toLowerCase() !== replaceCategory) {
+              throw new Error('교체 후보의 제품 정보를 확인할 수 없습니다.');
+            }
+            return {
+              ...part,
+              partId: part.id,
+              category: part.category.toLowerCase(),
+              unitPriceDifference: candidate.unitPriceDifference,
+              reason: candidate.reason,
+            };
+          }),
+        );
+      } catch (error) {
+        if (controller.signal.aborted) return;
+
+        setReplaceError(
+          error.message || "교체 후보를 불러오지 못했습니다.",
+        );
+      } finally {
+        if (!controller.signal.aborted) {
+          setReplaceLoading(false);
+        }
+      }
+    }
+
+    loadCandidate();
+
+    return () => controller.abort();
+  }, [replaceCategory, usageId, selectedTierCode, selectedParts, replaceAttempt]);
 
   return (
     <div className="mx-auto max-w-[1400px] px-6 py-8">
