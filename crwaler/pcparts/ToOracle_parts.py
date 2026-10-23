@@ -1,4 +1,19 @@
-"""Load parts, specs, or recommendations only when database writes are explicitly enabled."""
+"""Load parts, specs, or recommendations only with explicit write permission.
+
+Representative cases/coolers: run --execute --manual-only once, or when updating
+the catalog. Normal CSV loading never updates these representative products.
+
+Recommendation reload procedure:
+1. Load normal parts/specs with --execute.
+2. Load recommendation CSVs with --execute --recommendations-only.
+3. From backend/, start Gradle with the matching recommendation date:
+   .\\gradlew.bat bootRun --args="--build.accessories.apply-date=20261006"
+4. Verify estimate items and totals. Later normal starts must omit that option.
+
+Step 2 replaces recommendation items; step 3 restores case/cooler defaults.
+Stop other database loaders while applying defaults. This script never launches
+Java or applies accessory defaults automatically.
+"""
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
 import argparse
@@ -266,18 +281,38 @@ def insert_manual_parts(cursor):
             
     return inserted_count, updated_count, spec_count
 
-def main(limit=None, execute=False, recommendations_only=False):
+def load_manual_parts(config):
+    """Load only the representative case and cooler catalog in one transaction."""
+    import oracledb
+
+    with oracledb.connect(**config) as conn:
+        try:
+            with conn.cursor() as cursor:
+                inserted, updated, specs = insert_manual_parts(cursor)
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+    print(f'Oracle manual parts: inserted {inserted} / updated {updated} / '
+          f'PART_SPECS inserted {specs}')
+
+
+def main(limit=None, execute=False, recommendations_only=False, manual_only=False):
     if not DB_SAVE_ENABLED and not execute:
         print('Database writes are disabled. Pass --execute to enable loading.')
         raise SystemExit(DB_SAVE_DISABLED_EXIT_CODE)
 
     if limit is not None and limit < 1:
         raise ValueError('limit must be a positive integer.')
-    if recommendations_only and limit is not None:
-        raise ValueError('--limit cannot be combined with --recommendations-only.')
+    if recommendations_only and manual_only:
+        raise ValueError('--manual-only cannot be combined with --recommendations-only.')
+    if (recommendations_only or manual_only) and limit is not None:
+        raise ValueError('--limit cannot be combined with an only-mode option.')
 
     import oracledb
-    paths = (ESTIMATES_PATH, ITEMS_PATH) if recommendations_only else (PARTS_PATH, SPECS_PATH)
+    paths = (() if manual_only else
+             (ESTIMATES_PATH, ITEMS_PATH) if recommendations_only else
+             (PARTS_PATH, SPECS_PATH))
     if any(not path.exists() for path in paths):
         raise SystemExit(f'Missing input CSV files for {TARGET_DATE}.')
 
@@ -302,6 +337,9 @@ def main(limit=None, execute=False, recommendations_only=False):
         'password': os.environ['DB_PASSWORD'],
         'dsn': db_url[len(jdbc_prefix):],
     }
+    if manual_only:
+        load_manual_parts(config)
+        return
     if recommendations_only:
         load_recommendations(config)
         return
@@ -329,13 +367,6 @@ def main(limit=None, execute=False, recommendations_only=False):
             inserted_count += int(inserted)
             updated_count += int(not inserted)
             
-        #직접 작성한 케이스/cpu 쿨러 저장
-        manual_inserted, manual_updated, manual_specs = insert_manual_parts(cursor)
-            
-        inserted_count += manual_inserted
-        updated_count += manual_updated
-        spec_inserted_count += manual_specs
-            
         for _, row in specs.iterrows():
             cursor.execute('''INSERT INTO "PART_SPECS" ("spec_id","part_id","spec_key","spec_value","spec_unit")
                               SELECT "SEQ_PART_SPECS".NEXTVAL,:part_id,:spec_key,:spec_value,:spec_unit
@@ -361,9 +392,15 @@ def main(limit=None, execute=False, recommendations_only=False):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Load parts, specs, or recommendation CSVs into Oracle.')
+    parser = argparse.ArgumentParser(
+        description='Load parts, specs, or recommendation CSVs into Oracle.',
+        epilog=('Normal loading excludes representative cases/coolers. '
+                'After --recommendations-only, explicitly reapply accessory defaults '
+                f'in Java with --build.accessories.apply-date={TARGET_DATE}.'))
     parser.add_argument('--limit', type=int, help='Maximum products for a small test load.')
     parser.add_argument('--execute', action='store_true', help='Explicitly enable database writes.')
     parser.add_argument('--recommendations-only', action='store_true', help='Load recommendation CSVs using existing PARTS.')
+    parser.add_argument('--manual-only', action='store_true', help='Load only representative cases and coolers, without CSVs or estimates.')
     args = parser.parse_args()
-    main(limit=args.limit, execute=args.execute, recommendations_only=args.recommendations_only)
+    main(limit=args.limit, execute=args.execute,
+         recommendations_only=args.recommendations_only, manual_only=args.manual_only)

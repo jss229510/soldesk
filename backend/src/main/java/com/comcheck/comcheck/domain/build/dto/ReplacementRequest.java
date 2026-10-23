@@ -21,7 +21,8 @@ public record ReplacementRequest(
 
         @NotBlank(message = "교체할 부품 종류가 필요합니다.")
         @Pattern(
-                regexp = "(?i)(CPU|GPU|RAM|SSD|MAINBOARD|PSU)",
+                regexp = "(?i)(CPU|GPU|RAM|SSD|MAINBOARD|PSU"
+                        + "|CASE|COOLER)",
                 message = "지원하지 않는 교체 부품 종류입니다."
         )
         String category,

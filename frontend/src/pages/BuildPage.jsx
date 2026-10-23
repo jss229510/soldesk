@@ -5,15 +5,16 @@ import { PC_BUILD_PROFILES } from '../constants/usages';
 import {
   getRecommendEstimates,
   getEstimateItems,
+  getReplacementCandidates,
 } from '../api/estimates';
 import { UsagePartRow } from '../components/build/UsagePartRow';
 import { BuildSummary } from '../components/budget';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
-import { useBuild } from '../context/BuildContext';
 import { PartSpecModal } from '../components/shop';
 import PartReplaceModal from '../components/build/PartReplaceModal';
-import { useCart } from '../context/CartContext';
+import { useBudgetCart } from '../hooks/useBudgetCart';
+import { BudgetCartConfirmModal } from '../components/budget/BudgetCartConfirmModal';
 
 const PART_SLOTS = [
   { key: "cpu", label: "프로세서(CPU)" },
@@ -36,48 +37,27 @@ export const BuildPage = () => {
   const [selectedParts, setSelectedParts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [estimateAttempt, setEstimateAttempt] = useState(0);
   const [selectedPart, setSelectedPart] = useState(null);
-  const { setBuild } = useBuild();
   const navigate = useNavigate();
   const [replaceCategory, setReplaceCategory] = useState(null);
   const [replacedParts, setReplaceParts] = useState([]);
-  const { addItem } = useCart();
-  const [isAddCart, setIsAddCart] = useState(false);
+  const [replaceLoading, setReplaceLoading] = useState(false);
+  const [replaceError, setReplaceError] = useState('');
+  const [replaceAttempt, setReplaceAttempt] = useState(0);
+  const { user, authChecking, openLogin } = useOutletContext() ?? {};
+  const cart = useBudgetCart({
+    items: selectedParts,
+    accessToken: user?.accessToken,
+    authChecking,
+    onRequireLogin: openLogin,
+  });
+  const isAddCart = cart.busy;
+  const cartResult = cart.state?.result;
 
 
   // 선택한 부품 총 가격
   const total = selectedParts.reduce((sum, item) => sum + (Number(item.part?.price || 0) * (item.quantity ?? 1)), 0);
-
-  const applyCart = async () => {
-    if (isAddCart || build.items.length === 0) return;
-
-    setIsAddCart(true);
-
-    try {
-      for (const item of build.items) {
-        if (!item.part?.id) {
-          throw new Error("부품 id가 없습니다.")
-        }
-        const quantity = item.quantity ?? 1;
-        if (!Number.isInteger(quantity) || quantity < 1) {
-          throw new Error("부품 갯수가 맞지 않습니다.")
-        }
-      }
-
-      for (const item of build.items) {
-        for (let count = 0; count < (item.quantity ?? 1); count += 1) {
-          await addItem(item.part);
-        }
-      }
-      navigate(ROUTES.cart);
-
-    } catch (error) {
-      window.alert(error.message || "장바구니 담기에 실패했습니다.");
-
-    } finally {
-      setIsAddCart(false);
-    }
-  }
 
   useEffect(() => {
     // 용도와 등급을 모두 골랐을 때만 조회
@@ -134,7 +114,9 @@ export const BuildPage = () => {
       } catch (err) {
         if (!ignore) {
           setSelectedParts([]);
-          setError(err.message || "견적 조회 중 오류가 발생했습니다.");
+          setError(err instanceof TypeError
+            ? "서버에 연결하지 못했습니다. 백엔드 실행 상태를 확인하고 다시 시도해주세요."
+            : err.message || "견적 조회 중 오류가 발생했습니다.");
         }
       } finally {
         if (!ignore) {
@@ -148,8 +130,62 @@ export const BuildPage = () => {
     return () => {
       ignore = true;
     }
-  }, [usageId, selectedTierCode]);
+  }, [usageId, selectedTierCode, estimateAttempt]);
 
+  useEffect(() => {
+    if (!replaceCategory || !usageId || !selectedTierCode) return;
+
+    const controller = new AbortController();
+
+    getReplacementCandidates({
+      usageType: usageId,
+      tierCode: selectedTierCode,
+      category: replaceCategory.toUpperCase(),
+      items: selectedParts,
+    }, { signal: controller.signal })
+      .then((candidates) => {
+        if (controller.signal.aborted) return;
+
+        const parts = candidates.map((candidate) => {
+          const part = candidate.part;
+
+          if (!Number.isSafeInteger(part?.id) || part.id < 1
+            || !Number.isSafeInteger(part.price) || part.price <= 0
+            || part.discontinued
+            || part.category?.toLowerCase() !== replaceCategory) {
+            throw new Error('교체 후보의 제품 정보를 확인할 수 없습니다.');
+          }
+
+          return {
+            ...part,
+            partId: part.id,
+            category: part.category.toLowerCase(),
+            unitPriceDifference: candidate.unitPriceDifference,
+            reason: candidate.reason,
+          };
+        });
+
+        setReplaceParts(parts);
+      })
+      .catch((err) => {
+        if (!controller.signal.aborted) {
+          setReplaceParts([]);
+          setReplaceError(err.message || '교체 후보 조회에 실패했습니다.');
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setReplaceLoading(false);
+      });
+
+    return () => controller.abort();
+  }, [replaceCategory, usageId, selectedTierCode, selectedParts, replaceAttempt]);
+
+  const handleReplaceClose = () => {
+    setReplaceCategory(null);
+    setReplaceParts([]);
+    setReplaceLoading(false);
+    setReplaceError('');
+  };
 
 
   // 선택된 용도와 세부 등급으로 부품 조회
@@ -165,6 +201,9 @@ export const BuildPage = () => {
 
   // 용도 선택
   const handleUsageSelect = (nextUsageId) => {
+    if (isAddCart) return;
+    handleReplaceClose();
+    setSelectedPart(null);
     setUsageId(nextUsageId);
     setSelectedTierCode(null);
     setSelectedParts([]);
@@ -175,31 +214,64 @@ export const BuildPage = () => {
 
   // 세부 등급 선택
   const handleTierSelect = (tierCode) => {
-    if (tierCode === selectedTierCode) return;
+    if (isAddCart || tierCode === selectedTierCode) return;
 
+    handleReplaceClose();
+    setSelectedPart(null);
     setSelectedTierCode(tierCode);
-    setSelectedParts([]),
-      setError("");
+    setSelectedParts([]);
+    setError("");
     setLoading(true);
   };
 
   // 교체 버튼 클릭
   const handleReplaceClick = (categoryId) => {
-    console.log("교체 버튼 클릭:", categoryId)
+    if (loading || isAddCart
+      || !selectedParts.some((item) => item.category === categoryId)) return;
+
+    setReplaceParts([]);
+    setReplaceError('');
+    setReplaceLoading(true);
     setReplaceCategory(categoryId);
+  };
+
+  const handleReplaceRetry = () => {
+    setReplaceParts([]);
+    setReplaceError('');
+    setReplaceLoading(true);
+    setReplaceAttempt((value) => value + 1);
   };
 
   // 교체할 부품 선택
   const handleReplaceSelect = (part) => {
+    if (replaceLoading || replaceError) return;
+
+    const candidate = replacedParts.find((value) => value.id === part.id);
+    const target = selectedParts.find((item) => item.category === replaceCategory);
+    if (!candidate || !target) return;
+
+    const itemPrice = candidate.price * target.quantity;
+    if (!Number.isSafeInteger(target.quantity) || target.quantity < 1
+      || !Number.isSafeInteger(itemPrice)) {
+      setReplaceError('교체할 부품의 수량과 금액을 확인해주세요.');
+      return;
+    }
+
     setSelectedParts((prev) =>
       prev.map((item) =>
         item.category === replaceCategory
-          ? { ...item, part }
+          ? {
+            ...item,
+            part: candidate,
+            unitPrice: candidate.price,
+            itemPrice,
+          }
           : item
       )
     );
 
-    setReplaceCategory(null);
+    setSelectedPart(null);
+    handleReplaceClose();
   };
 
   // BuildSummary에 전달할 데이터 (selectedParts 로 되이 있기 때문.)
@@ -267,9 +339,21 @@ export const BuildPage = () => {
         {/* 오른쪽: 부품 구성 */}
         <aside className="min-w-0 self-start rounded-2xl bg-[var(--bg-surface)] p-6 shadow-sm">
 
-          <h2 className="text-2xl font-bold text-[var(--text)]">
-            부품 구성
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold text-[var(--text)]">
+              부품 구성
+            </h2>
+            {!loading && !error && selectedParts.length > 0 && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full border border-emerald-300 px-3 py-1 text-sm text-emerald-600"
+                title="추천 엔진의 기본 호환성 기준을 통과한 구성입니다. 케이스·쿨러 장착 호환성은 검증 대상이 아닙니다."
+                aria-label="호환성 검증: 추천 엔진의 기본 기준 통과, 케이스·쿨러 장착 호환성 제외"
+              >
+                <span aria-hidden="true">✓</span>
+                호환성 검증
+              </span>
+            )}
+          </div>
           <span className='block h-4' />
           {selectedTier ? (
             <>
@@ -277,14 +361,43 @@ export const BuildPage = () => {
                 {selectedUsage.title} · {selectedTier.label}
               </p>
 
+              {replaceLoading && (
+                <div className="mt-4 flex items-center gap-3" role="status">
+                  <span>교체 후보를 불러오는 중입니다.</span>
+                  <button type="button" onClick={handleReplaceClose}>
+                    취소
+                  </button>
+                </div>
+              )}
+
+              {replaceError && (
+                <div className="mt-4 space-y-2">
+                  <p className="text-red-600" role="alert">{replaceError}</p>
+                  <div className="flex gap-3">
+                    <button type="button" onClick={handleReplaceRetry}>
+                      다시 시도
+                    </button>
+                    <button type="button" onClick={handleReplaceClose}>
+                      닫기
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {loading ? (
                 <p className='mt-6 text-gray-500' role="status">
                   추천 견적을 불러오는 중입니다.
                 </p>
               ) : error ? (
-                <p className="mt-6 text-red-600" role="alert">
-                  {error}
-                </p>
+                <div className="mt-6 space-y-2">
+                  <p className="text-red-600" role="alert">{error}</p>
+                  <button
+                    type="button"
+                    onClick={() => setEstimateAttempt((value) => value + 1)}
+                  >
+                    다시 시도
+                  </button>
+                </div>
               ) : (
                 <div className='mt-6'>
                   {selectedParts.length === 0 ? (
@@ -299,7 +412,11 @@ export const BuildPage = () => {
                         label={slot.label}
                         item={selectedParts.find((item) => item.category === slot.key)}
                         onSelect={setSelectedPart}
-                        onReplace={() => handleReplaceClick(slot.key)}
+                        onReplace={
+                          !isAddCart && selectedParts.some(
+                            (item) => item.category === slot.key
+                          ) ? () => handleReplaceClick(slot.key) : undefined
+                        }
                       />
                     ))
                   )}
@@ -318,10 +435,54 @@ export const BuildPage = () => {
           <div >
             <BuildSummary
               build={build}
-              actionLabel='장바구니 담기'
-              onAction={applyCart}
+              actionLabel={cart.state?.phase === 'checking' ? '장바구니 확인 중'
+                : cart.state?.phase === 'saving' ? '장바구니에 담는 중'
+                  : '장바구니 담기'}
+              onAction={cart.start}
+              actionDisabled={authChecking || isAddCart || loading || replaceLoading
+                || selectedParts.length === 0}
               note='담기는 로그인 후에 가능합니다.'
-            />
+            >
+              {cart.state?.phase === 'saving' && (
+                <p role="status" className="mt-3 text-sm text-gray-400">
+                  {cart.state.progress.addedQuantity} / {cart.state.progress.totalQuantity}개 추가 완료
+                </p>
+              )}
+              {cart.state?.error && (
+                <p role="alert" className="mt-3 text-sm text-red-400">
+                  {cart.state.error.message}
+                </p>
+              )}
+              {cartResult && (
+                <div role={cartResult.failure ? 'alert' : 'status'} className="mt-4 space-y-2 text-sm">
+                  <p>
+                    {cartResult.failure ? '상품 추가가 중단되었습니다.'
+                      : cartResult.addedQuantity > 0
+                        ? `부품 ${cartResult.addedQuantity}개를 장바구니에 담았습니다.`
+                        : '중복 상품을 제외해 추가할 상품이 없습니다.'}
+                  </p>
+                  {cartResult.failure && (
+                    <>
+                      <p>{cartResult.failure.item.name}: {cartResult.failure.error.message}</p>
+                      <p>일부 상품은 이미 저장됐을 수 있습니다. 다시 담기 전에 실제 장바구니 수량을 확인해주세요.</p>
+                      <ul className="space-y-1">
+                        {cartResult.items.map((item) => (
+                          <li key={item.partId}>
+                            {item.name}: {item.addedQuantity} / {item.quantity}개 추가 확인
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  {cartResult.skipped.length > 0 && (
+                    <p>중복으로 제외한 상품: {cartResult.skipped.map((item) => item.name).join(', ')}</p>
+                  )}
+                  <button type="button" className="underline" onClick={() => navigate(ROUTES.cart)}>
+                    장바구니 확인
+                  </button>
+                </div>
+              )}
+            </BuildSummary>
           </div>
         </aside>
       </div>
@@ -333,11 +494,19 @@ export const BuildPage = () => {
         onClose={() => setSelectedPart(null)}
       />
 
+      {cart.state?.phase === 'confirming' && (
+        <BudgetCartConfirmModal
+          plan={cart.state.plan}
+          onConfirm={cart.confirm}
+          onClose={cart.cancel}
+        />
+      )}
+
       <PartReplaceModal
-        isOpen={replaceCategory !== null}
+        isOpen={replaceCategory !== null && !replaceLoading && !replaceError}
         categoryId={replaceCategory}
         parts={replacedParts}
-        onClose={() => setReplaceCategory(null)}
+        onClose={handleReplaceClose}
         onSelect={handleReplaceSelect}
       />
     </div>

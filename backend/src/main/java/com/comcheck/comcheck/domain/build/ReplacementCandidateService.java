@@ -29,17 +29,24 @@ public class ReplacementCandidateService {
             Set.of("CPU", "MAINBOARD", "RAM", "SSD", "PSU");
 
     private static final Set<String> REPLACEABLE_CATEGORIES =
-            Set.of("CPU", "MAINBOARD", "RAM", "SSD", "PSU", "GPU");
+            Set.of("CPU", "MAINBOARD", "RAM", "SSD", "PSU", "GPU",
+                    "CASE", "COOLER");
+
+    private static final Set<String> UNCHECKED_ACCESSORY_CATEGORIES =
+            Set.of("CASE", "COOLER");
 
     private final PartRepository partRepository;
     private final PartSpecRepository partSpecRepository;
+    private final AccessoryRecommendationService accessoryService;
 
     public ReplacementCandidateService(
             PartRepository partRepository,
-            PartSpecRepository partSpecRepository) {
+            PartSpecRepository partSpecRepository,
+            AccessoryRecommendationService accessoryService) {
 
         this.partRepository = partRepository;
         this.partSpecRepository = partSpecRepository;
+        this.accessoryService = accessoryService;
     }
 
     public record CurrentConfiguration(
@@ -58,6 +65,16 @@ public class ReplacementCandidateService {
         if (selected.getPrice() == null || selected.getPrice() <= 0) {
             throw new IllegalArgumentException(
                     "현재 제품 가격을 확인할 수 없습니다.");
+        }
+
+        if (UNCHECKED_ACCESSORY_CATEGORIES.contains(category)) {
+            return accessoryService.findRepresentatives(category).stream()
+                    .filter(part -> !part.getPartId()
+                            .equals(selected.getPartId()))
+                    .limit(3)
+                    .map(part -> new Candidate(part, Map.of()))
+                    .map(candidate -> toResponse(candidate, selected))
+                    .toList();
         }
 
         return findSameLevelCandidates(request, current).stream()
@@ -165,6 +182,12 @@ public class ReplacementCandidateService {
                 throw new IllegalArgumentException(
                         "CPU·메인보드·GPU·PSU는 각각 1개만 지원합니다.");
             }
+
+            if (UNCHECKED_ACCESSORY_CATEGORIES.contains(partCategory)
+                    && quantitiesById.get(partId) != 1L) {
+                throw new IllegalArgumentException(
+                        "케이스·쿨러는 각각 1개만 지원합니다.");
+            }
         }
 
         if (!parts.keySet().containsAll(REQUIRED_CATEGORIES)) {
@@ -187,7 +210,7 @@ public class ReplacementCandidateService {
         return new CurrentConfiguration(
                 Map.copyOf(parts),
                 Map.copyOf(quantities),
-                loadSpecs(partIds));
+                loadSpecs(List.copyOf(partsById.values())));
     }
 
     private record Candidate(
@@ -302,7 +325,10 @@ public class ReplacementCandidateService {
                 response,
                 part.getPrice() - selected.getPrice(),
                 candidate.specs(),
-                "최소조건·교체 수준 조건·기본 호환성을 통과한 후보입니다.");
+                UNCHECKED_ACCESSORY_CATEGORIES.contains(
+                        normalize(part.getCategory()))
+                        ? "대표 제품 목록입니다. 케이스·쿨러 호환성은 검사하지 않았습니다."
+                        : "최소조건·교체 수준 조건·기본 호환성을 통과한 후보입니다.");
     }
 
     private List<Candidate> findSameLevelCandidates(
@@ -327,12 +353,8 @@ public class ReplacementCandidateService {
                         && part.getPrice() > 0)
                 .toList();
 
-        List<Long> candidateIds = products.stream()
-                .map(Part::getPartId)
-                .toList();
-
         Map<Long, Map<String, String>> candidateSpecs =
-                loadSpecs(candidateIds);
+                loadSpecs(products);
 
         List<Candidate> candidates = new ArrayList<>();
 
@@ -358,17 +380,24 @@ public class ReplacementCandidateService {
     }
 
     private Map<Long, Map<String, String>> loadSpecs(
-            List<Long> partIds) {
+            List<Part> products) {
 
-        if (partIds.isEmpty()) {
+        if (products.isEmpty()) {
             return Map.of();
         }
 
         Map<Long, Map<String, String>> specs = new HashMap<>();
 
-        for (Long partId : partIds) {
-            specs.put(partId, new HashMap<>());
+        for (Part part : products) {
+            specs.put(part.getPartId(), new HashMap<>());
         }
+
+        // Accessories are displayed without compatibility or performance checks.
+        List<Long> partIds = products.stream()
+                .filter(part -> !UNCHECKED_ACCESSORY_CATEGORIES.contains(
+                        normalize(part.getCategory())))
+                .map(Part::getPartId)
+                .toList();
 
         List<PartSpec> rows = new ArrayList<>();
 

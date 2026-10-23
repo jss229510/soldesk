@@ -112,3 +112,32 @@ export async function getRecommendEstimates(usageType, tierCode, page = 0, size 
 export async function getUsagePresets() {
   return { presets: PC_BUILD_PROFILES };
 }
+
+export async function getReplacementCandidates(
+  { usageType, tierCode, category, items },
+  { signal } = {},
+) {
+  if (!Array.isArray(items) || items.length === 0) {
+    throw new Error('현재 구성 정보가 없습니다.');
+  }
+
+  const result = await request('/build/replacements', {
+    method: 'POST',
+    signal,
+    body: JSON.stringify({
+      usageType,
+      tierCode,
+      category,
+      items: items.map((item) => ({
+        partId: item.part?.id,
+        quantity: item.quantity,
+      })),
+    }),
+  });
+
+  if (!Array.isArray(result)) {
+    throw new Error('교체 후보 응답 형식이 올바르지 않습니다.');
+  }
+
+  return result;
+}
