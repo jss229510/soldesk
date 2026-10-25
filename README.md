@@ -3,7 +3,8 @@
 | 항목 | 내용 |
 | --- | --- |
 | 최종 수정일 | 2026-10-26 |
-| 담당자 |  |
+| 팀장 | 소주성 |
+| 팀원 | 김주찬 김장현 박선영 이혜연 최민석 |
 
 PC 부품을 검색하고, 예산·용도별 추천 견적을 확인하며, 장바구니와 카카오페이 결제를 진행하는 팀 프로젝트입니다.
 
@@ -115,7 +116,3 @@ python ToOracle_parts.py --execute
   - [챗봇](docs/features/chatbot.md)
   - [데이터 파이프라인](docs/features/data-pipeline.md)
 
-## 확인 필요
-
-- 실제 배포 주소, CI/CD, 운영 DB 운영 방식은 저장소 코드에서 확인되지 않았습니다.
-- `PRICE_HISTORY` 테이블은 `database/create_table.sql`에서 주석 처리되어 있습니다.
