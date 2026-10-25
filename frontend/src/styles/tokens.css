@@ -5,29 +5,29 @@
 ========================= */
 :root {
   /* 배경 계층 */
-  --bg-base: #F1F5F9;
+  --bg-base: #F6F8FC;
   --bg-surface: #ffffff;
-  --bg-surface-2: #f1f5f9;
-  --bg-surface-3: #e2e8f0;
+  --bg-surface-2: #F8FAFC;
+  --bg-surface-3: #EEF2F7;
   --bg-overlay: rgba(255, 255, 255, 0.78);
   --search-bg: var(--bg-surface);
   --search-border: var(--line);
   --search-placeholder: var(--text-2);
 
   /* 선 */
-  --line: #e2e8f0;
-  --line-strong: #cbd5e1;
+  --line: #E2E8F0;
+  --line-strong: #D4DEE9;
 
   /* 텍스트 */
-  --text: #0f172a;
-  --text-2: #475569;
-  --text-3: #475569;
-  --text-4: #64748b;
+  --text: #14213D;
+  --text-2: #64748B;
+  --text-3: #64748B;
+  --text-4: #94A3B8;
 
   /* 브랜드 / 상태 */
-  --brand: #0891b2;
-  --brand-strong: #06b6d4;
-  --brand-soft: rgba(34, 211, 238, 0.12);
+  --brand: #0798B9;
+  --brand-strong: #14BDE0;
+  --brand-soft: #E8FBFF;
   --up: #f87171;
   --down: #22c55e;
   --warn: #f59e0b;

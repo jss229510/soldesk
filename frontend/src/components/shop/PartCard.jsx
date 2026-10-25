@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Badge, Button, Chip, Sparkline, StarRating, Thumbnail } from '../common';
 import { useCart } from '../../context/CartContext';
 import { sparklineValues } from '../../mock/priceHistory';
@@ -12,7 +12,28 @@ export const PartCard = ({ part, onSelect }) => {
   // 부모 컴포넌트를 거쳐 콜백을 전달하지 않아도 카드에서 바로 장바구니에 담을 수 있다.
   const { addItem } = useCart();
   const [isAdding, setIsAdding] = useState(false);
+  const [notice, setNotice] = useState(null);
+  const noticeTimerRef = useRef(null);
   const off = discountRate(part.price, part.listPrice);
+
+  // 같은 카드에서 연속으로 눌렀을 때 이전 타이머가 새 알림을 닫지 않게 관리한다.
+  useEffect(() => () => {
+    if (noticeTimerRef.current) {
+      window.clearTimeout(noticeTimerRef.current);
+    }
+  }, []);
+
+  const showNotice = (type, message) => {
+    if (noticeTimerRef.current) {
+      window.clearTimeout(noticeTimerRef.current);
+    }
+
+    setNotice({ type, message });
+    noticeTimerRef.current = window.setTimeout(() => {
+      setNotice(null);
+      noticeTimerRef.current = null;
+    }, 2600);
+  };
 
   // 비동기 장바구니 API의 성공·실패를 카드 버튼에서 처리한다.
   const handleAddToCart = async () => {
@@ -21,9 +42,9 @@ export const PartCard = ({ part, onSelect }) => {
     setIsAdding(true);
     try {
       await addItem(part);
-      alert('장바구니에 담았습니다.');
+      showNotice('success', '장바구니에 담았습니다.');
     } catch (error) {
-      alert(error.message ?? '장바구니에 담지 못했습니다.');
+      showNotice('error', error.message ?? '장바구니에 담지 못했습니다.');
     } finally {
       setIsAdding(false);
     }
@@ -31,6 +52,40 @@ export const PartCard = ({ part, onSelect }) => {
 
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-700 bg-gray-900 text-left hover:border-gray-500">
+      {notice && (
+        <div
+          role={notice.type === 'error' ? 'alert' : 'status'}
+          aria-live="polite"
+          className={`fixed right-5 top-20 z-50 w-[min(22rem,calc(100vw-2.5rem))] rounded-xl border p-4 shadow-2xl backdrop-blur transition ${notice.type === 'success'
+            ? 'border-cyan-400/50 bg-slate-950/95 text-white'
+            : 'border-red-400/50 bg-red-950/95 text-white'}`}
+        >
+          <div className="flex items-start gap-3">
+            <span
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${notice.type === 'success'
+                ? 'bg-cyan-400 text-slate-950'
+                : 'bg-red-400 text-red-950'}`}
+              aria-hidden="true"
+            >
+              {notice.type === 'success' ? '✓' : '!'}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">
+                {notice.type === 'success' ? '장바구니에 추가됨' : '장바구니 추가 실패'}
+              </p>
+              <p className="mt-1 text-sm text-slate-300">{notice.message}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setNotice(null)}
+              className="rounded-md px-1 text-lg leading-none text-slate-400 transition hover:text-white"
+              aria-label="알림 닫기"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       <div className="px-2 pt-2">
         <Thumbnail
           part={part}

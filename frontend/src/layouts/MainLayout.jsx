@@ -17,7 +17,7 @@ export const MainLayout = () => {
   const [user, setUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
   const authVersion = useRef(0);
-  const { resetCart } = useCart();
+  const { loadCart, resetCart } = useCart();
 
   // Restore the existing session without overwriting a newer login or logout.
   useEffect(() => {
@@ -40,6 +40,13 @@ export const MainLayout = () => {
         const profile = await fetchCurrentUser(session.accessToken);
         if (isCurrent()) {
           setUser({ ...profile, accessToken: session.accessToken });
+          // 새로고침 후에도 헤더의 장바구니 배지가 DB 상태를 바로 반영하게 한다.
+          try {
+            await loadCart();
+          } catch {
+            // 장바구니 조회 실패가 로그인 복원을 취소하지는 않되, 이전 화면 상태는 남기지 않는다.
+            if (isCurrent()) resetCart();
+          }
         }
       } catch {
         if (isCurrent()) {
@@ -53,7 +60,7 @@ export const MainLayout = () => {
 
     restoreUser();
     return () => { active = false; };
-  }, [resetCart]);
+  }, [loadCart, resetCart]);
 
   const onLoginSuccess = (profile) => {
     authVersion.current += 1;
@@ -61,6 +68,8 @@ export const MainLayout = () => {
     setUser(profile);
     setAuthChecking(false);
     closeLogin();
+    // 방금 로그인한 사용자도 페이지 이동 없이 장바구니 수량을 헤더에 반영한다.
+    void loadCart().catch(resetCart);
   };
 
   const onLogout = () => {

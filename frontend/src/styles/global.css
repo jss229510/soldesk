@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
+/* `dark:` 유틸리티는 OS 설정이 아니라 MainLayout의 .dark 클래스만 따른다. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 *,
 *::before,
 *::after {

@@ -15,16 +15,17 @@ import { ROUTES } from '../constants/routes';
 
 const PAGE_SIZE = 10;
 const PAGE_BLOCK_SIZE = 5;
-const buttonClass = 'rounded-lg border border-gray-600 px-3 py-2 '
-  + 'text-sm hover:bg-gray-800 disabled:cursor-not-allowed '
-  + 'disabled:opacity-50';
+const buttonClass = 'rounded-full border border-[#cbd5e1] bg-white px-[18px] py-2 '
+  + 'text-sm font-medium text-[#4b5563] transition hover:border-[#67e8f9] '
+  + 'hover:text-[#0891b2] disabled:cursor-not-allowed disabled:opacity-50 '
+  + 'dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-cyan-400 dark:hover:text-cyan-300';
 
 function BoardSearchForm({ keyword, hasFilters, onSearch, onReset }) {
   const [input, setInput] = useState(keyword);
 
   return (
     <form
-      className="mb-6 flex flex-wrap gap-2"
+      className="flex flex-wrap gap-2 rounded-xl border border-[#e5e7eb] bg-white p-[10px] dark:border-slate-700 dark:bg-slate-900"
       role="search"
       onSubmit={(event) => {
         event.preventDefault();
@@ -37,10 +38,15 @@ function BoardSearchForm({ keyword, hasFilters, onSearch, onReset }) {
         onChange={(event) => setInput(event.target.value)}
         placeholder="제목 또는 내용 검색"
         aria-label="검색어"
-        className="min-w-0 flex-1 rounded-lg border border-gray-600
-          bg-gray-900 px-3 py-2 text-sm"
+        className="h-10 min-w-0 flex-1 rounded-lg border border-[#d1d5db]
+          bg-[#fafafa] px-3 text-sm text-[#1f2937] outline-none transition placeholder:text-[#9ca3af] focus:border-[#0891b2] focus:ring-2 focus:ring-cyan-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-400 dark:focus:ring-cyan-950"
       />
-      <button type="submit" className={buttonClass}>검색</button>
+      <button
+        type="submit"
+        className="h-10 rounded-lg bg-[#0f172a] px-6 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+      >
+        검색
+      </button>
       {(hasFilters || input) && (
         <button
           type="button"
@@ -83,7 +89,7 @@ function BoardPagination({ page, totalPages, onPage }) {
           key={number}
           type="button"
           className={`${buttonClass} ${number === page
-            ? 'border-cyan-500 bg-cyan-950 text-cyan-400'
+            ? 'border-[#0f172a] bg-[#0f172a] text-white ring-1 ring-[#0f172a] hover:bg-slate-700 hover:text-white'
             : ''}`}
           aria-label={`${number}페이지`}
           aria-current={number === page ? 'page' : undefined}
@@ -104,7 +110,7 @@ function BoardPagination({ page, totalPages, onPage }) {
   );
 }
 
-function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry }) {
+function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry, onWrite }) {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -174,9 +180,9 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
 
   return (
     <>
-      <p className="mb-3 text-sm text-gray-400" role="status">
+      <p className="mb-4 mt-4 px-1 text-sm text-[#4b5563] dark:text-slate-300" role="status">
         {keyword ? `“${keyword}” 검색 결과` : '게시글'}{' '}
-        <strong className="text-gray-300">{result.totalElements}</strong>건
+        <strong className="font-bold text-[#0891b2]">{result.totalElements}</strong>건
       </p>
       {outOfRange ? (
         <StateBox
@@ -193,24 +199,43 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
           )}
         />
       ) : result.boards.length === 0 ? (
-        <StateBox
-          status="empty"
-          title={category || keyword
-            ? '조건에 맞는 글이 없습니다'
-            : '아직 등록된 글이 없습니다'}
-        />
+        <div className="overflow-hidden rounded-[14px] border border-[#e5e7eb] bg-white dark:border-slate-700 dark:bg-slate-900">
+          <div className="grid grid-cols-[80px_1fr_140px_120px_80px] border-b border-[#e5e7eb] bg-[#f9fafb] px-5 py-3 text-[13px] font-semibold text-[#6b7280] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+            <span>번호</span>
+            <span>제목</span>
+            <span className="hidden sm:block">작성자</span>
+            <span className="hidden md:block">작성일</span>
+            <span className="hidden md:block">조회</span>
+          </div>
+          <div className="flex min-h-[190px] flex-col items-center justify-center px-6 py-8 text-center">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#ecfeff] text-xl text-[#0891b2] dark:bg-cyan-950 dark:text-cyan-300" aria-hidden="true">✎</span>
+            <strong className="mt-3 text-sm font-normal text-[#6b7280] dark:text-slate-300">
+              {category || keyword ? '조건에 맞는 글이 없습니다' : '아직 등록된 게시글이 없어요.'}
+            </strong>
+            {(category || keyword) && (
+              <p className="mt-1 text-sm text-[#6b7280] dark:text-slate-400">
+                다른 분류나 검색어로 다시 찾아보세요.
+              </p>
+            )}
+            {!category && !keyword && (
+              <button type="button" className="mt-4 rounded-lg border border-[#67e8f9] bg-white px-4 py-2 text-sm font-semibold text-[#0891b2] transition hover:bg-[#ecfeff] dark:border-cyan-500 dark:bg-slate-900 dark:text-cyan-300 dark:hover:bg-cyan-950" onClick={onWrite}>
+                첫 게시글 작성하기
+              </button>
+            )}
+          </div>
+        </div>
       ) : (
-        <div className="rounded-xl border border-gray-700 bg-gray-900 p-3 sm:p-4">
-          <table className="w-full table-fixed text-left text-sm">
+        <div className="overflow-hidden rounded-[14px] border border-[#e5e7eb] bg-white dark:border-slate-700 dark:bg-slate-900">
+          <table className="w-full table-fixed text-left text-sm dark:text-slate-200">
             <caption className="sr-only">게시글 목록</caption>
-            <thead className="border-b border-gray-700 text-gray-400">
+            <thead className="border-b border-[#e5e7eb] bg-[#f9fafb] text-[13px] font-semibold text-[#6b7280] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
               <tr>
-                <th scope="col" className="w-24 py-3 pr-2">번호</th>
+                <th scope="col" className="w-[80px] py-3 pl-5 pr-2">번호</th>
                 <th scope="col" className="hidden w-28 py-3 sm:table-cell">게시판</th>
                 <th scope="col" className="py-3">제목</th>
-                <th scope="col" className="hidden w-24 py-3 sm:table-cell">작성자</th>
-                <th scope="col" className="hidden w-16 py-3 md:table-cell">조회</th>
-                <th scope="col" className="hidden w-28 py-3 md:table-cell">작성일</th>
+                <th scope="col" className="hidden w-[110px] py-3 sm:table-cell">작성자</th>
+                <th scope="col" className="hidden w-[110px] py-3 md:table-cell">작성일</th>
+                <th scope="col" className="hidden w-[64px] py-3 pr-5 text-right md:table-cell">조회</th>
               </tr>
             </thead>
             <tbody>
@@ -221,16 +246,15 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
                 return (
                   <tr
                     key={board.boardId}
-                    className={`border-b border-gray-700 last:border-0 ${isPinned
-                      ? 'bg-cyan-500/10' : ''}`}
+                    className={`border-b border-[#e5e7eb] last:border-0 dark:border-slate-700 ${isPinned
+                      ? 'bg-[#E8FBFF] dark:bg-cyan-950/40' : ''}`}
                   >
-                    <td className="py-4 pr-2">
+                    <td className="py-4 pl-5 pr-2">
                       {isPinned ? (
                         <span
                           className="inline-flex items-center gap-1 whitespace-nowrap
-                            rounded border border-cyan-500/40 bg-cyan-500/10
-                            px-1.5 py-0.5 text-xs font-semibold text-cyan-600
-                            dark:text-cyan-300"
+                            rounded border border-[#14BDE0]/40 bg-[#E8FBFF]
+                             px-1.5 py-0.5 text-xs font-semibold text-[#0798B9] dark:border-cyan-400/40 dark:bg-cyan-950 dark:text-cyan-300"
                         >
                           <span aria-hidden="true">📌</span>
                           고정 공지
@@ -241,28 +265,28 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
                       {getBoardCategoryLabel(board.category)}
                     </td>
                     <td className="py-4 pr-3 [overflow-wrap:anywhere]">
-                      <span className="mb-1 block text-xs text-cyan-400 sm:hidden">
+                      <span className="mb-1 block text-xs text-[#0798B9] dark:text-cyan-300 sm:hidden">
                         {getBoardCategoryLabel(board.category)}
                       </span>
                       <Link
                         to={ROUTES.boardDetail(board.boardId)}
                         state={{ listSearch }}
-                        className="font-medium hover:text-cyan-400 hover:underline"
+                        className="font-medium text-[#14213D] hover:text-[#0798B9] hover:underline dark:text-slate-100 dark:hover:text-cyan-300"
                       >
                         {board.title}
                       </Link>
-                      <span className="mt-1 block text-xs text-gray-400 sm:hidden">
+                      <span className="mt-1 block text-xs text-[#64748B] dark:text-slate-400 sm:hidden">
                         {board.writerName || '알 수 없음'}
                       </span>
                     </td>
                     <td className="hidden break-words py-4 sm:table-cell">
                       {board.writerName || '알 수 없음'}
                     </td>
-                    <td className="hidden py-4 md:table-cell">{board.viewCount ?? 0}</td>
                     <td className="hidden py-4 md:table-cell">
                       {typeof board.createdAt === 'string'
                         ? board.createdAt.slice(0, 10) : '-'}
                     </td>
+                    <td className="hidden py-4 pr-5 text-right md:table-cell">{board.viewCount ?? 0}</td>
                   </tr>
                 );
               })}
@@ -306,28 +330,42 @@ export default function BoardListPage() {
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
+  // 상단 버튼과 빈 목록 버튼이 같은 로그인 검증·글쓰기 이동 로직을 사용한다.
+  const handleWrite = () => {
+    if (!user) {
+      openLogin();
+      return;
+    }
+
+    navigate(ROUTES.boardWrite, {
+      state: { listSearch: searchParams.toString() },
+    });
+  };
+
   return (
-    <section className="container mx-auto px-4 py-8 text-gray-300">
-      <div className="mb-6 flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold">게시판</h1>
-        <button
-          type="button"
-          className={buttonClass}
-          disabled={authChecking}
-          onClick={() => {
-            if (!user) openLogin();
-            else navigate(ROUTES.boardWrite, {
-              state: { listSearch: searchParams.toString() },
-            });
-          }}
-        >
-          {authChecking ? '로그인 확인 중…' : '글쓰기'}
-        </button>
+    <section className="min-h-[calc(100vh-14rem)] bg-[#f5f7fa] dark:bg-slate-950">
+      <div className="container mx-auto max-w-6xl px-4 py-6 text-[#1f2937] dark:text-slate-100 sm:py-8">
+      <div className="mb-5 rounded-2xl border border-[#dbeafe] bg-[linear-gradient(120deg,#ecfeff_0%,#e0f2fe_55%,#eef2ff_100%)] px-7 py-[26px] dark:border-slate-700 dark:bg-[linear-gradient(120deg,#0f2935_0%,#10233a_55%,#182443_100%)] sm:px-7">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold tracking-[2px] text-[#0891b2]">COMMUNITY</p>
+            <h1 className="mt-1 text-[28px] font-bold leading-tight text-[#0f172a] dark:text-white">게시판</h1>
+            <p className="mt-2 text-sm text-[#475569] dark:text-slate-300">PC 구성 경험과 궁금한 점을 함께 나누는 공간입니다.</p>
+          </div>
+          <button
+            type="button"
+            className="rounded-[10px] bg-[#0891b2] px-[22px] py-[11px] text-sm font-semibold text-white shadow-[0_2px_6px_rgba(8,145,178,.25)] transition hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-cyan-500 dark:text-slate-950 dark:hover:bg-cyan-400"
+            disabled={authChecking}
+            onClick={handleWrite}
+          >
+            {authChecking ? '로그인 확인 중…' : '+ 글쓰기'}
+          </button>
+        </div>
       </div>
 
       <div
         role="group"
-        className="mb-4 flex flex-wrap gap-2"
+        className="mb-[14px] mt-[22px] flex flex-wrap gap-2"
         aria-label="게시판 분류"
       >
         {[{ code: '', label: '전체' }, ...BOARD_CATEGORIES].map((item) => (
@@ -335,7 +373,7 @@ export default function BoardListPage() {
             key={item.code}
             type="button"
             className={`${buttonClass} ${category === item.code
-              ? 'border-cyan-500 bg-cyan-950 text-cyan-400'
+              ? '!border-[#0891b2] !bg-[#e8fbff] font-semibold !text-[#0891b2] !ring-1 !ring-[#0891b2] hover:!bg-[#e8fbff] hover:!text-[#0891b2] dark:!border-cyan-400 dark:!bg-cyan-950/70 dark:!text-cyan-300 dark:!ring-cyan-400 dark:hover:!bg-cyan-950/70 dark:hover:!text-cyan-300'
               : ''}`}
             aria-pressed={category === item.code}
             onClick={() => updateQuery({ category: item.code, page: '' })}
@@ -363,6 +401,7 @@ export default function BoardListPage() {
           listSearch={searchParams.toString()}
           onPage={handlePage}
           onRetry={() => setRetry((value) => value + 1)}
+          onWrite={handleWrite}
         />
       ) : (
         <StateBox
@@ -379,6 +418,7 @@ export default function BoardListPage() {
           )}
         />
       )}
+      </div>
     </section>
   );
 }

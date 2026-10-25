@@ -12,19 +12,19 @@ export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = fa
   const over = remaining != null && remaining < 0;
 
   return (
-    <aside className="rounded-lg border border-gray-700 bg-gray-900 p-5 lg:sticky lg:top-20">
+    <aside className="rounded-lg border border-gray-700 bg-gray-900 p-5 sm:p-6 lg:sticky lg:top-20">
       <p className="font-mono text-xs text-gray-500">총 부품 금액</p>
-      <p className="mb-2 mt-1 text-3xl font-extrabold">{formatPrice(total)}</p>
+      <p className="mt-2 text-3xl font-extrabold">{formatPrice(total)}</p>
 
       {remaining != null && (
-        <p className={`text-sm ${over ? 'text-red-400' : 'text-green-400'}`}>
+        <p className={`mt-2 text-sm ${over ? 'text-red-400' : 'text-green-400'}`}>
           예산 {formatPrice(Math.abs(remaining))} {over ? '초과' : '절약'}
         </p>
       )}
 
       {budget && (
         <>
-          <div className="mb-2 mt-5 flex justify-between font-mono text-xs text-gray-500">
+          <div className="mb-3 mt-7 flex justify-between font-mono text-xs text-gray-500">
             <span>예산 활용률</span>
             <span>{usageRate}%</span>
           </div>
@@ -39,7 +39,7 @@ export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = fa
         </>
       )}
 
-      <ul className="my-5 grid gap-2">
+      <ul className="my-7 grid gap-3">
         {items.map((item) => {
           const category = getCategory(item.category);
           return (

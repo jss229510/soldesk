@@ -21,7 +21,7 @@ export const ROUTES = {
 };
 
 export const NAV_ITEMS = [
-  { id: 'shop', to: ROUTES.shop, label: '시세 쇼핑' },
+  { id: 'shop', to: ROUTES.shop, label: '쇼핑' },
   { id: 'budget', to: ROUTES.budget, label: '예산 추천' },
   { id: 'build', to: ROUTES.build, label: 'PC 구성' },
   { id: 'cart', to: ROUTES.cart, label: '장바구니' },
