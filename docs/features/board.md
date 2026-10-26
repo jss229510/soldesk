@@ -3,7 +3,7 @@
 | 항목 | 내용 |
 | --- | --- |
 | 최종 수정일 | 2026-10-26 |
-| 담당자 |  |
+| 담당자 | 김주찬, 이혜연 |
 
 ## 1. 개요
 
@@ -44,8 +44,3 @@
 - `frontend/src/components/BoardForm.jsx`
 - `frontend/src/api/boards.js`
 
-## 6. 주의사항 / 미완성 부분 / TODO
-
-- DB는 `is_deleted` 컬럼을 가지므로 삭제가 Soft Delete인지 `BoardService` 동작을 기준으로 확인해야 합니다.
-- 공지 고정(`is_pinned`)을 누가 설정할 수 있는지 권한 정책은 확인 필요입니다.
-- 댓글·첨부 파일 테이블과 API는 현재 코드에서 확인되지 않았습니다.
