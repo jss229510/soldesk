@@ -22,7 +22,7 @@ export const BuildPartRow = ({ item, onReplace, onSelect }) => {
         {category.label}
       </span>
 
-      <Thumbnail part={part} className="w-16 rounded-md" />
+      <Thumbnail part={part} className="w-16 rounded-md [&_figcaption]:hidden" />
 
       <div className="flex-1">
         <p className="font-mono text-xs text-cyan-400">{part.brand}</p>

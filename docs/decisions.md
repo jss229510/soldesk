@@ -52,6 +52,12 @@
 - 이유: 스크립트를 실수로 실행해 운영성 데이터를 변경하는 일을 막습니다.
 - 결정: 기본 실행은 쓰기를 막고, 실제 적재 때만 `--execute`를 사용합니다.
 
+## 게시판 대표 이미지와 댓글·좋아요 분리
+
+- 근거: `Board.java`의 `imageUrl`, `BoardComment.java`, `BoardLike.java`과 `database/create_table.sql`의 `BOARD_POSTS`, `BOARD_COMMENTS`, `BOARD_LIKES` 정의입니다.
+- 이유: 게시글 본문과 관계형 댓글·좋아요 데이터를 하나의 컬럼에 섞지 않고, 각각의 조회·소유권 검증·중복 방지를 분리합니다.
+- 결정: 대표 이미지는 게시글당 1개 URL만 저장하고, 좋아요는 `(post_id, user_id)` 복합 PK로 회원당 한 번만 보관합니다.
+
 ## Frontend와 챗봇 서버 분리
 
 - 근거: `frontend/vite.config.js`의 `/api`, `/pyapi` 프록시와 `chatbot/main.py`입니다.

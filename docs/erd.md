@@ -13,6 +13,8 @@ erDiagram
   USERS ||--o{ CARTS : owns
   USERS o|--o{ ESTIMATES : owns
   USERS ||--o{ BOARD_POSTS : writes
+  USERS ||--o{ BOARD_COMMENTS : writes
+  USERS ||--o{ BOARD_LIKES : likes
   USERS ||--o{ PAYMENTS : pays
 
   PARTS ||--o{ PART_SPECS : has
@@ -27,6 +29,8 @@ erDiagram
   CARTS ||--o{ PAYMENTS : used_for
   PAYMENTS ||--o{ PAYMENT_ITEMS : contains
   PAYMENTS ||--o{ PAYMENT_CANCELLATIONS : has
+  BOARD_POSTS ||--o{ BOARD_COMMENTS : has
+  BOARD_POSTS ||--o{ BOARD_LIKES : has
 
   USERS {
     NUMBER user_id PK
@@ -97,9 +101,22 @@ erDiagram
     VARCHAR2 board_type
     VARCHAR2 title
     CLOB content
+    VARCHAR2 image_url
     NUMBER view_count
     CHAR is_pinned
     CHAR is_deleted
+  }
+  BOARD_COMMENTS {
+    NUMBER comment_id PK
+    NUMBER post_id FK
+    NUMBER user_id FK
+    CLOB content
+    CHAR is_deleted
+  }
+  BOARD_LIKES {
+    NUMBER post_id PK_FK
+    NUMBER user_id PK_FK
+    TIMESTAMP created_at
   }
   PAYMENTS {
     NUMBER payment_id PK
@@ -133,5 +150,7 @@ erDiagram
 - 개인 견적은 `ESTIMATES.user_id`를 가집니다.
 - `PAYMENT_ITEMS`는 결제 당시 이름·단가·수량을 보존하는 스냅샷입니다.
 - `PAYMENT_ITEMS.source_cart_item_id`는 결제 후 삭제할 원래 장바구니 품목을 찾기 위한 값이며, DDL 주석상 FK를 의도적으로 만들지 않습니다.
+- `BOARD_POSTS.image_url`은 대표 이미지 URL 하나를 저장합니다.
+- `BOARD_COMMENTS`와 `BOARD_LIKES`는 게시글 삭제 시 함께 삭제되도록 `BOARD_POSTS`를 참조합니다.
 - `PRICE_HISTORY` DDL은 주석 처리 상태입니다. 실제 사용 여부는 확인 필요입니다.
 

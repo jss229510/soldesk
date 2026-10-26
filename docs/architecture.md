@@ -53,7 +53,7 @@ soldesk/
 - `build`: 호환성·교체 후보 추천
 - `cart`, `cartitem`: 회원별 장바구니
 - `payment`, `paymentitem`, `paymentcancellation`: 카카오 결제와 스냅샷·취소 이력
-- `board`: 게시글, 카테고리, 조회수
+- `board`: 게시글, 대표 이미지, 댓글, 좋아요, 카테고리, 조회수
 
 ## 일반 요청 흐름
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { formatPrice } from '../utils/format';
 import { preparePayment } from '../api/payments';
@@ -6,6 +7,7 @@ import { getStoredAccessToken, savePendingPayment } from '../constants/payment';
 import PaymentHistoryModal from '../components/payment/PaymentHistoryModal';
 
 export const CartPage = () => {
+  const { user, authChecking } = useOutletContext();
   const {
     items,
     selectedIds,
@@ -25,9 +27,19 @@ export const CartPage = () => {
   const [isPaying, setIsPaying] = useState(false);
   const [paymentHistoryOpen, setPaymentHistoryOpen] = useState(false);
 
-  // 페이지에 진입할 때 DB에 저장된 장바구니를 불러온다.
+  // 로그인 복원이 끝난 뒤 사용자 상태가 바뀔 때마다 DB 장바구니를 다시 불러온다.
   useEffect(() => {
     let active = true;
+
+    // 새로고침 직후에는 MainLayout이 기존 JWT를 검증 중이므로 먼저 기다린다.
+    if (authChecking) return () => { active = false; };
+
+    // 비로그인 상태에서는 API를 호출하지 않고, 로그인 뒤 user 변경으로 Effect를 다시 실행한다.
+    if (!user) {
+      setLoadError('로그인이 필요합니다.');
+      setIsLoading(false);
+      return () => { active = false; };
+    }
 
     const load = async () => {
       setIsLoading(true);
@@ -52,7 +64,7 @@ export const CartPage = () => {
     return () => {
       active = false;
     };
-  }, [loadCart]);
+  }, [authChecking, loadCart, user]);
 
   // 수량 변경·삭제 요청이 실패해도 Promise 오류가 화면 밖으로 새지 않게 공통 처리한다.
   const runCartAction = async (action) => {
@@ -99,7 +111,7 @@ export const CartPage = () => {
         <button
           type="button"
           onClick={() => setPaymentHistoryOpen(true)}
-          className="mt-2 rounded-md border border-gray-600 bg-gray-900 px-4 py-2 text-sm font-semibold hover:border-cyan-500 hover:text-cyan-400"
+          className="mt-2 rounded-md border border-gray-600 bg-white px-4 py-2 text-sm font-semibold hover:border-cyan-500 hover:text-cyan-400"
         >
           결제 내역
         </button>
@@ -137,13 +149,21 @@ export const CartPage = () => {
               <section className="overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
                 {items.map((item) => (
                   <article key={item.id} className="flex flex-col gap-4 border-b border-gray-700 p-5 last:border-b-0 sm:flex-row sm:items-center">
-                    <input
-                      className="select-box h-5 w-5 shrink-0 cursor-pointer rounded border border-slate-300 accent-cyan-500 focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2"
-                      type="checkbox"
-                      checked={selectedIds.includes(item.id)}
-                      onChange={() => toggleSelectedItem(item.id)}
-                      aria-label={`${item.name} 선택`}
-                    />
+                    <label className="shrink-0 cursor-pointer">
+                      <input
+                        className="select-box peer sr-only"
+                        type="checkbox"
+                        checked={selectedIds.includes(item.id)}
+                        onChange={() => toggleSelectedItem(item.id)}
+                        aria-label={`${item.name} 선택`}
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="flex h-5 w-5 items-center justify-center rounded border border-slate-300 bg-white text-sm font-bold leading-none text-transparent transition peer-checked:border-[#376CF6] peer-checked:bg-[#376CF6] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#376CF6] peer-focus-visible:ring-offset-2"
+                      >
+                        ✓
+                      </span>
+                    </label>
                     <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-gray-800">
                     {item.imageUrl ? (
                     <img

@@ -14,6 +14,7 @@ public class BoardDetailResponse {
     private final String categoryLabel;
     private final String title;
     private final String content;
+    private final String imageUrl;
     private final Long writerId; // 작성자 회원 번호
     private final String writerName; // 작성자 이름
     private final long viewCount;
@@ -33,6 +34,7 @@ public class BoardDetailResponse {
         this.categoryLabel = board.getCategory().getLabel();
         this.title = board.getTitle();
         this.content = board.getContent();
+        this.imageUrl = board.getImageUrl();
         this.writerId = board.getWriter().getUserId();
         this.writerName = board.getWriter().getNickname();
         this.viewCount = board.getViewCount();

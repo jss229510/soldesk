@@ -1,6 +1,7 @@
 package com.comcheck.comcheck.domain.board.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,9 +12,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comcheck.comcheck.domain.board.dto.BoardDetailResponse;
+import com.comcheck.comcheck.domain.board.dto.BoardCommentRequest;
+import com.comcheck.comcheck.domain.board.dto.BoardCommentResponse;
+import com.comcheck.comcheck.domain.board.dto.BoardLikeResponse;
 import com.comcheck.comcheck.domain.board.dto.BoardPageResponse;
 import com.comcheck.comcheck.domain.board.dto.BoardRequest;
 import com.comcheck.comcheck.domain.board.entity.Category;
@@ -22,6 +27,9 @@ import com.comcheck.comcheck.global.exception.UnauthorizedException;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
@@ -63,7 +71,7 @@ public class BoardController {
     }
 
     // 글 작성
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     // @Valid: 전달받은 데이터가 유효한지 검사
     // @RequestBody: React가 보낸 JSON 데이터를 Java 객체로 변환
     // The JWT filter stores the verified user ID in Authentication.
@@ -74,8 +82,19 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    // 글 정보는 JSON part, 대표 이미지는 file part로 받아 기존 JSON API와 함께 지원한다.
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BoardDetailResponse> createWithImage(
+            @Valid @RequestPart("request") BoardRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            Authentication authentication) {
+        Long userId = requireLogin(authentication);
+        BoardDetailResponse saved = boardService.createBoard(request, image, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
     // 글 수정
-    @PutMapping("/{boardId}")
+    @PutMapping(value = "/{boardId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public BoardDetailResponse update(
             @PathVariable("boardId") Long boardId,
             @Valid @RequestBody BoardRequest request,
@@ -83,6 +102,16 @@ public class BoardController {
 
         Long userId = requireLogin(authentication);
         return boardService.updateBoard(boardId, request, userId);
+    }
+
+    @PutMapping(value = "/{boardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public BoardDetailResponse updateWithImage(
+            @PathVariable("boardId") Long boardId,
+            @Valid @RequestPart("request") BoardRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            Authentication authentication) {
+        Long userId = requireLogin(authentication);
+        return boardService.updateBoard(boardId, request, image, userId);
     }
 
     // 글 삭제
@@ -96,6 +125,54 @@ public class BoardController {
         return ResponseEntity.noContent().build();
     }
 
+    // 댓글은 공개 조회 가능하지만, 생성·수정·삭제는 JWT 로그인 사용자가 수행한다.
+    @GetMapping("/{boardId}/comments")
+    public List<BoardCommentResponse> comments(@PathVariable("boardId") Long boardId) {
+        return boardService.getComments(boardId);
+    }
+
+    @PostMapping("/{boardId}/comments")
+    public ResponseEntity<BoardCommentResponse> createComment(
+            @PathVariable("boardId") Long boardId,
+            @Valid @RequestBody BoardCommentRequest request,
+            Authentication authentication) {
+        Long userId = requireLogin(authentication);
+        BoardCommentResponse saved = boardService.createComment(boardId, request, userId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    @PutMapping("/{boardId}/comments/{commentId}")
+    public BoardCommentResponse updateComment(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("commentId") Long commentId,
+            @Valid @RequestBody BoardCommentRequest request,
+            Authentication authentication) {
+        return boardService.updateComment(boardId, commentId, request, requireLogin(authentication));
+    }
+
+    @DeleteMapping("/{boardId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("commentId") Long commentId,
+            Authentication authentication) {
+        boardService.deleteComment(boardId, commentId, requireLogin(authentication));
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{boardId}/likes")
+    public BoardLikeResponse likeStatus(
+            @PathVariable("boardId") Long boardId,
+            Authentication authentication) {
+        return boardService.getLikeStatus(boardId, optionalLoginUserId(authentication));
+    }
+
+    @PostMapping("/{boardId}/likes")
+    public BoardLikeResponse toggleLike(
+            @PathVariable("boardId") Long boardId,
+            Authentication authentication) {
+        return boardService.toggleLike(boardId, requireLogin(authentication));
+    }
+
     // 로그인 검사
     private Long requireLogin(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()
@@ -103,6 +180,14 @@ public class BoardController {
             throw new UnauthorizedException("로그인이 필요합니다.");
         }
         return loginUserId;
+    }
+
+    private Long optionalLoginUserId(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()
+                && authentication.getPrincipal() instanceof Long loginUserId) {
+            return loginUserId;
+        }
+        return null;
     }
 
 }

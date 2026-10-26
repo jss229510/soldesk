@@ -4,6 +4,18 @@ SELECT COUNT(*) AS "상품수_예상2424" FROM "PARTS";
 SELECT COUNT(*) AS "사양수_예상25313" FROM "PART_SPECS";
 SELECT COUNT(*) AS "가격수_예상2424" FROM "PRICE_HISTORY";
 
+-- 게시판 기능 확인: 게시글별 댓글 수와 대표 이미지 저장 여부를 확인한다.
+SELECT b."post_id", b."title", b."image_url",
+       COUNT(DISTINCT c."comment_id") AS "comment_count",
+       COUNT(DISTINCT l."user_id") AS "like_count"
+FROM "BOARD_POSTS" b
+LEFT JOIN "BOARD_COMMENTS" c
+    ON c."post_id" = b."post_id" AND c."is_deleted" = 'N'
+LEFT JOIN "BOARD_LIKES" l
+    ON l."post_id" = b."post_id"
+GROUP BY b."post_id", b."title", b."image_url"
+ORDER BY b."post_id" DESC;
+
 -- 예상: CPU 216, GPU 399, MAINBOARD 852, PSU 270, RAM 303, SSD 384
 SELECT "category", COUNT(*) AS "상품수"
 FROM "PARTS"

@@ -87,11 +87,17 @@
 | GET | `/boards?page=0&size=10&category=&keyword=` | 아니오 | `BoardPageResponse` |
 | GET | `/boards/{boardId}` | 아니오 | `BoardDetailResponse` |
 | POST | `/boards/{boardId}/views` | 아니오 | `204` |
-| POST | `/boards` | 예 | `BoardRequest` → `201 BoardDetailResponse` |
-| PUT | `/boards/{boardId}` | 예, 작성자 | `BoardRequest` → `BoardDetailResponse` |
+| POST | `/boards` | 예 | JSON `BoardRequest` 또는 multipart `request` + 선택 `image` → `201 BoardDetailResponse` |
+| PUT | `/boards/{boardId}` | 예, 작성자 | JSON `BoardRequest` 또는 multipart `request` + 선택 `image` → `BoardDetailResponse` |
 | DELETE | `/boards/{boardId}` | 예, 작성자 | `204` |
+| GET | `/boards/{boardId}/comments` | 아니오 | `BoardCommentResponse[]` |
+| POST | `/boards/{boardId}/comments` | 예 | `BoardCommentRequest` → `201 BoardCommentResponse` |
+| PUT | `/boards/{boardId}/comments/{commentId}` | 예, 댓글 작성자 | `BoardCommentRequest` → `BoardCommentResponse` |
+| DELETE | `/boards/{boardId}/comments/{commentId}` | 예, 댓글 작성자 | `204` |
+| GET | `/boards/{boardId}/likes` | 선택 | `BoardLikeResponse` |
+| POST | `/boards/{boardId}/likes` | 예 | 좋아요 추가·해제 토글 → `BoardLikeResponse` |
 
-`BoardRequest`는 `category`, `title`, `content`를 받습니다. 카테고리는 `FREE`, `QNA`, `NOTICE` Enum 여부를 `Category.java`에서 확인할 수 있습니다.
+`BoardRequest`는 `category`, `title`, `content`를 받습니다. multipart 요청의 파일 part 이름은 `image`이며 대표 이미지 1개만 지원합니다. `BoardCommentRequest`는 1,000자 이하의 `content`를 받습니다. 카테고리는 `FREE`, `QNA`, `NOTICE` Enum을 사용합니다.
 
 ## 챗봇
 

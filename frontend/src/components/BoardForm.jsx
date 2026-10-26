@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ApiError } from '../api/client';
 import { Button } from './common';
 import { BOARD_CATEGORIES } from '../constants/boardCategories';
@@ -6,6 +6,7 @@ import { BOARD_CATEGORIES } from '../constants/boardCategories';
 // Match the current BoardRequest validation limits.
 const TITLE_MAX = 100;
 const CONTENT_MAX = 1000;
+const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 const fieldClass = 'w-full rounded-lg border border-gray-600 '
   + 'bg-gray-900 px-3 py-2 text-gray-300';
 
@@ -39,9 +40,16 @@ export default function BoardForm({
   }));
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [removeImage, setRemoveImage] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const submittingRef = useRef(false);
   const formRef = useRef(null);
+
+  useEffect(() => () => {
+    if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview);
+  }, [imagePreview]);
 
   const focusError = (nextErrors) => {
     const name = ['category', 'title', 'content'].find((key) => nextErrors[key]);
@@ -53,6 +61,30 @@ export default function BoardForm({
     setForm((current) => ({ ...current, [name]: value }));
     setErrors((current) => ({ ...current, [name]: '' }));
     setMessage('');
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
+      setMessage('JPG, PNG, WEBP, GIF 이미지만 첨부할 수 있습니다.');
+      return;
+    }
+    if (file.size > IMAGE_MAX_BYTES) {
+      setMessage('이미지는 5MB 이하만 첨부할 수 있습니다.');
+      return;
+    }
+    setImage(file);
+    setRemoveImage(false);
+    setImagePreview(URL.createObjectURL(file));
+    setMessage('');
+  };
+
+  const handleImageRemove = () => {
+    setImage(null);
+    setImagePreview(null);
+    setRemoveImage(Boolean(initialValues?.imageUrl));
   };
 
   const handleSubmit = async (event) => {
@@ -70,7 +102,12 @@ export default function BoardForm({
     submittingRef.current = true;
     setSubmitting(true);
     try {
-      await onSubmit({ ...form, title: form.title.trim() });
+      await onSubmit({
+        ...form,
+        title: form.title.trim(),
+        image,
+        removeImage,
+      });
     } catch (error) {
       const fieldErrors = {};
       ['category', 'title', 'content'].forEach((name) => {
@@ -167,6 +204,31 @@ export default function BoardForm({
             <p id="content-error" role="alert" className="mt-1 text-sm text-red-400">
               {errors.content}
             </p>
+          )}
+        </div>
+        <div>
+          <label htmlFor="board-image" className="mb-2 block font-medium">
+            대표 이미지 <span className="text-sm font-normal text-gray-400">(선택, 최대 5MB)</span>
+          </label>
+          {(imagePreview || (initialValues?.imageUrl && !removeImage)) ? (
+            <div className="rounded-lg border border-gray-600 bg-gray-900 p-3">
+              <img
+                src={imagePreview || initialValues.imageUrl}
+                alt="게시글 대표 미리보기"
+                className="max-h-64 rounded-md object-contain"
+              />
+              <Button className="mt-3" variant="outline" size="sm" onClick={handleImageRemove}>
+                이미지 제거
+              </Button>
+            </div>
+          ) : (
+            <input
+              id="board-image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={handleImageChange}
+              className={`${fieldClass} file:mr-3 file:rounded file:border-0 file:bg-cyan-500 file:px-3 file:py-1 file:text-sm file:font-medium file:text-slate-950`}
+            />
           )}
         </div>
       </fieldset>

@@ -51,6 +51,9 @@ public class Board {
     @Column(name = "\"content\"")
     private String content;
 
+    @Column(name = "\"image_url\"")
+    private String imageUrl;
+
     @Column(name = "\"view_count\"")
     private long viewCount;
 
@@ -94,6 +97,11 @@ public class Board {
         // Keep category-specific flags consistent with database constraints.
         this.isPinned = category == Category.NOTICE;
         if (category != Category.QNA) this.isResolved = false;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void changeImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
         this.updatedAt = LocalDateTime.now();
     }
 

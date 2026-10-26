@@ -44,6 +44,7 @@ out/
 
 # 환경변수
 backend/.env
+backend/uploads/
 
 # soldesk/.gitignore 에 추가
 chatbot/.env

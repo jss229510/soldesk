@@ -50,7 +50,7 @@ export const BudgetPage = () => {
   return (
     <div className="container mx-auto px-4 pb-12">
       <header className="max-w-3xl py-12">
-        <p className="font-mono text-sm text-gray-500">// 예산별 추천</p>
+        <p className="font-mono text-sm text-gray-500">예산별 추천</p>
         <h1 className="my-3 text-3xl font-extrabold">
           예산에 맞는 <span className="text-cyan-400">최적 구성</span>
         </h1>
@@ -72,14 +72,7 @@ export const BudgetPage = () => {
             description="예산을 변경해 주세요." />
         )}
 
-        {!loading && !error && selectedEstimate && (
-          <section className="my-6" aria-label="추천 견적">
-            <h2 className="font-semibold">추천 견적</h2>
-            <p className="mt-3 rounded-md border border-gray-700 bg-gray-900 px-4 py-3">
-              {selectedEstimate.title} · {formatPrice(selectedEstimate.totalPrice)}
-            </p>
-          </section>
-        )}
+
 
         {detailsLoading && <StateBox status="loading" title="견적의 부품 구성을 불러오는 중입니다" />}
         {detailsError && (
@@ -118,7 +111,6 @@ export const BudgetPage = () => {
 
               <BuildSummary
                 build={build}
-                actionLabel={isApplied ? '선택한 견적입니다' : '이 견적 선택'}
                 onAction={applyBuild}
                 actionDisabled={build.items.length === 0 || isApplied || build.powerChecking || Boolean(build.powerError)}
                 note="선택한 견적은 새로고침 전까지 유지됩니다."

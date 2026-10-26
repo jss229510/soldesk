@@ -56,7 +56,11 @@ export const BuildSummary = ({ build, actionLabel, onAction, actionDisabled = fa
         })}
       </ul>
 
-      <Button variant="soft" block onClick={onAction} disabled={actionDisabled}>{actionLabel}</Button>
+      {actionLabel && onAction && (
+        <Button variant="soft" block onClick={onAction} disabled={actionDisabled}>
+          {actionLabel}
+        </Button>
+      )}
       {note && (
         <p className="mt-3 text-center font-mono text-xs text-gray-500">
           {note}

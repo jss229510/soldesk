@@ -18,7 +18,7 @@ function getAuthHeaders(accessToken) {
   return { Authorization: `Bearer ${accessToken.trim()}` };
 }
 
-function serializeBoard(form) {
+function normalizeBoard(form) {
   if (!BOARD_CATEGORIES.some((category) => category.code === form?.category)) {
     throw new ApiError('게시판을 선택해주세요.', 400, {
       category: '자유게시판·공지게시판·Q&A 중 선택해주세요.',
@@ -30,11 +30,22 @@ function serializeBoard(form) {
   }
 
   // Form and server validation enforce required fields and length limits.
-  return JSON.stringify({
+  return {
     category: form.category,
     title: form.title.trim(),
     content: form.content,
-  });
+    removeImage: Boolean(form.removeImage),
+  };
+}
+
+function toBoardFormData(form) {
+  const requestBody = normalizeBoard(form);
+  const formData = new FormData();
+  formData.append('request', new Blob([JSON.stringify(requestBody)], { type: 'application/json' }));
+  if (form.image instanceof File) {
+    formData.append('image', form.image);
+  }
+  return formData;
 }
 
 // API pages are zero-based; the list screen converts its displayed page number.
@@ -78,7 +89,7 @@ export async function createBoard(form, accessToken) {
   return request('/boards', {
     method: 'POST',
     headers: getAuthHeaders(accessToken),
-    body: serializeBoard(form),
+    body: toBoardFormData(form),
   });
 }
 
@@ -87,7 +98,48 @@ export async function updateBoard(boardId, form, accessToken) {
   return request(getBoardPath(boardId), {
     method: 'PUT',
     headers: getAuthHeaders(accessToken),
-    body: serializeBoard(form),
+    body: toBoardFormData(form),
+  });
+}
+
+export async function fetchBoardComments(boardId, { signal } = {}) {
+  return request(`${getBoardPath(boardId)}/comments`, { signal });
+}
+
+export async function createBoardComment(boardId, content, accessToken) {
+  return request(`${getBoardPath(boardId)}/comments`, {
+    method: 'POST',
+    headers: getAuthHeaders(accessToken),
+    body: JSON.stringify({ content }),
+  });
+}
+
+export async function updateBoardComment(boardId, commentId, content, accessToken) {
+  return request(`${getBoardPath(boardId)}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(accessToken),
+    body: JSON.stringify({ content }),
+  });
+}
+
+export async function deleteBoardComment(boardId, commentId, accessToken) {
+  return request(`${getBoardPath(boardId)}/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(accessToken),
+  });
+}
+
+export async function fetchBoardLikeStatus(boardId, accessToken, { signal } = {}) {
+  const headers = typeof accessToken === 'string' && accessToken.trim()
+    ? getAuthHeaders(accessToken)
+    : undefined;
+  return request(`${getBoardPath(boardId)}/likes`, { headers, signal });
+}
+
+export async function toggleBoardLike(boardId, accessToken) {
+  return request(`${getBoardPath(boardId)}/likes`, {
+    method: 'POST',
+    headers: getAuthHeaders(accessToken),
   });
 }
 

@@ -369,7 +369,7 @@ export const BuildPage = () => {
             </h2>
             {!loading && !error && selectedParts.length > 0 && (
               <span
-                className="inline-flex items-center gap-1 rounded-full border border-emerald-300 px-3 py-1 text-sm text-emerald-600"
+                className="inline-flex items-center gap-1 rounded-full border border-emerald-300 px-3 py-1 text-[15px]  text-emerald-600"
                 title="추천 엔진의 기본 호환성 기준을 통과한 구성입니다. 케이스·쿨러 장착 호환성은 검증 대상이 아닙니다."
                 aria-label="호환성 검증: 추천 엔진의 기본 기준 통과, 케이스·쿨러 장착 호환성 제외"
               >
@@ -465,7 +465,7 @@ export const BuildPage = () => {
               onAction={cart.start}
               actionDisabled={authChecking || isAddCart || loading || replaceLoading
                 || selectedParts.length === 0}
-              note='담기는 로그인 후에 가능합니다.'
+              note={user ? undefined : '담기는 로그인 후에 가능합니다.'}
             >
               {cart.state?.phase === 'saving' && (
                 <p role="status" className="mt-3 text-sm text-gray-400">

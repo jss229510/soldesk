@@ -180,7 +180,7 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
 
   return (
     <>
-      <p className="mb-4 mt-4 px-1 text-sm text-[#4b5563] dark:text-slate-300" role="status">
+      <p className="mb-6 mt-6 px-1 text-sm text-[#4b5563] dark:text-slate-300" role="status">
         {keyword ? `“${keyword}” 검색 결과` : '게시글'}{' '}
         <strong className="font-bold text-[#0891b2]">{result.totalElements}</strong>건
       </p>
@@ -251,14 +251,9 @@ function BoardListResults({ page, category, keyword, listSearch, onPage, onRetry
                   >
                     <td className="py-4 pl-5 pr-2">
                       {isPinned ? (
-                        <span
-                          className="inline-flex items-center gap-1 whitespace-nowrap
-                            rounded border border-[#14BDE0]/40 bg-[#E8FBFF]
-                             px-1.5 py-0.5 text-xs font-semibold text-[#0798B9] dark:border-cyan-400/40 dark:bg-cyan-950 dark:text-cyan-300"
-                        >
+                        
                           <span aria-hidden="true">📌</span>
-                          고정 공지
-                        </span>
+                        
                       ) : board.boardId}
                     </td>
                     <td className="hidden py-4 sm:table-cell">
@@ -345,7 +340,7 @@ export default function BoardListPage() {
   return (
     <section className="min-h-[calc(100vh-14rem)] bg-[#f5f7fa] dark:bg-slate-950">
       <div className="container mx-auto max-w-6xl px-4 py-6 text-[#1f2937] dark:text-slate-100 sm:py-8">
-      <div className="mb-5 rounded-2xl border border-[#dbeafe] bg-[linear-gradient(120deg,#ecfeff_0%,#e0f2fe_55%,#eef2ff_100%)] px-7 py-[26px] dark:border-slate-700 dark:bg-[linear-gradient(120deg,#0f2935_0%,#10233a_55%,#182443_100%)] sm:px-7">
+      <div className="mb-5 mt-3 rounded-2xl border border-[#dbeafe] bg-[linear-gradient(120deg,#ecfeff_0%,#e0f2fe_55%,#eef2ff_100%)] px-7 py-[26px] dark:border-slate-700 dark:bg-[linear-gradient(120deg,#0f2935_0%,#10233a_55%,#182443_100%)] sm:px-7">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-xs font-bold tracking-[2px] text-[#0891b2]">COMMUNITY</p>

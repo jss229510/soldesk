@@ -8,6 +8,8 @@
 -- DROP TABLE "PART_SPECS" CASCADE CONSTRAINTS;
 -- DROP TABLE "CART_ITEMS" CASCADE CONSTRAINTS;
 -- DROP TABLE "CART_ESTIMATES" CASCADE CONSTRAINTS;
+-- DROP TABLE "BOARD_LIKES" CASCADE CONSTRAINTS;
+-- DROP TABLE "BOARD_COMMENTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "BOARD_POSTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "CARTS" CASCADE CONSTRAINTS;
 -- DROP TABLE "ESTIMATES" CASCADE CONSTRAINTS;
@@ -24,6 +26,8 @@
 -- DELETE FROM "PART_SPECS";
 -- DELETE FROM "CART_ITEMS";
 -- DELETE FROM "CART_ESTIMATES";
+-- DELETE FROM "BOARD_LIKES";
+-- DELETE FROM "BOARD_COMMENTS";
 -- DELETE FROM "BOARD_POSTS";
 -- DELETE FROM "CARTS";
 -- DELETE FROM "ESTIMATES";
@@ -126,6 +130,7 @@ CREATE TABLE "BOARD_POSTS" (
     "board_type" VARCHAR2(20 CHAR) NOT NULL, -- 게시판구분(FREE,QNA,NOTICE)
     "title" VARCHAR2(200 CHAR) NOT NULL, -- 게시글 제목/최대 200 글자
     "content" CLOB NOT NULL, -- 게시글 본문
+    "image_url" VARCHAR2(500 CHAR), -- 게시글 대표 첨부 이미지 URL(선택)
     "view_count" NUMBER DEFAULT 0 NOT NULL, -- 조회수/기본값은 0
     "is_pinned" CHAR(1) DEFAULT 'N' NOT NULL, -- 상단고정 여부/Y는 고정 N은 고정아님/ 기본값은 N
     "is_deleted" CHAR(1) DEFAULT 'N' NOT NULL, -- 삭제여부/Y는 삭제처리 N은 정상 게시글/ 기본값은 N
@@ -134,17 +139,22 @@ CREATE TABLE "BOARD_POSTS" (
     "updated_at" DATE DEFAULT SYSDATE NOT NULL -- 마지막 수정 일시/ 최초저장시에는 기본값이 들어감/ 글을 수정하면 업데이트함
 );
 
---CREATE TABLE "PRICE_HISTORY" (
---    "price_history_id" NUMBER NOT NULL,
---    "part_id" NUMBER NOT NULL,
---    "dateprice" NUMBER(12, 0) NOT NULL,
---    "Field" VARCHAR2(10) NOT NULL,
---    "source" VARCHAR2(50) DEFAULT '다나와' NOT NULL,
---    "created_at" DATE DEFAULT SYSDATE NOT NULL,
---    "recorded_at" GENERATED ALWAYS AS (
---        TO_DATE("Field", 'FXYYYY-MM-DD')
---    ) VIRTUAL
---);
+CREATE TABLE "BOARD_COMMENTS" (
+    "comment_id" NUMBER NOT NULL,
+    "post_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
+    "content" CLOB NOT NULL,
+    "is_deleted" CHAR(1) DEFAULT 'N' NOT NULL,
+    "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+    "updated_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+
+CREATE TABLE "BOARD_LIKES" (
+    "post_id" NUMBER NOT NULL,
+    "user_id" NUMBER NOT NULL,
+    "created_at" TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL
+);
+
 
 -- 카카오페이 결제 거래와 결제 당시 부품 스냅샷, 취소 이력을 저장한다.
 CREATE TABLE "PAYMENTS" (

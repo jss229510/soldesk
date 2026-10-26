@@ -24,8 +24,8 @@ export const mockResponse = async (data, ms = 220) => {
 export const request = async (path, options = {}) => {
   const headers = new Headers(options.headers);
 
-  // Callers serialize JSON bodies and explicitly provide authentication headers.
-  if (options.body != null && !headers.has('Content-Type')) {
+  // FormData는 브라우저가 multipart boundary를 포함한 Content-Type을 직접 설정해야 한다.
+  if (options.body != null && !(options.body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
