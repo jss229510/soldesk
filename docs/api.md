@@ -39,7 +39,7 @@
 | --- | --- | --- | --- |
 | POST | `/estimates` | 예 | `EstimateRequest` → `201 EstimateResponse` |
 | GET | `/estimates/recommended?usageType=&tierCode=&page=0&size=10` | 아니오 | `EstimatePageResponse` |
-| GET | `/estimates/recommended/budget?budget=&page=0&size=10` | 아니오 | `EstimatePageResponse` |
+| GET | `/estimates/recommended/budget?budget=` | 아니오 | `200 EstimateResponse`, 결과가 없으면 `204` |
 | GET | `/estimates/{estimateId}` | 선택 | `EstimateResponse` |
 | PUT | `/estimates/{estimateId}` | 예, 소유자 | `EstimateRequest` → `EstimateResponse` |
 | DELETE | `/estimates/{estimateId}` | 예, 소유자 | `204` |
@@ -53,6 +53,8 @@
 | POST | `/build/replacements` | 아니오 | `ReplacementRequest` → `ReplacementCandidateResponse[]` |
 
 `EstimateRequest`는 `title`, `usageType`, `budgetMax`을 받습니다. 추천 견적은 공개 조회이고 개인 견적은 소유자 검사를 수행합니다.
+
+예산 추천은 모든 용도의 추천 견적 중 총액이 예산 이하인 가장 비싼 견적 1개를 반환합니다. 동액이면 견적 번호가 작은 항목을 선택합니다. `budget`은 원 단위이며 누락 또는 음수이면 `400`입니다. 예산 추천에는 페이지 구분이 없습니다.
 
 ## 장바구니
 

@@ -1,45 +1,41 @@
 import { useEffect, useState } from 'react';
-import { checkBudgetDraftPower, getBudgetEstimateDetails, getBudgetRecommendedEstimates } from '../api/estimates';
+import { checkBudgetDraftPower, getBudgetEstimateDetails, getBudgetRecommendedEstimate } from '../api/estimates';
 import { replaceBudgetPart, toBudgetBuild } from '../utils/budget';
 
-/** 실제 예산 견적 목록 → 견적 선택 → 부품·스펙·전력 결과 조회 */
+/** 예산 이하에서 가장 비싼 추천 견적 → 부품·스펙·전력 결과 조회 */
 export const useBudgetBuild = (budget, {
-  page = 0, size = 10, accessToken, authChecking = false,
+  accessToken, authChecking = false,
 } = {}) => {
-  const [listResult, setListResult] = useState(null);
+  const [estimateResult, setEstimateResult] = useState(null);
   const [detailsResult, setDetailsResult] = useState(null);
-  const [selection, setSelection] = useState(null);
   const [revision, setRevision] = useState(0);
   const [draft, setDraft] = useState(null);
   const [draftPower, setDraftPower] = useState(null);
   const [powerRevision, setPowerRevision] = useState(0);
-  const selectionKey = `${budget}:${page}:${size}`;
-  const listKey = `${selectionKey}:${revision}`;
+  const estimateKey = `${budget}:${revision}`;
   const enabled = Number.isFinite(budget) && budget >= 0;
 
   useEffect(() => {
     if (!enabled) return;
     const controller = new AbortController();
-    getBudgetRecommendedEstimates(budget, page, size, { signal: controller.signal })
+    getBudgetRecommendedEstimate(budget, { signal: controller.signal })
       .then((data) => {
-        if (!Array.isArray(data?.estimates)) throw new Error('추천 견적 응답 형식이 올바르지 않습니다.');
-        if (!controller.signal.aborted) setListResult({ key: listKey, data, error: null });
+        if (data !== null && (!Number.isInteger(data?.estimatedId) || !Number.isFinite(data?.totalPrice))) {
+          throw new Error('추천 견적 응답 형식이 올바르지 않습니다.');
+        }
+        if (!controller.signal.aborted) setEstimateResult({ key: estimateKey, data, error: null });
       })
       .catch((error) => {
-        if (!controller.signal.aborted) setListResult({ key: listKey, data: null, error });
+        if (!controller.signal.aborted) setEstimateResult({ key: estimateKey, data: null, error });
       });
     // 조건이 바뀌면 이전 응답이 새 화면을 덮어쓰지 않도록 취소한다.
     return () => controller.abort();
-  }, [budget, page, size, enabled, listKey]);
+  }, [budget, enabled, estimateKey]);
 
-  const currentList = listResult?.key === listKey ? listResult : null;
-  const estimates = currentList?.data?.estimates ?? [];
-  // 사용자가 선택하기 전에는 서버가 정렬해서 준 첫 번째 견적을 표시한다.
-  const selectedEstimate = estimates.find((estimate) => (
-    selection?.key === selectionKey && estimate.estimatedId === selection.id
-  )) ?? estimates[0] ?? null;
+  const currentEstimate = estimateResult?.key === estimateKey ? estimateResult : null;
+  const selectedEstimate = currentEstimate?.data ?? null;
   const estimateId = selectedEstimate?.estimatedId;
-  const detailsKey = `${listKey}:${estimateId}`;
+  const detailsKey = `${estimateKey}:${estimateId}`;
 
   useEffect(() => {
     if (estimateId == null || authChecking) return;
@@ -82,10 +78,7 @@ export const useBudgetBuild = (budget, {
     && draftPower?.revision === powerRevision ? draftPower : null;
 
   return {
-    estimates,
     selectedEstimate,
-    selectEstimate: (id) => setSelection({ key: selectionKey, id }),
-    pageInfo: currentList?.data ?? null,
     build: selectedEstimate && currentDetails?.data
       ? toBudgetBuild(selectedEstimate, currentDetails.data, budget, currentItems, currentPower) : null,
     replacePart: (itemId, part, specs) => {
@@ -97,8 +90,8 @@ export const useBudgetBuild = (budget, {
     },
     resetReplacements: () => setDraft(null),
     retryPowerCheck: () => setPowerRevision((value) => value + 1),
-    loading: enabled && !currentList,
-    error: currentList?.error ?? null,
+    loading: enabled && !currentEstimate,
+    error: currentEstimate?.error ?? null,
     detailsLoading: Boolean(selectedEstimate) && !currentDetails,
     detailsError: currentDetails?.error ?? null,
     refetch: () => setRevision((value) => value + 1),

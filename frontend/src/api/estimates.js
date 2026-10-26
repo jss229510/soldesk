@@ -3,16 +3,13 @@ import { PC_BUILD_PROFILES } from '../constants/usages';
 import { request } from './client';
 import { toBudgetItem } from '../utils/budget';
 
-// 예산별 추천 견적 목록 조회. 용도와 등급은 조건으로 보내지 않는다.
-export async function getBudgetRecommendedEstimates(budget, page = 0, size = 10, { signal } = {}) {
-  // 금액 단위는 원이며, 페이지 번호는 0부터 시작한다.
+// 예산 이하에서 가장 비싼 추천 견적 1개 조회. 결과가 없으면 null이다.
+export async function getBudgetRecommendedEstimate(budget, { signal } = {}) {
+  // 금액 단위는 원이다.
   const params = new URLSearchParams({
     budget: String(budget),
-    page: String(page),
-    size: String(size),
   });
 
-  // 응답은 { estimates, page, size, totalElements, ... } 형태다.
   return request(`/estimates/recommended/budget?${params}`, { signal });
 }
 

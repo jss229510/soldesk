@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -143,19 +144,16 @@ public class EstimateService {
         return EstimatePageResponse.from(result);
     }
 
-    // 예산별 추천 견적 목록 (예산 이하, 예산에 가까운 순)
-    // 예산별 추천은 용도를 받지 않는다 : 모든 용도의 추천 견적 중에서 예산 안에 드는 것을 찾는다.
+    // 모든 용도의 추천 견적 중 예산 이하에서 가장 비싼 견적 1개만 반환한다.
     // 예산이 없거나 음수면 400
-    public EstimatePageResponse getRecommendedEstimatesByBudget(Long budget, int page, int size) {
+    public Optional<EstimateResponse> getRecommendedEstimateByBudget(Long budget) {
         if (budget == null || budget < 0) {
             throw new InvalidBudgetException(budget);
         }
-        int safePage = Math.max(page, 0);
-        int safeSize = Math.min(Math.max(size, 1), MAX_PAGE_SIZE);
-        Page<Estimate> result = estimateRepository.findRecommendedWithinBudget(
-                true, budget, PageRequest.of(safePage, safeSize));
-        return EstimatePageResponse.from(result);
-
+        return estimateRepository.findRecommendedWithinBudget(true, budget, PageRequest.of(0, 1))
+                .stream()
+                .findFirst()
+                .map(EstimateResponse::from);
     }
 
     // ===== 전력 호환성 =====

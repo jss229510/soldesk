@@ -65,17 +65,16 @@ public class EstimateController {
         return ResponseEntity.ok(estimateService.getRecommendedEstimates(usageType, tierCode, page, size));
     }
 
-    // 예산별 추천 견적 목록 조회 (로그인 없이 가능)
-    // GET /api/estimates/recommended/budget?budget=1500000&page=0&size=10
-    // 예산별 추천은 용도를 받지 않는다 : 모든 용도의 추천 견적 중 예산 안에 드는 것을 보여준다.
+    // 예산 이하에서 가장 비싼 추천 견적 1개 조회 (로그인 없이 가능, 결과가 없으면 204)
+    // GET /api/estimates/recommended/budget?budget=1500000
     // budget을 required = false로 받는 이유 : 빠졌을 때 Spring 기본 오류 대신
     // Service의 InvalidBudgetException으로 프로젝트 공통 오류 형식을 쓰기 위해서다.
     @GetMapping("/estimates/recommended/budget")
-    public ResponseEntity<EstimatePageResponse> getRecommendedEstimatesByBudget(
-            @RequestParam(required = false) Long budget,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(estimateService.getRecommendedEstimatesByBudget(budget, page, size));
+    public ResponseEntity<EstimateResponse> getRecommendedEstimateByBudget(
+            @RequestParam(required = false) Long budget) {
+        return estimateService.getRecommendedEstimateByBudget(budget)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     // 견적 전력 호환성 검사

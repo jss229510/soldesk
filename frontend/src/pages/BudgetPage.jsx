@@ -17,18 +17,18 @@ import { useBudgetCart } from '../hooks/useBudgetCart';
 import { BudgetCartConfirmModal } from '../components/budget/BudgetCartConfirmModal';
 import { ROUTES } from '../constants/routes';
 
-/** 예산 이하로 등록된 실제 추천 견적을 조회한다. 용도 선택 화면과는 별개다. */
+/** 예산 이하에서 가장 비싼 추천 견적 하나를 보여준다. */
 export const BudgetPage = () => {
-  const [{ budget, page }, setQuery] = useState({ budget: DEFAULT_BUDGET, page: 0 });
+  const [budget, setBudget] = useState(DEFAULT_BUDGET);
   const [appliedBuild, setAppliedBuild] = useState(null);
   const [replacementTarget, setReplacementTarget] = useState(null);
   const [partPreview, setPartPreview] = useState(null);
   const { user, authChecking, openLogin } = useOutletContext() ?? {};
   const {
-    estimates, selectedEstimate, selectEstimate, pageInfo, build,
+    selectedEstimate, build,
     loading, error, detailsLoading, detailsError, refetch,
     replacePart, resetReplacements, retryPowerCheck,
-  } = useBudgetBuild(budget, { page, accessToken: user?.accessToken, authChecking });
+  } = useBudgetBuild(budget, { accessToken: user?.accessToken, authChecking });
   const { setBuild } = useBuild();
   const cart = useBudgetCart({ items: build?.items, accessToken: user?.accessToken,
     authChecking, onRequireLogin: openLogin });
@@ -54,12 +54,12 @@ export const BudgetPage = () => {
         <h1 className="my-3 text-3xl font-extrabold">
           예산에 맞는 <span className="text-cyan-400">최적 구성</span>
         </h1>
-        <p className="leading-loose text-gray-300">예산을 선택하면 해당 금액 이하로 등록된 추천 견적과 부품 구성을 보여드립니다.</p>
+        <p className="leading-loose text-gray-300">예산을 선택하면 예산 이하에서 예산에 가장 가까운 추천 견적 하나와 부품 구성을 보여드립니다.</p>
       </header>
 
       {/* 확인 대기·저장 중에는 담을 구성이 바뀌지 않도록 예산 화면의 조작을 막는다. */}
       <fieldset disabled={cart.busy} className="min-w-0">
-        <BudgetSelector value={budget} onChange={(nextBudget) => setQuery({ budget: nextBudget, page: 0 })} />
+        <BudgetSelector value={budget} onChange={setBudget} />
 
         {loading && <StateBox status="loading" title="추천 견적을 불러오는 중입니다" />}
         {error && (
@@ -67,38 +67,17 @@ export const BudgetPage = () => {
             action={<Button onClick={refetch}>다시 시도</Button>} />
         )}
 
-        {!loading && !error && estimates.length === 0 && (
+        {!loading && !error && !selectedEstimate && (
           <StateBox status="empty" title="조건에 맞는 추천 견적이 없습니다"
-            description="예산을 변경하거나 다른 페이지를 확인해 주세요." />
+            description="예산을 변경해 주세요." />
         )}
 
-        {!loading && !error && pageInfo && (
-          <section className="my-6 grid gap-4" aria-label="추천 견적 선택">
-            {selectedEstimate && (
-              <div className="grid gap-2">
-                <label htmlFor="budget-estimate" className="font-semibold">
-                  추천 견적 선택 · 전체 {pageInfo.totalElements}개
-                </label>
-                <select id="budget-estimate" value={selectedEstimate.estimatedId}
-                  onChange={(event) => selectEstimate(Number(event.target.value))}
-                  className="w-full rounded-md border border-gray-700 bg-gray-900 px-4 py-3">
-                  {estimates.map((estimate) => (
-                    <option key={estimate.estimatedId} value={estimate.estimatedId}>
-                      {estimate.title} · {formatPrice(estimate.totalPrice)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            )}
-            {pageInfo.totalPages > 1 && (
-              <div className="flex items-center gap-4">
-                <Button size="sm" disabled={pageInfo.first}
-                  onClick={() => setQuery({ budget, page: page - 1 })}>이전</Button>
-                <span>{pageInfo.page + 1} / {pageInfo.totalPages} 페이지</span>
-                <Button size="sm" disabled={pageInfo.last}
-                  onClick={() => setQuery({ budget, page: page + 1 })}>다음</Button>
-              </div>
-            )}
+        {!loading && !error && selectedEstimate && (
+          <section className="my-6" aria-label="추천 견적">
+            <h2 className="font-semibold">추천 견적</h2>
+            <p className="mt-3 rounded-md border border-gray-700 bg-gray-900 px-4 py-3">
+              {selectedEstimate.title} · {formatPrice(selectedEstimate.totalPrice)}
+            </p>
           </section>
         )}
 

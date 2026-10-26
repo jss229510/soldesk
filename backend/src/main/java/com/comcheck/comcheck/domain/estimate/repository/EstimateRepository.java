@@ -42,20 +42,16 @@ public interface EstimateRepository extends JpaRepository<Estimate, Long> {
   Optional<Estimate> findByEstimateKey(String estimateKey);
 
   // 예산별 추천
-  // 추천 견적 + 총 금액이 예산 이하
-  @Query(value = """
+  // 예산 이하에서 가장 비싼 견적을 먼저 조회한다. 동액이면 견적 번호순이다.
+  @Query("""
       select e from Estimate e left join fetch e.user
       where e.isRecommend = :recommend
       and e.totalPrice <= :budget
-      order by e.totalPrice desc
-      """, countQuery = """
-      select count(e) from Estimate e
-      where e.isRecommend = :recommend
-        and e.totalPrice <= :budget
+      order by e.totalPrice desc, e.estimatedId asc
       """)
 
-  // Page : 목록 + 전체 개수 + 전체 페이지 수 정보를 함께 담는다.
-  Page<Estimate> findRecommendedWithinBudget(
+  // 서비스에서 최대 1건으로 제한하며 전체 개수는 조회하지 않는다.
+  List<Estimate> findRecommendedWithinBudget(
       @Param("recommend") Boolean recommend,
       @Param("budget") Long budget,
       Pageable pageable);
