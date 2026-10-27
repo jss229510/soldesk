@@ -1,0 +1,17 @@
+{
+  "date": "20261027",
+  "estimates": 12,
+  "estimate_items": 93,
+  "usage_counts": {
+    "OFFICE": 3,
+    "GAMING": 3,
+    "STREAMING": 3,
+    "CREATOR": 3
+  },
+  "accessory_counts": {
+    "CASE": 4,
+    "COOLER": 4
+  },
+  "all_totals_match": true,
+  "all_estimates_have_case_and_cooler": true
+}

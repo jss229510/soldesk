@@ -1,0 +1,136 @@
+{
+  "date": "20261027",
+  "raw_counts": {
+    "CPU": 182,
+    "GPU": 391,
+    "MAINBOARD": 839,
+    "RAM": 201,
+    "SSD": 393,
+    "PSU": 257
+  },
+  "parts_count": 2150,
+  "specs_count": 15409,
+  "parts_by_category": {
+    "CPU": 157,
+    "GPU": 388,
+    "MAINBOARD": 823,
+    "PSU": 233,
+    "RAM": 176,
+    "SSD": 373
+  },
+  "review_issue_count": 730,
+  "review_issues_by_reason": {
+    "데스크톱 내장형 그래픽카드가 아닌 외장 GPU 제외": 2,
+    "원본에 값이 없거나 지원하지 않는 표기": 564,
+    "제품명에서 SSD 제조사를 확정하지 못함": 53,
+    "중고·리퍼·재생 상품 제외": 93,
+    "필수 스펙을 추출하지 못해 적재 제외": 18
+  },
+  "coverage": [
+    {
+      "category": "CPU",
+      "bucket": "사무용",
+      "candidate_count": "52",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "CPU",
+      "bucket": "게임용",
+      "candidate_count": "54",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "CPU",
+      "bucket": "개발·작업용",
+      "candidate_count": "103",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "RAM",
+      "bucket": "8GB",
+      "candidate_count": "21",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "RAM",
+      "bucket": "16GB",
+      "candidate_count": "46",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "RAM",
+      "bucket": "32GB",
+      "candidate_count": "87",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "RAM",
+      "bucket": "64GB 이상",
+      "candidate_count": "22",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "PSU",
+      "bucket": "500W급",
+      "candidate_count": "20",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "PSU",
+      "bucket": "650W급",
+      "candidate_count": "34",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "PSU",
+      "bucket": "750W급",
+      "candidate_count": "58",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "PSU",
+      "bucket": "850W급 이상",
+      "candidate_count": "121",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "SSD",
+      "bucket": "512GB급",
+      "candidate_count": "84",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "SSD",
+      "bucket": "1TB급",
+      "candidate_count": "121",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "SSD",
+      "bucket": "2TB급",
+      "candidate_count": "83",
+      "minimum_required": "3",
+      "status": "PASS"
+    },
+    {
+      "category": "SSD",
+      "bucket": "4TB급 이상",
+      "candidate_count": "40",
+      "minimum_required": "3",
+      "status": "PASS"
+    }
+  ]
+}

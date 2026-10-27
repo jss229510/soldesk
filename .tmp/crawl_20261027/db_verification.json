@@ -1,0 +1,19 @@
+{
+  "date": "20261027",
+  "counts": {
+    "PARTS": 2150,
+    "PART_SPECS": 15409,
+    "PRICE_HISTORY": 0
+  },
+  "parts_by_category": {
+    "CPU": 157,
+    "GPU": 388,
+    "MAINBOARD": 823,
+    "PSU": 233,
+    "RAM": 176,
+    "SSD": 373
+  },
+  "orphan_specs": 0,
+  "duplicate_product_urls": 0,
+  "csv_products_missing_or_price_mismatched": 0
+}

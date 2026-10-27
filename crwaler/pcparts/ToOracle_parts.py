@@ -24,7 +24,7 @@ from insertCoolerAndCase import cooler_end_case
 
 DB_SAVE_ENABLED = False
 DB_SAVE_DISABLED_EXIT_CODE = 10
-TARGET_DATE = "20261006"
+TARGET_DATE = "20261027"
 BASE_DIR = Path(__file__).resolve().parent
 ENV_PATH = BASE_DIR.parents[1] / "backend" / ".env"
 PARTS_PATH = BASE_DIR / "output" / TARGET_DATE / "parts_all.csv"
