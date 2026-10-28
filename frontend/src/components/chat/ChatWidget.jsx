@@ -127,7 +127,7 @@ export const ChatWidget = ({ user, onLogin }) => {
         <section className="chat-panel" aria-label={`${BOT_NAME} 대화창`}>
           <header className="chat-head">
             <div>
-              <b>{BOT_NAME}</b>
+              <b >{BOT_NAME}</b>
               <span className="chat-sub">PC 부품 추천 도우미</span>
             </div>
             <div className="chat-head-btns">
