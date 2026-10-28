@@ -20,7 +20,9 @@ export const Thumbnail = ({ part, topLeft, topRight, className, imageClassName='
           {category.icon}
         </span>
       )}
-      <figcaption className="absolute bottom-2 left-3 font-mono text-xs text-gray-400">{category.label}</figcaption>
+      {!imageSrc && (
+        <figcaption className="absolute bottom-2 left-3 font-mono text-xs text-gray-400">{category.label}</figcaption>
+      )}
     </figure>
   );
 };

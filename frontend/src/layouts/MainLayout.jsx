@@ -1,23 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Header, Footer } from '../components/layout';
-import useToggle from '../hooks/useToggle';
 import Modal from '../components/common/Modal';
 import LoginPage from '../pages/LoginPage';
 import { fetchCurrentUser } from '../api/users';
 import { useCart } from '../context/CartContext';
 import ChatWidget from '../components/chat/ChatWidget'; // [챗봇] 추가
 
+const THEME_STORAGE_KEY = 'partzone-theme';
+
 /** 헤더 + 본문 + 푸터. 라우트가 바뀌면 스크롤을 맨 위로 되돌린다. */
 export const MainLayout = () => {
   const { pathname } = useLocation();
-  const [isDark, toggleDark] = useToggle(false);
+  const [isDark, setIsDark] = useState(
+    () => localStorage.getItem(THEME_STORAGE_KEY) === 'dark',
+  );
   const [loginOpen, setLoginOpen] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
   const authVersion = useRef(0);
   const { loadCart, resetCart } = useCart();
+
+  const toggleDark = () => {
+    setIsDark((current) => !current);
+  };
+
+  useEffect(() => {
+    localStorage.setItem(THEME_STORAGE_KEY, isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   // Restore the existing session without overwriting a newer login or logout.
   useEffect(() => {

@@ -216,7 +216,7 @@ const RegisterPage = () => {
           style={{
             border: "1px solid #ccc",
             backgroundColor: "#fff",
-            color: "var(--text)",
+            color: "#0f172a",
             boxShadow: "0 2px 4px rgba(15, 23, 42, 0.12)",
           }}
         >

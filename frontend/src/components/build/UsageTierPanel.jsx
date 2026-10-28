@@ -25,7 +25,7 @@ export const UsageTierPanel = ({
                 세부 용도를 선택해주세요.
             </p>
 
-            <div className="mt-3 grid grid-cols-3 gap-2">
+            <div className="mt-3 grid grid-cols-2 gap-2">
                 {tiers.length === 0 ? (
                     <p className="text-sm text-gray-400">
                         선택할 수 있는 세부 용도가 없습니다.
